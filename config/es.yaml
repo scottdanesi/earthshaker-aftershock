@@ -1,0 +1,326 @@
+# P-ROC Game Description file for Earthshaker
+PRGame:
+    machineType: wpcAlphanumeric
+    numBalls: 3
+PRFlippers:
+    - flipperLwR
+    - flipperLwL
+PRBumpers:
+    - slingL
+    - slingR
+PRSwitches:
+    # **** Format ****
+    # name:
+    #   number: <number>
+    #   type: <type>
+    #
+    #   <number> can be: SFx (Flipper switch, labeled Fx in WPC manual
+    #                    SDx (Dedicated switch, labeled SDx in WPC manual
+    #                    Sx  (Matrix switch, labeled x in WPC manual
+    #   <type> can be: 'NO' (normally open.  This is the default; so no need to use this)
+    #                  'NC' (normally closed.  Common for optos)
+    flipperLwR:
+        number: S81
+    flipperLwL:
+        number: S82
+    tilt: 
+        number: S11
+    cSidePowerRelay: 
+        number: S12
+    startButton: 
+        number: S13
+    leftCoin: 
+        number: S14
+    centerCoin:
+        number: S15
+    rightCoin:
+        number: S16
+    slamTilt:
+        number: S17
+    highScoreReset:
+        number: S18
+    playfieldTilt:
+        number: S21
+    outhole:
+        number: S22
+    trough1:
+        number: S23
+    trough2:
+        number: S24
+    trough3:
+        number: S25
+    rightInsideReturn7:
+        number: S26
+    rightOutsideReturn:
+        number: S27
+    rightOutlane:
+        number: S28
+    leftOutlane:
+        number: S31
+    leftReturnLane8:
+        number: S32
+    leftStandup1:
+        number: S33
+    ejectHole5:
+        number: S34
+    rightStandupHigh2:
+        number: S35
+    rightStandupLow3:
+        number: S36
+    captiveBall9:
+        number: S37
+    rightStandup50k:
+        number: S38
+    instituteUp:
+        number: S41
+        type: 'NC'
+    instituteDown:
+        number: S42
+    3BankLeft:
+        number: S43
+    3BankMid:
+        number: S44
+    3BankRight:
+        number: S45
+    centerStandup4:
+        number: S46
+    rightLoop6:
+        number: S47
+    leftLoop6:
+        number: S48
+    onRamp50k:
+        number: S51
+    onRamp25k:
+        number: S52
+    onRamp100k:
+        number: S53
+    onRampBypass:
+        number: S54
+    ballPopperTop:
+        number: S55
+    underPlayfieldDrop1:
+        number: S56
+    underPlayfieldDrop2: 
+        number: S57
+    ballPopperBottom: 
+        number: S58
+    spinner:
+        number: S61
+    faultOpen:
+        number: S62
+    rightRampEntry:
+        number: S63
+    centerRampEntry:
+        number: S64
+    centerRampMiddle:
+        number: S65
+    centerRampEnd:
+        number: S66
+    unusedS67:
+        number: S67
+    unusedS68:
+        number: S68
+    unusedS71:
+        number: S71
+    ballShooter: 
+        number: S72
+    unusedS73:
+        number: S73
+    jetLeftSwitch: 
+        number: S74
+    jetRightSwitch:
+        number: S75
+    jetTopSwitch:
+        number: S76
+    slingLeftSwitch:
+        number: S77
+    slingRightSwitch:
+        number: S78
+    unusedS83:
+        number: S83
+    unusedS84:
+        number: S84
+    unusedS85:
+        number: S85
+    unusedS86:
+        number: S86
+    unusedS87:
+        number: S87
+    unusedS88:
+        number: S88
+PRCoils:
+    outholeKicker_CaptiveFlashers:
+        number: C01
+    ballReleaseShooterLane_CenterRampFlashers1:
+        number: C02
+    dropReset_CenterRampFlashers2:
+        number: C03
+    californiaFault_CenterRampFlashers3:
+        number: C04
+    ejectHole_CenterRampFlashers4:
+        number: C05
+    bottomBallPopper_RightRampFlashers1:
+        number: C06
+    knocker_RightRampFlashers2:
+        number: C07
+    unused_RightRampFlashers3:
+        number: C08
+    quakeInstitute:
+        number: C09
+    giUpper:
+        number: C10
+    giBackbox:
+        number: C11
+    acSelect:
+        number: C12
+    topBallPopper:
+        number: C13
+    jackpotFlasher:
+        number: C14
+    giLower:
+        number: C15
+    onRampJetBumperFlashers:
+        number: C16
+    jetLeftCoil:
+        number: C17
+    slingLeftCoil:
+        number: C18
+    jetRightCoil:
+        number: C19
+    slingRightCoil:
+        number: C20
+    jetTopCoil:
+        number: C21
+    quakeMotor:
+        number: C22
+    flipperEnable:
+        number: C23
+PRLamps:
+    captive25k:
+        number: L11
+    captive50k:
+        number: L12
+    captive100k:
+        number: L13
+    captive150k:
+        number: L14
+    captive250k:
+        number: L15
+    captiveArrow9:
+        number: L16
+    spinner:
+        number: L17
+    jetCenter:
+        number: L18
+    bonus2x:
+        number: L21
+    bonus3x:
+        number: L22
+    bonus4x:
+        number: L23
+    bonus5x:
+        number: L24
+    bonus6xExtraBall:
+        number: L25
+    bonus6xSpecial:
+        number: L26
+    inlaneLeft8:
+        number: L27
+    outlaneLeft:
+        number: L28
+    building7:
+        number: L31
+    building8:
+        number: L32
+    building9:
+        number: L33
+    building4:
+        number: L34
+    building5:
+        number: L35
+    building6:
+        number: L36
+    building1:
+        number: L37
+    building2:
+        number: L38
+    building3:
+        number: L41
+    standupRightHigh2:
+        number: L42
+    standupRightLow3:
+        number: L43
+    standupRight50k:
+        number: L44
+    inlaneRight7:
+        number: L45
+    inlaneRightSpinner:
+        number: L46
+    outlaneRight:
+        number: L47
+    shootAgain:
+        number: L48
+    miles1:
+        number: L51
+    miles2:
+        number: L52
+    miles3:
+        number: L53
+    miles4:
+        number: L54
+    miles5:
+        number: L55
+    miles10:
+        number: L56
+    miles20:
+        number: L57
+    miles30:
+        number: L58
+    jetTopLamp:
+        number: L61
+    jetLeftLamp:
+        number: L62
+    jetRightLamp:
+        number: L63
+    rightRampJackpot:
+        number: L64
+    rightRampLock:
+        number: L65
+    rightRamp3Miles:
+        number: L66
+    centerRamp100k:
+        number: L67
+    centerRamp2Miles:
+        number: L68
+    leftRoadSign:
+        number: L71
+    standupLeft1:
+        number: L72
+    ejectLock:
+        number: L73
+    ejectTop5:
+        number: L74
+    standupCenter4:
+        number: L75
+    dropHoleExtraBall:
+        number: L76
+    dropHoleLock:
+        number: L77
+    underFaultLoop6:
+        number: L78
+    rightRoadSign:
+        number: L81
+    jackpot1:
+        number: L82
+    jackpot2:
+        number: L83
+    jackpot3:
+        number: L84
+    jackpot4:
+        number: L85
+    jackpot5:
+        number: L86
+    jackpot6:
+        number: L87
+    jackpot7:
+        number: L88

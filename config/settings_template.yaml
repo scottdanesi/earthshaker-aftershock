@@ -1,0 +1,548 @@
+##   ____           _                ____
+##  / ___|__ _  ___| |_ _   _ ___   / ___|__ _ _ __  _   _  ___  _ __
+## | |   / _` |/ __| __| | | / __| | |   / _` | '_ \| | | |/ _ \| '_ \
+## | |__| (_| | (__| |_| |_| \__ \ | |__| (_| | | | | |_| | (_) | | | |
+##  \____\__,_|\___|\__|\__,_|___/  \____\__,_|_| |_|\__, |\___/|_| |_|
+##                                                   |___/
+##           ___ ___  _  _ _____ ___ _  _ _   _ ___ ___
+##          / __/ _ \| \| |_   _|_ _| \| | | | | __|   \
+##         | (_| (_) | .` | | |  | || .` | |_| | _|| |) |
+##          \___\___/|_|\_| |_| |___|_|\_|\___/|___|___/
+##
+## A P-ROC Project by Eric Priepke, Copyright 2012-2013
+## Built on the PyProcGame Framework from Adam Preble and Gerry Stellenberg
+## Original Cactus Canyon software by Matt Coriale
+##
+# This file is a template for all of the settings used in the game.  The game code will
+# load this file along with a user_settings.yaml file.  Any settings not present in
+# the user_settings.yaml file will default to the default value specified here.  When
+# any setting is saved (via the in-game service menu), the user_settings.yaml file
+# will be updated with ALL of the entries here without overwriting existing settings.
+
+Machine (Standard):
+  'Color Display Pixel Size':
+    options: [14,10,8]
+    default: 8
+  'Color Display X Offset':
+    options: [-2500,2500]
+    increments: 1
+    default: 0
+  'Color Display Y Offset':
+    options: [-2500,2500]
+    increments: 1
+    default: -70
+  'Balls Per Game':
+    options: [1,10]
+    increments: 1
+    default: 3
+  'Tilt Warnings':
+    options: [1,10]
+    increments: 1
+    default: 2
+  'Maximum Extra Balls':
+    options: [0,10]
+    increments: 1
+    default: 2
+  'Game Restart':
+    options: [True,False]
+    default: True
+  'Slow Attract Pages':
+    options: ['Enabled','Disabled']
+    default: 'Disabled'
+  'Flipper Pulse':
+    options: [25,40]
+    increments: 1
+    default: 34
+  'Drop Target Boost':
+    options: [0,30]
+    increments: 5
+    default: 0
+  'Mine Kicker Strength':
+    options: [20,50]
+    increments: 5
+    default: 20
+  'Autoplunger Strength':
+    options: [20,50]
+    increments: 5
+    default: 20
+  'Trough Eject Strength':
+    options: [20,50]
+    increments: 5
+    default: 30
+  'Saloon Eject Strength':
+    options: [20,50]
+    increments: 5
+    default: 30
+  'Inactive Switch Warning':
+    options: [3,30]
+    increments: 1
+    default: 5
+  'Real Knocker Installed':
+    options: ['Yes','No']
+    default: 'No'
+  'Real Knocker Strength':
+    options: [20,50]
+    increments: 5
+    default: 20
+  'Max Initials Length':
+    options: [3,12]
+    default: 3
+  'Replays':
+    options: ['Enabled','Disabled']
+    default: 'Enabled'
+  'Replay Award':
+    options: ['Extra Ball','Last Call']
+    default: 'Extra Ball'
+  'Replay Score':
+    options: [3000000,9000000000]
+    increments: 500000
+    default: 10000000
+  'Replay Auto Adjust':
+    options: ['Yes','No']
+    default: 'Yes'
+  'Replay Score Pad':
+    options: [0,10000000]
+    increments: 500000
+    default: 0
+  'Match Percentage':
+    options: [1,100]
+    increments: 1
+    default: 10
+Sound:
+  'Initial volume':
+    options: [1,2,3,4,5,6,7,8,9,10]
+    default: 5
+  'Music volume offset':
+    options: [-0.4,-0.3,-0.2,-0.1,0,0.1,0.2,0.3,0.4]
+    default: 0
+Gameplay (Feature):
+  'Attract sounds to play':
+    options: [3,10]
+    increments: 1
+    default: 3
+  'Attract sound delay time':
+    options: [30,600]
+    increments: 10
+    default: 120
+  'Combo Timer':
+    options: [3,10]
+    increments: 1
+    default: 7
+  'Combos for Star':
+    options: [5,20]
+    increments: 1
+    default: 10
+  'Beer Mug Hits For Multiball':
+    options: [2,20]
+    increments: 1
+    default: 5
+  'Bart Brothers Difficulty':
+    options: ['Easy','Hard']
+    default: 'Easy'
+  'Bart Brothers for Star':
+    options: [2,10]
+    increments: 1
+    default: 3
+  'Bozo Ball':
+    options: ['Enabled','Disabled']
+    default: 'Enabled'
+  'Bozo Ball Minutes':
+    options: [1,5]
+    increments: 1
+    default: 2
+  'Tournament Mode':
+    options: ['Enabled','Disabled']
+    default: 'Enabled'
+  'Moonlight Shots at Start':
+    options: [1,6]
+    increments: 1
+    default: 3
+  'Moonlight Mins to Midnight':
+    options: [1,15]
+    increments: 1
+    default: 3
+  'Mine Opening Difficulty':
+    options: ['Easy','Hard']
+    default: 'Easy'
+  'Quickdraw Timer':
+    options: [5,30]
+    increments: 5
+    default: 20
+  'Ambush Target Timer':
+    options: [5,30]
+    increments: 1
+    default: 12
+  'Ambush Escapes to Lose':
+    options: [3,15]
+    increments: 1
+    default: 3
+  'Ambush Awards Badge':
+    options: ['Yes','No']
+    default: 'No'
+  'Ambush Ball Saver':
+    options: ['Enabled','Disabled']
+    default: 'Disabled'
+  'Ambush or Showdown First':
+    options: ['Ambush','Showdown']
+    default: 'Showdown'
+  'Save Polly Shots - Train':
+    options: [2,15]
+    increments: 1
+    default: 5
+  'Save Polly Shots - River':
+    options: [2,15]
+    increments: 1
+    default: 3
+  'Save Polly Timer - River':
+    options: [15,60]
+    increments: 5
+    default: 30
+  'Save Polly Timer - Bank':
+    options: [15,60]
+    increments: 5
+    default: 30
+  'Save Polly Wins Required':
+    options: ['Yes','No']
+    default: 'No'
+  'Shots to defeat Bionic Bart':
+    options: [2,10]
+    increments: 1
+    default: 3
+  'Bionic Bart Ball Save':
+    options: ['Enabled','Disabled']
+    default: 'Enabled'
+  'Franks N Beans':
+    options: ['Enabled','Disabled']
+    default: 'Enabled'
+  'Franks N Beans Time':
+    options: [15,60]
+    increments: 1
+    default: 30
+  'Tribute Mode':
+    options: ['Enabled','Disabled']
+    default: 'Enabled'
+  'Tribute Selecting':
+    options: ['Manual','Random']
+    default: 'Random'
+  'Fast Restart After Game':
+    options: ['Enabled','Disabled']
+    default: 'Enabled'
+  'Bionic Bart Ball Save Timer':
+    options: [5,40]
+    increments: 5
+    default: 15
+  'Move Your Train Mode':
+    options: ['Enabled','Disabled']
+    default: 'Disabled'
+  'Move Your Train Max Shots':
+    options: [4,20]
+    increments: 1
+    default: 7
+  'Drunk Multiball Stacking':
+    options: ['Enabled','Disabled']
+    default: 'Enabled'
+  'Drunk Multiball GI':
+    options: ['Enabled','Disabled']
+    default: 'Disabled'
+  'Last Call Mode':
+    options: ['Enabled','Disabled']
+    default: 'Enabled'
+  'Marshall Multiball':
+    options: ['Enabled','Disabled']
+    default: 'Enabled'
+  'Marshall Jackpot Timer':
+    options: [5,60]
+    increments: 5
+    default: 15
+  'Marshall Multiball Music':
+    options: ['Yes','No']
+    default: 'No'
+  'Quickdraws Lit Difficulty':
+    options: ['Easy','Hard']
+    default: 'Easy'
+  'Quickdraw Wins for EB':
+    options: [2,8]
+    increments: 1
+    default: 4
+  'Multiball Locks Difficulty':
+    options: ['Easy','Hard']
+    default: 'Easy'
+  'Showdown Difficulty':
+    options: ['Easy','Hard']
+    default: 'Easy'
+  'Super Skill Bonus X':
+    options: ['Enabled','Disabled']
+    default: 'Disabled'
+  'Super Skill Gunfight':
+    options: ['Enabled','Disabled']
+    default: 'Disabled'
+  'Super Skill 3 Million':
+    options: ['Enabled','Disabled']
+    default: 'Disabled'
+  'Motherlode Badge Difficulty':
+    options: ['Easy','Normal']
+    default: 'Easy'
+  'Gold Mine Multiball Restart':
+    options: ['Yes','No']
+    default: 'Yes'
+  'Gold Mine Restart Timer':
+    options: [5,15]
+    increments: 1
+    default: 8
+  'Marshall Req for Bionic':
+    options: ['Yes','No']
+    default: 'No'
+  'Multiball Ball Savers':
+    options: ['Yes','No']
+    default: 'No'
+  'Multiball Savers Timer':
+    options: [5,30]
+    increments: 5
+    default: 10
+  'Default Ball Save Time':
+    options: [5,30]
+    increments: 5
+    default: 10
+  'Skillshot Boosts':
+    options: ['Easy','Hard']
+    default: 'Easy'
+  'Polly Dies Animation':
+    options: ['Show','Hide']
+    default: 'Hide'
+  'Drunk Multiball Intro Skip':
+    options: ['Yes','No']
+    default: 'No'
+  'Tumbleweeds for CVA':
+    options: [2,20]
+    increments: 1
+    default: 3
+  'CVA GI Behavior':
+    options: ['Default','On']
+    default: 'Default'
+  'Attract Mode Sounds':
+    options: ['Yes','No']
+    default: 'Yes'
+  'Attract Mode Wind Noise':
+    options: ['Yes','No']
+    default: 'Yes'
+  'Attract Mode Music':
+    options: ['Yes','No']
+    default: 'Yes'
+Custom Message:
+  'Custom Message':
+    options: ['Enabled','Disabled']
+    default: 'Disabled'
+  'Custom Message Pages':
+    options: [1,2,3,4,5]
+    default: 1
+  'Page 1 Border':
+    options: ['NONE','ROPE','SIMPLE','GUNS','SKULLS','STARS','TRACKS','THIN']
+    default: 'NONE'
+  'Page 1 Line 1 Text':
+    options: []
+    default: 'NONE'
+  'Page 1 Line 1 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 1 Line 1 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 1 Line 1 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 1 Line 2 Text':
+    options: []
+    default: 'NONE'
+  'Page 1 Line 2 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 1 Line 2 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 1 Line 2 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 1 Line 3 Text':
+    options: []
+    default: 'NONE'
+  'Page 1 Line 3 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 1 Line 3 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 1 Line 3 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 1 Preview':
+    options: [1]
+    default: 1
+  'Page 2 Border':
+    options: ['NONE','ROPE','SIMPLE','GUNS','SKULLS','STARS','TRACKS','THIN']
+    default: 'NONE'
+  'Page 2 Line 1 Text':
+    options: []
+    default: 'NONE'
+  'Page 2 Line 1 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 2 Line 1 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 2 Line 1 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 2 Line 2 Text':
+    options: []
+    default: 'NONE'
+  'Page 2 Line 2 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 2 Line 2 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 2 Line 2 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 2 Line 3 Text':
+    options: []
+    default: 'NONE'
+  'Page 2 Line 3 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 2 Line 3 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 2 Line 3 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 2 Preview':
+    options: [2]
+    default: 2
+  'Page 3 Border':
+    options: ['NONE','ROPE','SIMPLE','GUNS','SKULLS','STARS','TRACKS','THIN','PIXEL']
+    default: 'NONE'
+  'Page 3 Line 1 Text':
+    options: []
+    default: 'NONE'
+  'Page 3 Line 1 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 3 Line 1 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 3 Line 1 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 3 Line 2 Text':
+    options: []
+    default: 'NONE'
+  'Page 3 Line 2 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 3 Line 2 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 3 Line 2 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 3 Line 3 Text':
+    options: []
+    default: 'NONE'
+  'Page 3 Line 3 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 3 Line 3 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 3 Line 3 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 3 Preview':
+    options: [3]
+    default: 3
+  'Page 4 Border':
+    options: ['NONE','ROPE','SIMPLE','GUNS','SKULLS','STARS','TRACKS','THIN','PIXEL']
+    default: 'NONE'
+  'Page 4 Line 1 Text':
+    options: []
+    default: 'NONE'
+  'Page 4 Line 1 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 4 Line 1 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 4 Line 1 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 4 Line 2 Text':
+    options: []
+    default: 'NONE'
+  'Page 4 Line 2 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 4 Line 2 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 4 Line 2 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 4 Line 3 Text':
+    options: []
+    default: 'NONE'
+  'Page 4 Line 3 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 4 Line 3 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 4 Line 3 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 4 Preview':
+    options: [4]
+    default: 4
+  'Page 5 Border':
+    options: ['NONE','ROPE','SIMPLE','GUNS','SKULLS','STARS','TRACKS','THIN','PIXEL']
+    default: 'NONE'
+  'Page 5 Line 1 Text':
+    options: []
+    default: 'NONE'
+  'Page 5 Line 1 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 5 Line 1 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 5 Line 1 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 5 Line 2 Text':
+    options: []
+    default: 'NONE'
+  'Page 5 Line 2 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 5 Line 2 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 5 Line 2 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 5 Line 3 Text':
+    options: []
+    default: 'NONE'
+  'Page 5 Line 3 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 5 Line 3 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 5 Line 3 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 5 Preview':
+    options: [5]
+    default: 5
+
