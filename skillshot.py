@@ -62,7 +62,7 @@ class SkillshotMode(game.Mode):
 		self.game.lamps.captive150k.schedule(schedule=0x0000F000, cycle_seconds=0, now=False)
 		self.game.lamps.captive250k.schedule(schedule=0x000F0000, cycle_seconds=0, now=False)
 		self.game.lamps.captiveArrow9.schedule(schedule=0xCCC00000, cycle_seconds=0, now=False)
-		self.game.coils.outholeKicker_CaptiveFlashers.schedule(schedule=0x00C00000, cycle_seconds=0, now=False)
+		#self.game.coils.outholeKicker_CaptiveFlashers.schedule(schedule=0x00C00000, cycle_seconds=0, now=False)
 
 	def stopSkillshotLamps(self):
 		self.game.lamps.captive25k.disable()
@@ -71,7 +71,7 @@ class SkillshotMode(game.Mode):
 		self.game.lamps.captive150k.disable()
 		self.game.lamps.captive250k.disable()
 		self.game.lamps.captiveArrow9.disable()
-		self.game.coils.outholeKicker_CaptiveFlashers.disable()
+		#self.game.coils.outholeKicker_CaptiveFlashers.disable()
 
 	def sw_onRamp50k_active(self, sw):
 		#need to score
@@ -90,4 +90,5 @@ class SkillshotMode(game.Mode):
 		self.game.modes.remove(self)
 
 	def sw_centerRampMiddle_active(self):
-		self.game.coils.outholeKicker_CaptiveFlashers.schedule(schedule=0x00C00000, cycle_seconds=0, now=False)
+		#self.game.coils.outholeKicker_CaptiveFlashers.schedule(schedule=0x00C00000, cycle_seconds=0, now=False)
+		pass

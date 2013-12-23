@@ -81,13 +81,12 @@ class BaseGameMode(game.Mode):
 			self.game.coils.topBallPopper.pulse(50)
 
 	def score(self, points):
-		"""Convenience method to add *points* to the current player."""
 		p = self.game.current_player()
 		p.score += points
 		self.cancel_delayed('updatescore')
 		self.delay(name='updatescore',delay=0.5,handler=self.update_display)
 
-	def queueModes(self):
+	def queueGameStartModes(self):
 		skillshot_mode = SkillshotMode(self.game)
 		self.game.modes.add(skillshot_mode)
 		
@@ -102,7 +101,7 @@ class BaseGameMode(game.Mode):
 		self.p.score = 0
 		#self.start_ball()
 		self.game.coils.ballReleaseShooterLane_CenterRampFlashers1.pulse(50)
-		self.queueModes()
+		self.queueGameStartModes()
 		self.update_display()
 
 	def end_game(self):
@@ -120,7 +119,8 @@ class BaseGameMode(game.Mode):
 		return procgame.game.SwitchStop
 		
 	def sw_startButton_active_for_20ms(self, sw):
-		print self.game.ball
+		print 'Player: ' + self.game.players.index
+		print 'Ball' + self.game.ball
 		if self.troughIsFull()==True:
 			#Trough is full!
 			if self.game.ball == 0:
