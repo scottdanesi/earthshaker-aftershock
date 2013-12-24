@@ -48,7 +48,7 @@ from skillshot import SkillshotMode
 
 class BaseGameMode(game.Mode):
 	def __init__(self, game):
-			super(BaseGameMode, self).__init__(game=game, priority=6)
+			super(BaseGameMode, self).__init__(game=game, priority=2)
 			#self.score_display = AlphaScoreDisplay(self.game,0)
 			#Start Attract Mode
 			#self.attract_mode = AttractMode(self.game)
@@ -119,8 +119,8 @@ class BaseGameMode(game.Mode):
 		return procgame.game.SwitchStop
 		
 	def sw_startButton_active_for_20ms(self, sw):
-		print 'Player: ' + self.game.players.index
-		print 'Ball' + self.game.ball
+		print 'Player: ' + str(self.game.players.index)
+		print 'Ball' + str(self.game.ball)
 		if self.troughIsFull()==True:
 			#Trough is full!
 			if self.game.ball == 0:
