@@ -44,7 +44,8 @@ class AttractMode(game.Mode):
 
 	def mode_started(self):
 		self.resetQuakeInstitute()
-		self.startAttractLamps()
+		#self.startAttractLamps()
+		self.startAttractLamps2()
 		self.setDisplayContent()
 		return super(AttractMode, self).mode_started()
 			
@@ -66,6 +67,27 @@ class AttractMode(game.Mode):
 				lamp.schedule(schedule=0x00f000f0, cycle_seconds=0, now=False)
 			elif i % 4 == 0:
 				lamp.schedule(schedule=0x000f000f, cycle_seconds=0, now=False)
+			i = i + 1
+
+	def startAttractLamps2(self):
+		i = 0		
+		for lamp in self.game.lamps:
+			if i % 8 == 7:
+				lamp.schedule(schedule=0xf0000000, cycle_seconds=0, now=False)
+			elif i % 8 == 6:
+				lamp.schedule(schedule=0x0f000000, cycle_seconds=0, now=False)
+			elif i % 8 == 5:
+				lamp.schedule(schedule=0x00f00000, cycle_seconds=0, now=False)
+			elif i % 8 == 4:
+				lamp.schedule(schedule=0x000f0000, cycle_seconds=0, now=False)
+			elif i % 8 == 3:
+				lamp.schedule(schedule=0x0000f000, cycle_seconds=0, now=False)
+			elif i % 8 == 2:
+				lamp.schedule(schedule=0x00000f00, cycle_seconds=0, now=False)
+			elif i % 8 == 1:
+				lamp.schedule(schedule=0x000000f0, cycle_seconds=0, now=False)
+			elif i % 8 == 0:
+				lamp.schedule(schedule=0x0000000f, cycle_seconds=0, now=False)
 			i = i + 1
 		
 	def resetQuakeInstitute(self):
