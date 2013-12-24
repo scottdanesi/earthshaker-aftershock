@@ -32,7 +32,7 @@ from scoredisplay import AlphaScoreDisplay
 
 class SkillshotMode(game.Mode):
 	def __init__(self, game):
-			super(SkillshotMode, self).__init__(game=game, priority=5)
+			super(SkillshotMode, self).__init__(game=game, priority=7)
 			####################
 			#Mode Setup
 			####################
@@ -54,6 +54,11 @@ class SkillshotMode(game.Mode):
 	def mode_stopped(self):
 		self.stopSkillshotLamps()
 		return super(SkillshotMode, self).mode_stopped()
+
+	def update_display(self):
+		self.p = self.game.current_player()
+		self.score_display.set_text(str(self.p.score),0)
+		self.score_display.set_text("Ball "+str(self.game.ball),1)
 		
 	def startSkillshotLamps(self):
 		self.game.lamps.captive25k.schedule(schedule=0x0000000F, cycle_seconds=0, now=False)
@@ -73,22 +78,42 @@ class SkillshotMode(game.Mode):
 		self.game.lamps.captiveArrow9.disable()
 		#self.game.coils.outholeKicker_CaptiveFlashers.disable()
 
+	def score(self, points):
+		p = self.game.current_player()
+		p.score += points
+		self.cancel_delayed('updatescore')
+		self.delay(name='updatescore',delay=0.5,handler=self.update_display)
+
 	def sw_onRamp50k_active(self, sw):
 		#need to score
 		self.game.modes.remove(self)
+		return procgame.game.SwitchContinue
 
 	def sw_onRamp25k_active(self, sw):
 		#need to score
 		self.game.modes.remove(self)
+		return procgame.game.SwitchContinue
 
 	def sw_onRamp100k_active(self, sw):
 		#need to score
 		self.game.modes.remove(self)
+		return procgame.game.SwitchContinue
 
 	def sw_onRampBypass_active(self, sw):
 		#need to score
 		self.game.modes.remove(self)
+		return procgame.game.SwitchContinue
 
-	def sw_centerRampMiddle_active(self):
-		#self.game.coils.outholeKicker_CaptiveFlashers.schedule(schedule=0x00C00000, cycle_seconds=0, now=False)
-		pass
+	def sw_centerRampMiddle_active(self, sw):
+		self.game.coils.outholeKicker_CaptiveFlashers.pulse(5)
+		return procgame.game.SwitchContinue
+
+	def sw_centerRampEnd_active(self, sw):
+		self.game.coils.outholeKicker_CaptiveFlashers.pulse(5)
+		return procgame.game.SwitchContinue
+
+	def sw_captiveBall9_closed(self, sw):
+		self.game.coils.outholeKicker_CaptiveFlashers.schedule(schedule=0x33330000, cycle_seconds=1, now=True)
+		self.score(2500)
+		self.game.modes.remove(self)
+		return procgame.game.SwitchContinue
