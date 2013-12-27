@@ -195,6 +195,23 @@ PRCoils:
         number: C22
     flipperEnable:
         number: C23
+    extraDrive1:
+        number: C25
+    extraDrive2:
+        number: C26
+    extraDrive3:
+        number: C27
+    extraDrive4:
+        number: C28
+    extraDrive5:
+        number: S35
+    extraDrive6:
+        number: S36
+    extraDrive7:
+        number: S37
+    extraDrive8:
+        number: S38
+
 PRLamps:
     captive25k:
         number: L11
