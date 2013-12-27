@@ -116,3 +116,18 @@ class AttractMode(game.Mode):
 		self.score_display.set_text("GAME OVER",0)
 		self.score_display.set_text("Press Start",1)
 		return procgame.game.SwitchStop
+
+	def sw_jetLeftSwitch_active(self, sw):
+		return procgame.game.SwitchStop
+
+	def sw_jetRightSwitch_active(self, sw):
+		return procgame.game.SwitchStop
+
+	def sw_jetTopSwitch_active(self, sw):
+		return procgame.game.SwitchStop
+
+	def sw_slingLeftSwitch_active(self, sw):
+		return procgame.game.SwitchStop
+
+	def sw_slingRightSwitch_active(self, sw):
+		return procgame.game.SwitchStop
