@@ -91,18 +91,25 @@ class BaseGameMode(game.Mode):
 		self.game.modes.add(skillshot_mode)
 		
 	def start_game(self):
+		#This function is to be used when starting a new game, player 1 and ball 1
+
+		#Clean Up
 		self.game.modes.remove(self.attract_mode)
-		for lamp in self.game.lamps:
-			lamp.disable()
-		#self.game.ball_starting()
-		self.game.add_player()
-		self.p = self.game.current_player()
+		
+		self.game.add_player() #will be first player at this point
 		self.game.ball = 1
+		
+		#Reset Player Score - Might not be needed
+		self.p = self.game.current_player()
 		self.p.score = 0
-		#self.start_ball()
-		self.game.coils.ballReleaseShooterLane_CenterRampFlashers1.pulse(50)
+
+		self.start_ball()
 		self.queueGameStartModes()
 		self.update_display()
+
+	def start_ball(self):
+		self.game.coils.ballReleaseShooterLane_CenterRampFlashers1.pulse(50)
+		
 
 	def end_game(self):
 		self.game.ball = 0

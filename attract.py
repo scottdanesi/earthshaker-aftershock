@@ -48,6 +48,11 @@ class AttractMode(game.Mode):
 		self.startAttractLamps2()
 		self.setDisplayContent()
 		return super(AttractMode, self).mode_started()
+
+	def mode_stopped(self):
+		for lamp in self.game.lamps:
+			lamp.disable()
+		return super(AttractMode, self).mode_stopped()
 			
 	def setDisplayContent(self):
 		#displayItems = [
