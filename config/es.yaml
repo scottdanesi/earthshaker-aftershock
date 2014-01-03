@@ -3,11 +3,40 @@ PRGame:
     machineType: wpcAlphanumeric
     numBalls: 3
 PRFlippers:
-    - flipperLwR
-    - flipperLwL
+#    - FlipperLwR
+#    - FlipperLwL
 PRBumpers:
     - slingL
     - slingR
+    - jetLeft
+    - jetRight
+    - jetTop
+PRPinmame:
+    # This section is specific to running the P-ROC via Pinmame.
+    
+    # keyboard:
+    #   on or off - determines whether keyboard will be enabled or not
+    #   useful in a Sys11 in early debugging
+    
+    # s11CreditDisplay and s11BallDisplay :
+    #   If using a Sys11 game prior which has a separate Ball/Credit display, you can put them on the
+    #   DMD.  If the value for a display is set to zero (or removed from YAML) it won't display.
+    #   Otherwise it's the vertical position of the display from the top.  Try 1 and 15 for a start.
+    
+    # autoPatterDetection:
+    #   on or off - by default, Pinmame will try to automatically detect patter requirements. 
+    #   there is a thread on the forum about this.  For Sys11 this should certainly be disabled,
+    #   as it does nasty things.  Likely enable for other platforms but could be useful to disable.
+
+    # doubleAlpha:
+    #   0 or 1 - set to 1 if your machine has 2 lines of 16 character alphanumeric displays.
+    #   This will adapt the code to properly handle the various display types in Sys11 machines (and a couple of WPC)
+   
+    keyboard: off
+    autoPatterDetection: off
+    s11CreditDisplay: 0
+    s11BallDisplay: 0
+    doubleAlpha: 1
 PRSwitches:
     # **** Format ****
     # name:
@@ -19,9 +48,9 @@ PRSwitches:
     #                    Sx  (Matrix switch, labeled x in WPC manual
     #   <type> can be: 'NO' (normally open.  This is the default; so no need to use this)
     #                  'NC' (normally closed.  Common for optos)
-    flipperLwR:
+    FlipperLwR:
         number: S81
-    flipperLwL:
+    FlipperLwL:
         number: S82
     tilt: 
         number: S11
@@ -126,15 +155,15 @@ PRSwitches:
         number: S72
     unusedS73:
         number: S73
-    jetLeftSwitch: 
+    jetLeft: 
         number: S74
-    jetRightSwitch:
+    jetRight:
         number: S75
-    jetTopSwitch:
+    jetTop:
         number: S76
-    slingLeftSwitch:
+    slingL:
         number: S77
-    slingRightSwitch:
+    slingR:
         number: S78
     unusedS83:
         number: S83
@@ -181,21 +210,21 @@ PRCoils:
         number: C15
     onRampJetBumperFlashers:
         number: C16
-    jetLeftCoil:
+    jetLeft:
         number: C17
-    slingLeftCoil:
+    slingL:
         number: C18
-    jetRightCoil:
+    jetRight:
         number: C19
-    slingRightCoil:
+    slingR:
         number: C20
-    jetTopCoil:
+    jetTop:
         number: C21
     quakeMotor:
         number: C22
     flipperEnable:
         number: C23
-    extraDrive1:
+    autoLauncher:
         number: C25
     extraDrive2:
         number: C26

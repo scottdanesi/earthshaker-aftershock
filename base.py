@@ -49,6 +49,9 @@ from skillshot import SkillshotMode
 class BaseGameMode(game.Mode):
 	def __init__(self, game):
 			super(BaseGameMode, self).__init__(game=game, priority=2)
+			#self.game.sound.load_music('main')
+			#print gameMusicPath+'twerk.wav'
+			#self.game.sound.play_music('main')
 			#self.score_display = AlphaScoreDisplay(self.game,0)
 			#Start Attract Mode
 			#self.attract_mode = AttractMode(self.game)
@@ -106,15 +109,35 @@ class BaseGameMode(game.Mode):
 		self.start_ball()
 		self.queueGameStartModes()
 		self.update_display()
+		#self.game.sound.load_music('main')
+		#print gameMusicPath+'twerk.wav'
+		
 
 	def start_ball(self):
 		self.game.coils.ballReleaseShooterLane_CenterRampFlashers1.pulse(50)
+		#self.game.coils.acSelect.disable()
 		
 
+
+	def launch_ball(self):
+		#if self.game.switches.outhole.is_active()==True:
+		self.game.coils.acSelect.enable()
+		time.sleep(.05)
+		self.score_display.set_text("LAUNCH TEST",0)
+		self.game.coils.unused_RightRampFlashers3.pulse(100)
+		#self.game.coils.extraDrive2.pulse(50)
+		#self.game.coils.extraDrive3.pulse(50)
+		#self.game.coils.extraDrive4.pulse(50)
+		#self.game.coils.extraDrive5.pulse(50)
+		#self.game.coils.extraDrive6.pulse(50)
+		#self.game.coils.extraDrive7.pulse(50)
+		#self.game.coils.extraDrive8.pulse(50)
+		
 	def end_game(self):
 		self.game.ball = 0
 		self.game.coils.flipperEnable.disable()
 		self.game.modes.add(self.attract_mode)
+		self.game.sound.fadeout_music(time_ms=450)
 
 	def update_display(self):
 		self.p = self.game.current_player()
@@ -135,6 +158,8 @@ class BaseGameMode(game.Mode):
 				#Start Game
 				#########################
 				self.start_game()
+				#self.game.sound.play_music('main')
+				self.delay(name='lauchball',delay=2,handler=self.launch_ball)
 			elif self.game.ball == 1 and len(self.game.players) < 4:
 				self.game.add_player()
 			else:
@@ -151,16 +176,20 @@ class BaseGameMode(game.Mode):
 	def sw_outhole_closed_for_1s(self, sw):
 		#self.attract_mode = AttractMode(game)
 		self.game.coils.acSelect.disable()
+		time.sleep(.5)
 		self.game.coils.outholeKicker_CaptiveFlashers.pulse(50)
 		#self.game.modes.add(self.attract_mode)
 		#self.game.modes.remove(basic_mode)
-		self.end_game()
+		#self.score_display.set_text(str(self.game.ball),0)
+		#self.score_display.set_text(str(self.game.balls_per_game),1)
+		if self.game.ball == self.game.balls_per_game:
+			self.end_game()
 		return procgame.game.SwitchStop
 
 	def sw_ejectHole5_closed_for_1s(self, sw):
 		self.game.coils.acSelect.disable()
 		self.game.coils.ejectHole_CenterRampFlashers4.pulse(50)
-		#self.game.score(250)
+			#self.game.score(250)
 		return procgame.game.SwitchStop
 
 	def sw_ballPopperBottom_closed_for_1s(self, sw):
@@ -181,36 +210,37 @@ class BaseGameMode(game.Mode):
 		#self.game.score(250)
 		return procgame.game.SwitchStop
 
-	def sw_jetLeftSwitch_active(self, sw):
-		self.game.coils.jetLeftCoil.pulse(30)
+	def sw_jetLeft_active(self, sw):
+		self.game.coils.jetLeft.pulse(30)
 		self.game.lamps.jetLeftLamp.enable()
 		self.score(50)
 		return procgame.game.SwitchStop
 
-	def sw_jetRightSwitch_active(self, sw):
-		self.game.coils.jetRightCoil.pulse(30)
+	def sw_jetRight_active(self, sw):
+		self.game.coils.jetRight.pulse(30)
 		self.game.lamps.jetRightLamp.enable()
 		self.score(50)
 		return procgame.game.SwitchStop
 
-	def sw_jetTopSwitch_active(self, sw):
-		self.game.coils.jetTopCoil.pulse(30)
+	def sw_jetTop_active(self, sw):
+		self.game.coils.jetTop.pulse(30)
 		self.game.lamps.jetTopLamp.enable()
 		self.score(50)
 		return procgame.game.SwitchStop
 
-	def sw_slingLeftSwitch_active(self, sw):
-		self.game.coils.slingLeftCoil.pulse(30)
+	def sw_slingL_active(self, sw):
+		self.game.coils.slingL.pulse(30)
 		self.score(100)
 		return procgame.game.SwitchStop
 
-	def sw_slingRightSwitch_active(self, sw):
-		self.game.coils.slingRightCoil.pulse(30)
+	def sw_slingR_active(self, sw):
+		self.game.coils.slingR.pulse(30)
 		self.score(100)
 		return procgame.game.SwitchStop
 
 	def sw_spinner_active(self, sw):
 		self.game.lamps.spinner.pulse(30)
+		self.game.sound.play_voice('spinner')
 		#game.coils.acSelect.disable()
 		self.score(100)
 		return procgame.game.SwitchStop

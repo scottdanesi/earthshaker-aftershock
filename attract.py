@@ -55,11 +55,12 @@ class AttractMode(game.Mode):
 		return super(AttractMode, self).mode_stopped()
 			
 	def setDisplayContent(self):
-		#displayItems = [
-		#score_display.set_script(self.displayItems)
+		script=[]
+		#script.append({'top':'earthshaker','bottom':'aftershock','timer':5,'transition':1})
+		#script.append({'top':'software by','bottom':'scott danesi','timer':5,'transition':1})
+		#self.score_display.set_script(script)
 		self.score_display.set_text("Earthshaker",0)
 		self.score_display.set_text("Aftershock",1)
-		#self.delay(name='restore_display',delay=seconds,handler=self.restore)
 		
 	def startAttractLamps(self):
 		i = 0		
@@ -117,17 +118,17 @@ class AttractMode(game.Mode):
 		self.score_display.set_text("Press Start",1)
 		return procgame.game.SwitchStop
 
-	def sw_jetLeftSwitch_active(self, sw):
+	def sw_jetLeft_active(self, sw):
 		return procgame.game.SwitchStop
 
-	def sw_jetRightSwitch_active(self, sw):
+	def sw_jetRight_active(self, sw):
 		return procgame.game.SwitchStop
 
-	def sw_jetTopSwitch_active(self, sw):
+	def sw_jetTop_active(self, sw):
 		return procgame.game.SwitchStop
 
-	def sw_slingLeftSwitch_active(self, sw):
+	def sw_slingL_active(self, sw):
 		return procgame.game.SwitchStop
 
-	def sw_slingRightSwitch_active(self, sw):
+	def sw_slingR_active(self, sw):
 		return procgame.game.SwitchStop

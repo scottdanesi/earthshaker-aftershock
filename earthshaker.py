@@ -34,7 +34,11 @@ from base import BaseGameMode
 gameYaml = 'config/es.yaml'
 gameSettings = 'config/settings.yaml'
 gameMachineType = 'wpcAlphanumeric'
-ballsPerGame = 3
+
+gameMusicPath = 'assets/music/'
+gameSoundPath = 'assets/sound/'
+
+ballsPerGame = 1
 
 ################################################
 # GAME CLASS
@@ -44,18 +48,29 @@ class EarthshakerAftershock(procgame.game.BasicGame):
 		super(EarthshakerAftershock, self).__init__(machine_type)
 		self.load_config(gameYaml)
 		self.balls_per_game = ballsPerGame
+		self.sound = procgame.sound.SoundController(self)
+		#self.RegisterSound()
 			
 	def reset(self):
 		super(EarthshakerAftershock, self).reset()
 		#boot into Game Over Mode
 		self.base_mode = BaseGameMode(game)
 		self.modes.add(self.base_mode)
+
+	#def RegisterSound(self):
+		#self.sound.register_music('main', gameMusicPath+'twerk.wav')
+		
 		
 ################################################
 # GAME DEFINITIONS
 ################################################
 game = EarthshakerAftershock(machine_type=gameMachineType)
-game.logging_enabled=True
-
+game.logging_enabled=False
+#game.sound = procgame.sound.SoundController(game)
+#game.sound.
+game.sound.music_volume_offset = 10
+game.sound.register_music('main', gameMusicPath+'test.mp3')
+game.sound.register_sound('spinner', gameSoundPath+'spinner.wav')
+#game.sound.play_music('main')
 game.reset()
 game.run_loop()
