@@ -48,9 +48,10 @@ class AuxPort(object):
 		if True: self.print_commands(commands)
 
 	def print_commands(self, commands):
-		ctr = 0
-		print "AuxPort commands being written:"
-		for command in commands:
-			print "Command %d: %s" % (ctr, command)
-			ctr += 1
+		pass
+		#ctr = 0
+		#print "AuxPort commands being written:"
+		#for command in commands:
+			#print "Command %d: %s" % (ctr, command)
+			#ctr += 1
 
