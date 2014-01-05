@@ -49,14 +49,7 @@ from skillshot import SkillshotMode
 class BaseGameMode(game.Mode):
 	def __init__(self, game):
 			super(BaseGameMode, self).__init__(game=game, priority=2)
-			#self.game.sound.load_music('main')
-			#print gameMusicPath+'twerk.wav'
-			#self.game.sound.play_music('main')
-			#self.score_display = AlphaScoreDisplay(self.game,0)
-			#Start Attract Mode
-			#self.attract_mode = AttractMode(self.game)
-			#self.game.modes.add(self.attract_mode)
-
+			
 	def mode_started(self):
 			self.score_display = AlphaScoreDisplay(self.game,0)
 			#Start Attract Mode
@@ -64,6 +57,9 @@ class BaseGameMode(game.Mode):
 			self.game.modes.add(self.attract_mode)
 			self.checkForStuckBalls()
 
+	###############################################################
+	# UTILITY FUNCTIONS
+	###############################################################
 	def troughIsFull(self): #should be moved globally
 		if (self.game.switches.trough1.is_active()==True and self.game.switches.trough2.is_active()==True and self.game.switches.trough3.is_active()==True):
 			return True
@@ -71,17 +67,27 @@ class BaseGameMode(game.Mode):
 			return False
 
 	def checkForStuckBalls(self):
+		#Checks for balls in locks or outhole and kicks them out
 		if self.game.switches.outhole.is_active()==True:
 			self.game.coils.acSelect.disable()
+			time.sleep(.05)
 			self.game.coils.outholeKicker_CaptiveFlashers.pulse(50)
+			self.enable_ac_select()
 		if self.game.switches.ejectHole5.is_active()==True:
 			self.game.coils.acSelect.disable()
+			time.sleep(.05)
 			self.game.coils.ejectHole_CenterRampFlashers4.pulse(50)
+			self.enable_ac_select()
 		if self.game.switches.ballPopperBottom.is_active()==True:
 			self.game.coils.acSelect.disable()
+			time.sleep(.05)
 			self.game.coils.bottomBallPopper_RightRampFlashers1.pulse(50)
+			self.enable_ac_select()
 		if self.game.switches.ballPopperTop.is_active()==True:
+			self.game.coils.acSelect.disable()
+			time.sleep(.05)
 			self.game.coils.topBallPopper.pulse(50)
+			self.enable_ac_select()
 
 	def score(self, points):
 		p = self.game.current_player()
@@ -90,9 +96,32 @@ class BaseGameMode(game.Mode):
 		self.delay(name='updatescore',delay=0.5,handler=self.update_display)
 
 	def queueGameStartModes(self):
+		#Skillshot Mode
 		skillshot_mode = SkillshotMode(self.game)
 		self.game.modes.add(skillshot_mode)
+
+	def launch_ball(self):
+		#if self.game.switches.outhole.is_active()==True:
+		self.game.coils.acSelect.disable()
+		time.sleep(.05)
+		self.score_display.set_text("LAUNCH TEST",0)
+		self.game.coils.unused_RightRampFlashers3.pulse(100)
+		self.enable_ac_select()
+
+	def enable_ac_select(self):
+		#This function will automatically delay the enabling of the AC Select relay
+		#It is to be used after a coil fires to ensure the the relay gets re-enabled
+		time.sleep(.25)
+		self.game.coils.acSelect.enable()
+
+	def update_display(self):
+		self.p = self.game.current_player()
+		self.score_display.set_text(str(self.p.score),0)
+		self.score_display.set_text("Ball "+str(self.game.ball),1,justify='right')
 		
+	###############################################################
+	# MAIN GAME HANDLING FUNCTIONS
+	###############################################################
 	def start_game(self):
 		#This function is to be used when starting a new game, player 1 and ball 1
 
@@ -112,38 +141,22 @@ class BaseGameMode(game.Mode):
 		#self.game.sound.load_music('main')
 		#print gameMusicPath+'twerk.wav'
 		
-
 	def start_ball(self):
 		self.game.coils.ballReleaseShooterLane_CenterRampFlashers1.pulse(50)
 		#self.game.coils.acSelect.disable()
 		
+	def end_ball(self):
+		self.game.ball += 1
 
-
-	def launch_ball(self):
-		#if self.game.switches.outhole.is_active()==True:
-		self.game.coils.acSelect.enable()
-		time.sleep(.05)
-		self.score_display.set_text("LAUNCH TEST",0)
-		self.game.coils.unused_RightRampFlashers3.pulse(100)
-		#self.game.coils.extraDrive2.pulse(50)
-		#self.game.coils.extraDrive3.pulse(50)
-		#self.game.coils.extraDrive4.pulse(50)
-		#self.game.coils.extraDrive5.pulse(50)
-		#self.game.coils.extraDrive6.pulse(50)
-		#self.game.coils.extraDrive7.pulse(50)
-		#self.game.coils.extraDrive8.pulse(50)
-		
 	def end_game(self):
 		self.game.ball = 0
 		self.game.coils.flipperEnable.disable()
 		self.game.modes.add(self.attract_mode)
 		self.game.sound.fadeout_music(time_ms=450)
 
-	def update_display(self):
-		self.p = self.game.current_player()
-		self.score_display.set_text(str(self.p.score),0)
-		self.score_display.set_text("Ball "+str(self.game.ball),1)
-
+	###############################################################
+	# BASE SWITCH HANDLING FUNCTIONS
+	###############################################################		
 	def sw_instituteDown_closed(self, sw):
 		self.game.coils.quakeInstitute.disable()
 		return procgame.game.SwitchStop
@@ -172,7 +185,6 @@ class BaseGameMode(game.Mode):
 			self.score_display.set_text("Please Wait",1,seconds=1)
 		return procgame.game.SwitchStop
 		
-
 	def sw_outhole_closed_for_1s(self, sw):
 		#self.attract_mode = AttractMode(game)
 		self.game.coils.acSelect.disable()
@@ -245,9 +257,9 @@ class BaseGameMode(game.Mode):
 		self.score(100)
 		return procgame.game.SwitchStop
 
-#############################
-# Zone Switches
-#############################
+	#############################
+	# Zone Switches
+	#############################
 	def sw_leftStandup1_closed(self, sw):
 		self.game.lamps.standupLeft1.enable()
 		self.game.lamps.building1.enable()
