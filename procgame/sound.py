@@ -22,6 +22,7 @@ class SoundController(object):
         try:
             mixer.pre_init(44100,-16,2,1024)
             mixer.init()
+            mixer.set_num_channels(32)
         except Exception, e:
             # The import mixer above may work, but init can still fail if mixer is not fully supported.
             self.enabled = False
