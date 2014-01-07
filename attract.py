@@ -26,41 +26,42 @@
 import procgame.game
 from procgame import *
 import pinproc
-import scoredisplay
-from scoredisplay import AlphaScoreDisplay
-#from base import AlphaScoreDisplay
 
 class AttractMode(game.Mode):
 	def __init__(self, game):
 			super(AttractMode, self).__init__(game=game, priority=5)
-			####################
-			#Mode Setup
-			####################
-			
-			self.score_display = AlphaScoreDisplay(self.game,0)
-			#gameover_mode = GameOver(game)
-			
-			#self.checkForStuckBalls()
 
 	def mode_started(self):
 		self.resetQuakeInstitute()
-		#self.startAttractLamps()
 		self.startAttractLamps2()
 		self.setDisplayContent()
-		return super(AttractMode, self).mode_started()
 
 	def mode_stopped(self):
 		for lamp in self.game.lamps:
 			lamp.disable()
-		return super(AttractMode, self).mode_stopped()
+		#Cancel Display Script
+		#self.game.score_display.cancel_script() #Does not work...
 			
 	def setDisplayContent(self):
+		#Script initialization
 		script=[]
-		#script.append({'top':'earthshaker','bottom':'aftershock','timer':5,'transition':1})
-		#script.append({'top':'software by','bottom':'scott danesi','timer':5,'transition':1})
-		#self.score_display.set_script(script)
-		self.score_display.set_text("Earthshaker",0)
-		self.score_display.set_text("Aftershock",1)
+
+		#Title Screen
+		script.append({'top':'<<<<<Earthshaker','bottom':'Aftershock>>>>>>','timer':5,'transition':3})
+
+		#About
+		script.append({'top':'software by','bottom':'scott danesi','timer':5,'transition':1})
+
+		#Special Thanks
+		script.append({'top':'SPECIAL THANKS','bottom':'myPinballs','timer':3,'transition':2})
+		script.append({'top':'SPECIAL THANKS','bottom':'Mark Sunnucks','timer':3,'transition':2})
+		script.append({'top':'SPECIAL THANKS','bottom':'Multimorphic','timer':3,'transition':2})
+		
+		#Cancel any score display scripts that may be running
+		#self.game.score_display.cancel_script()
+
+		#Start new display script
+		self.game.score_display.set_script(script)
 		
 	def startAttractLamps(self):
 		i = 0		
@@ -114,8 +115,8 @@ class AttractMode(game.Mode):
 		self.game.coils.acSelect.disable()
 		self.game.coils.flipperEnable.disable()
 		self.game.coils.outholeKicker_CaptiveFlashers.pulse(50)
-		self.score_display.set_text("GAME OVER",0)
-		self.score_display.set_text("Press Start",1)
+		self.game.score_display.set_text("GAME OVER",0)
+		self.game.score_display.set_text("Press Start",1)
 		return procgame.game.SwitchStop
 
 	def sw_jetLeft_active(self, sw):

@@ -57,8 +57,8 @@ class SkillshotMode(game.Mode):
 
 	def update_display(self):
 		self.p = self.game.current_player()
-		self.score_display.set_text(str(self.p.score),0)
-		self.score_display.set_text("Ball "+str(self.game.ball),1)
+		self.game.score_display.set_text(str(self.p.score),0)
+		self.game.score_display.set_text("Ball "+str(self.game.ball),1)
 		
 	def startSkillshotLamps(self):
 		self.game.lamps.captive25k.schedule(schedule=0x0000000F, cycle_seconds=0, now=False)

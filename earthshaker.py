@@ -27,6 +27,8 @@ import procgame.game
 import pinproc
 import base
 from base import BaseGameMode
+import scoredisplay
+from scoredisplay import *
 
 ################################################
 # GLOBAL VARIABLES
@@ -34,7 +36,6 @@ from base import BaseGameMode
 gameYaml = 'config/es.yaml'
 gameSettings = 'config/settings.yaml'
 gameMachineType = 'wpcAlphanumeric'
-
 gameMusicPath = 'assets/music/'
 gameSoundPath = 'assets/sound/'
 
@@ -47,9 +48,12 @@ class EarthshakerAftershock(procgame.game.BasicGame):
 	def __init__(self, machine_type):
 		super(EarthshakerAftershock, self).__init__(machine_type)
 		self.load_config(gameYaml)
+		self.logging_enabled=True
 		self.balls_per_game = ballsPerGame
 		self.sound = procgame.sound.SoundController(self)
-		#self.RegisterSound()
+		#Setup Score Display
+		self.score_display = AlphaScoreDisplay(self,0)
+		self.RegisterSound()
 			
 	def reset(self):
 		super(EarthshakerAftershock, self).reset()
@@ -57,20 +61,15 @@ class EarthshakerAftershock(procgame.game.BasicGame):
 		self.base_mode = BaseGameMode(game)
 		self.modes.add(self.base_mode)
 
-	#def RegisterSound(self):
-		#self.sound.register_music('main', gameMusicPath+'twerk.wav')
+	def RegisterSound(self):
+		self.sound.music_volume_offset = 10 #This will be hardcoded at 10 since I have external volume controls I will be using
+		self.sound.register_music('main', gameMusicPath+'test.mp3')
+		self.sound.register_sound('spinner', gameSoundPath+'spinner.wav')
 		
 		
 ################################################
 # GAME DEFINITIONS
 ################################################
 game = EarthshakerAftershock(machine_type=gameMachineType)
-game.logging_enabled=False
-#game.sound = procgame.sound.SoundController(game)
-#game.sound.
-game.sound.music_volume_offset = 10
-game.sound.register_music('main', gameMusicPath+'test.mp3')
-game.sound.register_sound('spinner', gameSoundPath+'spinner.wav')
-#game.sound.play_music('main')
 game.reset()
 game.run_loop()

@@ -238,24 +238,22 @@ class AlphaScoreDisplay(game.ScoreDisplay):
 
                 def wrapper(item,i): # Use wrapper() to capture the values of item.
                     self.log.info('script item is:%s',item)
-                    if item['transition']==0:
+                    if item['transition']==0: # fixed top and bottom, centered
                         self.__top_delay = self.delay(name='display_script_ttext', delay=i,handler=lambda: self.set_text(item['top'],0,justify='center'))
                         self.__bottom_delay = self.delay(name='display_script_btext', delay=i,handler=lambda: self.set_text(item['bottom'],1,justify='center'))
-                    elif item['transition']==1:
+                    elif item['transition']==1: #slide in top and bottom, from right to left
                         self.__top_delay = self.delay(name='display_script_ttext', delay=i,handler=lambda: self.set_transition_in(item['top'],0,justify='left'))
                         self.__bottom_delay = self.delay(name='display_script_btext', delay=i,handler=lambda: self.set_transition_in(item['bottom'],1,justify='left'))
-                    elif item['transition']==2:
+                    elif item['transition']==2: #fixed top, slide in bottom, centered
                         self.__top_delay = self.delay(name='display_script_ttext', delay=i,handler=lambda: self.set_text(item['top'],0,justify='center'))
                         self.__bottom_delay = self.delay(name='display_script_btext', delay=i,handler=lambda: self.set_transition_in(item['bottom'],1,justify='center'))
-                    elif item['transition']==3:
+                    elif item['transition']==3: # reveal out from center top and bottom
                         self.__top_delay = self.delay(name='display_script_ttext', delay=i,handler=lambda: self.set_transition_reveal(item['top'],0))
                         self.__bottom_delay = self.delay(name='display_script_btext', delay=i,handler=lambda: self.set_transition_reveal(item['bottom'],1))
-                    elif item['transition']==4:
+                    elif item['transition']==4: # fixed top, flashing bottom, centered
                         self.__top_delay = self.delay(name='display_script_ttext', delay=i,handler=lambda: self.set_text(item['top'],0,justify='center'))
                         self.__bottom_delay = self.delay(name='display_script_btext', delay=i,handler=lambda: self.set_text(item['bottom'],1,justify='center',blink_rate=0.2))                        
-                
-				#print(item['top'])
-				  
+                        
                 wrapper(item,i)
                 i+=item['timer']
             repeat_delay =self.delay(name='display_script_repeat',delay=i,handler=self.set_script,param=data)
