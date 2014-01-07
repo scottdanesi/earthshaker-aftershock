@@ -44,7 +44,7 @@ class BaseGameMode(game.Mode):
 			#Start Attract Mode
 			self.attract_mode = AttractMode(self.game)
 			self.game.modes.add(self.attract_mode)
-			self.checkForStuckBalls()
+			self.releaseStuckBalls()
 
 	###############################################################
 	# UTILITY FUNCTIONS
@@ -55,23 +55,23 @@ class BaseGameMode(game.Mode):
 		else:
 			return False
 
-	def checkForStuckBalls(self):
+	def releaseStuckBalls(self):
 		#Checks for balls in locks or outhole and kicks them out
 		if self.game.switches.outhole.is_active()==True:
-			self.coilPulse(coilname='outholeKicker_CaptiveFlashers',pulsetime=50)
+			self.acCoilPulse(coilname='outholeKicker_CaptiveFlashers',pulsetime=50)
 		if self.game.switches.ejectHole5.is_active()==True:
-			self.coilPulse(coilname='ejectHole_CenterRampFlashers4',pulsetime=50)
+			self.acCoilPulse(coilname='ejectHole_CenterRampFlashers4',pulsetime=50)
 		if self.game.switches.ballPopperBottom.is_active()==True:
-			self.coilPulse(coilname='bottomBallPopper_RightRampFlashers1',pulsetime=50)
+			self.acCoilPulse(coilname='bottomBallPopper_RightRampFlashers1',pulsetime=50)
 		if self.game.switches.ballPopperTop.is_active()==True:
 			self.game.coils.topBallPopper.pulse(50) #Does not need AC Relay logic
 
-	def coilPulse(self,coilname,pulsetime):
-		self.acselecttime = .2
+	def acCoilPulse(self,coilname,pulsetime):
+		self.acSelectTimeBuffer = .2
 		self.cancel_delayed(name='acEnableDelay')
 		self.game.coils.acSelect.disable()
-		self.delay(name='coilDelay',event_type=None,delay=self.acselecttime,handler=self.game.coils[coilname].pulse,param=pulsetime)
-		self.delay(name='acEnableDelay',delay=1,handler=self.game.coils.acSelect.enable)
+		self.delay(name='coilDelay',event_type=None,delay=self.acSelectTimeBuffer,handler=self.game.coils[coilname].pulse,param=pulsetime)
+		self.delay(name='acEnableDelay',delay=pulsetime+(self.acSelectTimeBuffer*2),handler=self.game.coils.acSelect.enable)
 
 	def score(self, points):
 		self.p = self.game.current_player()
@@ -116,7 +116,7 @@ class BaseGameMode(game.Mode):
 		#print gameMusicPath+'twerk.wav'
 		
 	def start_ball(self):
-		self.coilPulse(coilname='ballReleaseShooterLane_CenterRampFlashers1',pulsetime=50)
+		self.acCoilPulse(coilname='ballReleaseShooterLane_CenterRampFlashers1',pulsetime=50)
 		
 	def end_ball(self):
 		self.game.ball += 1
@@ -158,7 +158,7 @@ class BaseGameMode(game.Mode):
 			#Enable Flippers
 			self.game.coils.flipperEnable.enable()
 		else:
-			self.checkForStuckBalls()
+			self.releaseStuckBalls()
 			self.game.score_display.set_text("Missing Pinballs",0)
 			self.game.score_display.set_text("Please Wait",1)
 		return procgame.game.SwitchStop
@@ -168,18 +168,18 @@ class BaseGameMode(game.Mode):
 		pass
 		
 	def sw_outhole_closed_for_1s(self, sw):
-		self.coilPulse(coilname='outholeKicker_CaptiveFlashers',pulsetime=50)
+		self.acCoilPulse(coilname='outholeKicker_CaptiveFlashers',pulsetime=50)
 		if self.game.ball == self.game.balls_per_game:
 			self.end_game()
 		return procgame.game.SwitchStop
 
 	def sw_ejectHole5_closed_for_1s(self, sw):
-		self.coilPulse(coilname='ejectHole_CenterRampFlashers4',pulsetime=50)
+		self.acCoilPulse(coilname='ejectHole_CenterRampFlashers4',pulsetime=50)
 		self.score(250)
 		return procgame.game.SwitchStop
 
 	def sw_ballPopperBottom_closed_for_1s(self, sw):
-		self.coilPulse(coilname='bottomBallPopper_RightRampFlashers1',pulsetime=50)
+		self.acCoilPulse(coilname='bottomBallPopper_RightRampFlashers1',pulsetime=50)
 		self.score(250)
 		return procgame.game.SwitchStop
 
@@ -224,7 +224,7 @@ class BaseGameMode(game.Mode):
 		return procgame.game.SwitchStop
 
 	def sw_spinner_active(self, sw):
-		self.game.coils.dropReset_CenterRampFlashers2.pulse(50)
+		self.game.coils.dropReset_CenterRampFlashers2.pulse(40)
 		self.game.sound.play_voice('spinner')
 		self.score(100)
 		return procgame.game.SwitchStop
