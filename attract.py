@@ -47,7 +47,7 @@ class AttractMode(game.Mode):
 		script=[]
 
 		#Title Screen
-		script.append({'top':'<<<<<Earthshaker','bottom':'Aftershock>>>>>>','timer':5,'transition':3})
+		script.append({'top':'<<<< Earthshaker','bottom':'Aftershock  >>>>','timer':5,'transition':3})
 
 		#About
 		script.append({'top':'software by','bottom':'scott danesi','timer':5,'transition':1})
@@ -64,7 +64,7 @@ class AttractMode(game.Mode):
 		self.game.score_display.set_script(script)
 		
 	def startAttractLamps(self):
-		i = 0		
+		i = 0
 		for lamp in self.game.lamps:
 			if i % 4 == 3:
 				lamp.schedule(schedule=0xf000f000, cycle_seconds=0, now=False)
@@ -77,7 +77,7 @@ class AttractMode(game.Mode):
 			i = i + 1
 
 	def startAttractLamps2(self):
-		i = 0		
+		i = 0
 		for lamp in self.game.lamps:
 			if i % 8 == 7:
 				lamp.schedule(schedule=0xf0000000, cycle_seconds=0, now=False)
