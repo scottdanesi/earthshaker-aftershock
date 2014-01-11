@@ -39,10 +39,10 @@ import logging
 ###################################
 import base
 from base import *
-import attract
-from attract import *
+#import attract
+#from attract import *
 import scoredisplay
-from scoredisplay import AlphaScoreDisplay
+from scoredisplay import *
 
 # Import and Setup Logging
 logging.basicConfig(level=logging.WARN, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -70,7 +70,7 @@ ballsPerGame = 3 # this will eventually be called from the config file
 ################################################
 class EarthshakerAftershock(game.BasicGame):
 	def __init__(self, machine_type):
-		super(EarthshakerAftershock, self).__init__(game_machine_type)
+		super(EarthshakerAftershock, self).__init__(machine_type)
 		self.load_config(game_machine_yaml)
 		self.logging_enabled=True
 		self.balls_per_game = ballsPerGame
@@ -78,9 +78,10 @@ class EarthshakerAftershock(game.BasicGame):
 		#Setup Alphanumeric Display Controller
 		self.score_display = AlphaScoreDisplay(self,0)
 
-		#self.currentPlayer = self.current_player()
-		
-			
+		# Setup Sound Controller
+		self.sound = procgame.sound.SoundController(self)
+		self.RegisterSound()
+
 	def reset(self):
 		super(EarthshakerAftershock, self).reset()
 
@@ -94,24 +95,18 @@ class EarthshakerAftershock(game.BasicGame):
 		# software version number
 		self.revision = "1.0.0"
 
-		# Setup Sound Controller
-		self.sound = procgame.sound.SoundController(self)
-		self.RegisterSound()
-
-		#boot into Game Over Mode
-		self.base_mode = BaseGameMode(game, priority=2)
+		#boot into Base Mode
+		self.base_mode = BaseGameMode(game=game, priority=2)
 		self.modes.add(self.base_mode)
-		#self.attract_mode = AttractMode(game, priority=5)
-		#self.modes.add(self.attract_mode)
+		#could potentially put Attract mode here too
 
 	def RegisterSound(self):
 		self.sound.music_volume_offset = 10 #This will be hardcoded at 10 since I have external volume controls I will be using
 		self.sound.register_music('main', game_music_path + 'test.mp3')
 		self.sound.register_sound('spinner', game_sound_path + 'spinner.wav')
 		
-		
 ################################################
-# GAME DEFINITIONS
+# GAME DEFINITION
 ################################################
 game = EarthshakerAftershock(machine_type=game_machine_type)
 game.reset()

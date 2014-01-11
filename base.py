@@ -46,11 +46,10 @@ class BaseGameMode(game.Mode):
 			
 	def mode_started(self):
 			#Start Attract Mode
-			self.attract_mode = AttractMode(self.game,priority=5)
+			self.attract_mode = AttractMode(game=self.game,priority=5)
 			self.game.modes.add(self.attract_mode)
 			self.releaseStuckBalls()
 			
-
 	###############################################################
 	# UTILITY FUNCTIONS
 	###############################################################
