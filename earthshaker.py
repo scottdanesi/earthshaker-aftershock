@@ -42,7 +42,7 @@ from base import *
 #import attract
 #from attract import *
 import scoredisplay
-from scoredisplay import *
+from scoredisplay import AlphaScoreDisplay
 
 # Import and Setup Logging
 logging.basicConfig(level=logging.WARN, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -75,8 +75,7 @@ class EarthshakerAftershock(game.BasicGame):
 		self.logging_enabled=True
 		self.balls_per_game = ballsPerGame
 		
-		#Setup Alphanumeric Display Controller
-		self.score_display = AlphaScoreDisplay(self,0)
+		
 
 		# Setup Sound Controller
 		self.sound = procgame.sound.SoundController(self)
@@ -92,13 +91,19 @@ class EarthshakerAftershock(game.BasicGame):
 		self.current_player_index = 0
 		self.modes.modes = []
 
+		#Setup Alphanumeric Display Controller
+		self.alpha_score_display = AlphaScoreDisplay(game=self,priority=1)
+
 		# software version number
 		self.revision = "1.0.0"
 
 		#boot into Base Mode
-		self.base_mode = BaseGameMode(game=game, priority=2)
+		self.base_mode = BaseGameMode(game)
 		self.modes.add(self.base_mode)
+		
 		#could potentially put Attract mode here too
+		#self.attract_mode = AttractMode(game)
+		#self.modes.add(self.attract_mode)
 
 	def RegisterSound(self):
 		self.sound.music_volume_offset = 10 #This will be hardcoded at 10 since I have external volume controls I will be using

@@ -28,8 +28,8 @@ from procgame import *
 import pinproc
 
 class AttractMode(game.Mode):
-	def __init__(self, game, priority):
-			super(AttractMode, self).__init__(game, priority)
+	def __init__(self, game):
+			super(AttractMode, self).__init__(game, priority=5)
 
 	def mode_started(self):
 		self.resetQuakeInstitute()
@@ -40,7 +40,7 @@ class AttractMode(game.Mode):
 		for lamp in self.game.lamps:
 			lamp.disable()
 		#Cancel Display Script
-		self.game.score_display.cancel_script()
+		self.game.alpha_score_display.cancel_script()
 		self.game.coils.acSelect.enable()
 			
 	def setDisplayContent(self):
@@ -93,21 +93,23 @@ class AttractMode(game.Mode):
 
 		#Title Screen
 		#script.append({'top':'<<<< Earthshaker','bottom':'Aftershock  >>>>','timer':5,'transition':3})
-		script=script+animEarthshaker
+		#script=script+animEarthshaker
 
 		#About
-		script.append({'top':'software by','bottom':'scott danesi','timer':5,'transition':1})
+		script.append({'top':'SOFTWARE BY','bottom':'SCOTT DANESI','timer':5,'transition':1})
 
 		#Special Thanks
 		script.append({'top':'SPECIAL THANKS','bottom':'myPinballs','timer':3,'transition':1})
 		script.append({'top':'SPECIAL THANKS','bottom':'Mark Sunnucks','timer':3,'transition':2})
-		script.append({'top':'SPECIAL THANKS','bottom':'MULTIMORPHIC.COM','timer':3,'transition':2})
+		script.append({'top':'SPECIAL THANKS','bottom':'MULTIMORPHIC','timer':3,'transition':2})
 		
 		#Cancel any score display scripts that may be running
-		self.game.score_display.cancel_script()
+		self.game.alpha_score_display.cancel_script()
 
 		#Start new display script
-		self.game.score_display.set_script(script)
+		self.game.alpha_score_display.set_script(script)
+		print str(script)
+		#self.game.alpha_score_display.set_text("Alpha Test",0)
 		
 	def startAttractLamps(self):
 		i = 0
@@ -164,8 +166,8 @@ class AttractMode(game.Mode):
 		self.game.coils.acSelect.disable()
 		self.game.coils.flipperEnable.disable()
 		self.game.coils.outholeKicker_CaptiveFlashers.pulse(50)
-		self.game.score_display.set_text("GAME OVER",0)
-		self.game.score_display.set_text("Press Start",1)
+		self.game.alpha_score_display.set_text("GAME OVER",0)
+		self.game.alpha_score_display.set_text("Press Start",1)
 		return procgame.game.SwitchStop
 
 	def sw_jetLeft_active(self, sw):

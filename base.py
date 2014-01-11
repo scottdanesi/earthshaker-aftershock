@@ -40,14 +40,16 @@ from ballsaver import BallSaver
 import locale
 
 class BaseGameMode(game.Mode):
-	def __init__(self, game, priority):
+	def __init__(self, game):
 			#locale.setlocale(locale.LC_ALL, '') #Might not be needed
-			super(BaseGameMode, self).__init__(game, priority)
+			super(BaseGameMode, self).__init__(game, priority=2)
+			
 			
 	def mode_started(self):
 			#Start Attract Mode
-			self.attract_mode = AttractMode(game=self.game,priority=5)
+			self.attract_mode = AttractMode(self.game)
 			self.game.modes.add(self.attract_mode)
+			
 			self.releaseStuckBalls()
 			
 	###############################################################
@@ -102,8 +104,8 @@ class BaseGameMode(game.Mode):
 
 	def update_display(self):
 		self.p = self.game.current_player()
-		self.game.score_display.set_text(locale.format("%d", self.p.score, grouping=True),0,justify='left')
-		self.game.score_display.set_text(self.p.name + "  Ball "+str(self.game.ball),1,justify='right')
+		self.game.alpha_score_display.set_text(locale.format("%d", self.p.score, grouping=True),0,justify='left')
+		self.game.alpha_score_display.set_text(self.p.name + "  Ball "+str(self.game.ball),1,justify='right')
 		print self.p.name
 		print "Ball " + str(self.game.ball)
 	###############################################################
@@ -191,8 +193,8 @@ class BaseGameMode(game.Mode):
 		else:
 			#missing balls
 			self.releaseStuckBalls()
-			self.game.score_display.set_text("Missing Pinballs",0)
-			self.game.score_display.set_text("Please Wait",1)
+			self.game.alpha_score_display.set_text("Missing Pinballs",0)
+			self.game.alpha_score_display.set_text("Please Wait",1)
 		return procgame.game.SwitchStop
 
 	def sw_startButton_active_for_1s(self, sw):
