@@ -28,8 +28,8 @@ from procgame import *
 import pinproc
 
 class AttractMode(game.Mode):
-	def __init__(self, game):
-			super(AttractMode, self).__init__(game=game, priority=5)
+	def __init__(self, game, priority):
+			super(AttractMode, self).__init__(game, priority)
 
 	def mode_started(self):
 		self.resetQuakeInstitute()
@@ -40,25 +40,71 @@ class AttractMode(game.Mode):
 		for lamp in self.game.lamps:
 			lamp.disable()
 		#Cancel Display Script
-		#self.game.score_display.cancel_script() #Does not work...
+		self.game.score_display.cancel_script()
+		self.game.coils.acSelect.enable()
 			
 	def setDisplayContent(self):
 		#Script initialization
 		script=[]
+		animEarthshaker=[]
+
+		animEarthshaker.append({'top':'                ','bottom':'                ','timer':.5,'transition':0})
+		animEarthshaker.append({'top':'               E','bottom':'                ','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'              Ea','bottom':'k               ','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'             Ear','bottom':'ck              ','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'            Eart','bottom':'ock             ','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'           Earth','bottom':'hock            ','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'          Earths','bottom':'shock           ','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'         Earthsh','bottom':'rshock          ','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'        Earthsha','bottom':'ershock         ','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'       Earthshak','bottom':'tershock        ','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'      Earthshake','bottom':'ftershock       ','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'     Earthshaker','bottom':'Aftershock      ','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'    Earthshaker ','bottom':' Aftershock     ','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'   Earthshaker  ','bottom':'  Aftershock    ','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'  Earthshaker   ','bottom':'   Aftershock   ','timer':2,'transition':0})
+		animEarthshaker.append({'top':' Earthshaker    ','bottom':'    Aftershock  ','timer':.1,'transition':0})
+		animEarthshaker.append({'top':'  Earthshaker   ','bottom':'   Aftershock   ','timer':.1,'transition':0})
+		animEarthshaker.append({'top':' EarWhshaker    ','bottom':'    AfterXhock  ','timer':.1,'transition':0})
+		animEarthshaker.append({'top':'  EarWhshaker   ','bottom':'   AfterXhock   ','timer':.1,'transition':0})
+		animEarthshaker.append({'top':' EarWhs9aker    ','bottom':'    AfterXhock  ','timer':.1,'transition':0})
+		animEarthshaker.append({'top':'  EarWhs9aker   ','bottom':'   Af*erXhock   ','timer':.1,'transition':0})
+		animEarthshaker.append({'top':' KarWhs9(ker    ','bottom':'    Af*erXhock  ','timer':.1,'transition':0})
+		animEarthshaker.append({'top':'  KarWhs9(ker   ','bottom':'   Af*erXhoc7   ','timer':.1,'transition':0})
+		animEarthshaker.append({'top':' KarWhF9(ker    ','bottom':'    Af*erXhoc7  ','timer':.1,'transition':0})
+		animEarthshaker.append({'top':'  KarWhF9(ker   ','bottom':'   Af*erXho>7   ','timer':.1,'transition':0})
+		animEarthshaker.append({'top':' KGrWhF9(ker    ','bottom':'    Af*erXho>7  ','timer':.1,'transition':0})
+		animEarthshaker.append({'top':'  KGrWhF9(keU   ','bottom':'   Af*erXho>7   ','timer':.1,'transition':0})
+		animEarthshaker.append({'top':' KGrWhF9(keU    ','bottom':'    Zf*erXho>7  ','timer':.1,'transition':0})
+		animEarthshaker.append({'top':'  KGrWhF9(keU   ','bottom':'   Zf*erXho>7   ','timer':2,'transition':0})
+		animEarthshaker.append({'top':' KGrWhF9(keU    ','bottom':'    Zf*erXho>7  ','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'KGrWhF9(keU     ','bottom':'     Zf*erXho>7 ','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'GrWhF9(keU      ','bottom':'      Zf*erXho>7','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'rWhF9(keU       ','bottom':'       Zf*erXho>','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'WhF9(keU        ','bottom':'        Zf*erXho','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'hF9(keU         ','bottom':'         Zf*erXh','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'F9(keU          ','bottom':'          Zf*erX','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'9(keU           ','bottom':'           Zf*er','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'(keU            ','bottom':'            Zf*e','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'keU             ','bottom':'             Zf*','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'eU              ','bottom':'              Zf','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'U               ','bottom':'               Z','timer':.05,'transition':0})
+		animEarthshaker.append({'top':'                ','bottom':'                ','timer':.5,'transition':0})
 
 		#Title Screen
-		script.append({'top':'<<<< Earthshaker','bottom':'Aftershock  >>>>','timer':5,'transition':3})
+		#script.append({'top':'<<<< Earthshaker','bottom':'Aftershock  >>>>','timer':5,'transition':3})
+		script=script+animEarthshaker
 
 		#About
 		script.append({'top':'software by','bottom':'scott danesi','timer':5,'transition':1})
 
 		#Special Thanks
-		script.append({'top':'SPECIAL THANKS','bottom':'myPinballs','timer':3,'transition':2})
+		script.append({'top':'SPECIAL THANKS','bottom':'myPinballs','timer':3,'transition':1})
 		script.append({'top':'SPECIAL THANKS','bottom':'Mark Sunnucks','timer':3,'transition':2})
-		script.append({'top':'SPECIAL THANKS','bottom':'Multimorphic','timer':3,'transition':2})
+		script.append({'top':'SPECIAL THANKS','bottom':'MULTIMORPHIC.COM','timer':3,'transition':2})
 		
 		#Cancel any score display scripts that may be running
-		#self.game.score_display.cancel_script()
+		self.game.score_display.cancel_script()
 
 		#Start new display script
 		self.game.score_display.set_script(script)
@@ -110,6 +156,9 @@ class AttractMode(game.Mode):
 			#Game Starting
 			#self.game.modes.remove(self)
 			return procgame.game.SwitchContinue
+
+	def sw_outhole_closed(self, sw):
+		return procgame.game.SwitchStop
 
 	def sw_outhole_active_for_1s(self, sw):
 		self.game.coils.acSelect.disable()

@@ -23,53 +23,96 @@
 ##
 #################################################################################
 
+###################################
+# SYSTEM IMPORTS
+###################################
 import procgame.game
 import pinproc
+import locale
+import yaml
+import sys
+import os
+import logging
+
+###################################
+# MODE IMPORTS
+###################################
 import base
-from base import BaseGameMode
+from base import *
+import attract
+from attract import *
 import scoredisplay
-from scoredisplay import *
+from scoredisplay import AlphaScoreDisplay
+
+# Import and Setup Logging
+logging.basicConfig(level=logging.WARN, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+
+# Used to put commas in the score.
+locale.setlocale(locale.LC_ALL, "")
 
 ################################################
-# GLOBAL VARIABLES
+# GLOBAL PATH VARIABLES
 ################################################
-gameYaml = 'config/es.yaml'
-gameSettings = 'config/settings.yaml'
-gameMachineType = 'wpcAlphanumeric'
-gameMusicPath = 'assets/music/'
-gameSoundPath = 'assets/sound/'
+game_machine_type = 'wpcAlphanumeric'
+curr_file_path = os.path.dirname(os.path.abspath( __file__ ))
+user_game_data_path = curr_file_path + "/config/game_data.yaml"
+game_data_defaults_path = curr_file_path + "/config/game_data_template.yaml"
+settings_defaults_path = curr_file_path + "/config/settings_template.yaml"
+user_settings_path = curr_file_path + "/config/user_settings.yaml"
+game_machine_yaml = curr_file_path + "/config/es.yaml"
+game_music_path = curr_file_path + "/assets/music/"
+game_sound_path = curr_file_path + "/assets/sound/"
 
-ballsPerGame = 1
+ballsPerGame = 3 # this will eventually be called from the config file
 
 ################################################
 # GAME CLASS
 ################################################
-class EarthshakerAftershock(procgame.game.BasicGame):
+class EarthshakerAftershock(game.BasicGame):
 	def __init__(self, machine_type):
-		super(EarthshakerAftershock, self).__init__(machine_type)
-		self.load_config(gameYaml)
+		super(EarthshakerAftershock, self).__init__(game_machine_type)
+		self.load_config(game_machine_yaml)
 		self.logging_enabled=True
 		self.balls_per_game = ballsPerGame
-		self.sound = procgame.sound.SoundController(self)
-		#Setup Score Display
+		
+		#Setup Alphanumeric Display Controller
 		self.score_display = AlphaScoreDisplay(self,0)
-		self.RegisterSound()
+
+		#self.currentPlayer = self.current_player()
+		
 			
 	def reset(self):
 		super(EarthshakerAftershock, self).reset()
+
+		self.ball = 0
+		self.old_players = []
+		self.old_players = self.players[:]
+		self.players = []
+		self.current_player_index = 0
+		self.modes.modes = []
+
+		# software version number
+		self.revision = "1.0.0"
+
+		# Setup Sound Controller
+		self.sound = procgame.sound.SoundController(self)
+		self.RegisterSound()
+
 		#boot into Game Over Mode
-		self.base_mode = BaseGameMode(game)
+		self.base_mode = BaseGameMode(game, priority=2)
 		self.modes.add(self.base_mode)
+		#self.attract_mode = AttractMode(game, priority=5)
+		#self.modes.add(self.attract_mode)
 
 	def RegisterSound(self):
 		self.sound.music_volume_offset = 10 #This will be hardcoded at 10 since I have external volume controls I will be using
-		self.sound.register_music('main', gameMusicPath+'test.mp3')
-		self.sound.register_sound('spinner', gameSoundPath+'spinner.wav')
+		self.sound.register_music('main', game_music_path + 'test.mp3')
+		self.sound.register_sound('spinner', game_sound_path + 'spinner.wav')
 		
 		
 ################################################
 # GAME DEFINITIONS
 ################################################
-game = EarthshakerAftershock(machine_type=gameMachineType)
+game = EarthshakerAftershock(machine_type=game_machine_type)
 game.reset()
 game.run_loop()
