@@ -28,8 +28,8 @@ from procgame import *
 import pinproc
 
 class AttractMode(game.Mode):
-	def __init__(self, game):
-			super(AttractMode, self).__init__(game, priority=5)
+	def __init__(self, game, priority):
+			super(AttractMode, self).__init__(game, priority)
 
 	def mode_started(self):
 		self.resetQuakeInstitute()
@@ -109,7 +109,8 @@ class AttractMode(game.Mode):
 		#Start new display script
 		self.game.alpha_score_display.set_script(script)
 		print str(script)
-		#self.game.alpha_score_display.set_text("Alpha Test",0)
+		#self.game.alpha_score_display.set_text("<<<< Earthshaker",0)
+		#self.game.alpha_score_display.set_text("Aftershock  >>>>",0)
 		
 	def startAttractLamps(self):
 		i = 0

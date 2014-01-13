@@ -40,14 +40,14 @@ from ballsaver import BallSaver
 import locale
 
 class BaseGameMode(game.Mode):
-	def __init__(self, game):
+	def __init__(self, game, priority):
 			#locale.setlocale(locale.LC_ALL, '') #Might not be needed
-			super(BaseGameMode, self).__init__(game, priority=2)
+			super(BaseGameMode, self).__init__(game, priority)
 			
 			
 	def mode_started(self):
 			#Start Attract Mode
-			self.attract_mode = AttractMode(self.game)
+			self.attract_mode = AttractMode(self.game,priority=5)
 			self.game.modes.add(self.attract_mode)
 			
 			self.releaseStuckBalls()

@@ -72,33 +72,33 @@ class EarthshakerAftershock(game.BasicGame):
 	def __init__(self, machine_type):
 		super(EarthshakerAftershock, self).__init__(machine_type)
 		self.load_config(game_machine_yaml)
-		self.logging_enabled=True
+		self.logging_enabled = True
 		self.balls_per_game = ballsPerGame
 		
 		
+	def reset(self):
+		#super(EarthshakerAftershock, self).reset()
 
+		#self.ball = 0
+		#self.old_players = []
+		#self.old_players = self.players[:]
+		#self.players = []
+		#self.current_player_index = 0
+		#self.modes.modes = []
+
+		#Setup Alphanumeric Display Controller
+		self.alpha_score_display = AlphaScoreDisplay(self,0)
+		self.modes.add(self.alpha_score_display)
+		
 		# Setup Sound Controller
 		self.sound = procgame.sound.SoundController(self)
 		self.RegisterSound()
-
-	def reset(self):
-		super(EarthshakerAftershock, self).reset()
-
-		self.ball = 0
-		self.old_players = []
-		self.old_players = self.players[:]
-		self.players = []
-		self.current_player_index = 0
-		self.modes.modes = []
-
-		#Setup Alphanumeric Display Controller
-		self.alpha_score_display = AlphaScoreDisplay(game=self,priority=1)
 
 		# software version number
 		self.revision = "1.0.0"
 
 		#boot into Base Mode
-		self.base_mode = BaseGameMode(game)
+		self.base_mode = BaseGameMode(self,2)
 		self.modes.add(self.base_mode)
 		
 		#could potentially put Attract mode here too

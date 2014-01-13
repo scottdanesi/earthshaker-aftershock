@@ -26,9 +26,9 @@
 import procgame.game
 from procgame import *
 import pinproc
-import scoredisplay
-from scoredisplay import AlphaScoreDisplay
-#from base import AlphaScoreDisplay
+
+ballSaverTime = 15
+clearForLaunch = False
 
 class BallSaver(game.Mode):
 	def __init__(self, game):
@@ -38,12 +38,18 @@ class BallSaver(game.Mode):
 		self.startBallSaverLamps()
 
 	def mode_stopped(self):
-		self.stopSkillshotLamps()
+		self.stopBallSaverLamps()
+
+	def acCoilPulse(self,coilname,pulsetime=50):
+		self.acSelectTimeBuffer = .2
+		#Insert placeholder to stop flasher lampshows and schedules?
+		self.cancel_delayed(name='acEnableDelay')
+		self.game.coils.acSelect.disable()
+		self.delay(name='coilDelay',event_type=None,delay=self.acSelectTimeBuffer,handler=self.game.coils[coilname].pulse,param=pulsetime)
+		self.delay(name='acEnableDelay',delay=pulsetime+(self.acSelectTimeBuffer*2),handler=self.game.coils.acSelect.enable)
 
 	def update_display(self):
-		self.p = self.game.current_player()
-		self.score_display.set_text(str(self.p.score),0)
-		self.score_display.set_text("Ball "+str(self.game.ball),1)
+		pass
 		
 	def startBallSaverLamps(self):
 		self.game.lamps.shootAgain.schedule(schedule=0xFF00FF00, cycle_seconds=0, now=False)
@@ -51,6 +57,31 @@ class BallSaver(game.Mode):
 	def stopBallSaverLamps(self):
 		self.game.lamps.shootAgain.disable()
 
-	def sw_outhole_active(self, sw):
+	def stopBallSaverMode(self):
+		self.game.modes.remove(self)
+
+	def sw_outhole_closed_for_1s(self, sw):
 		#Kick another ball
+		clearForLaunch = True
+		self.game.score_display.set_text("BALL SAVED",0,justify='center')
+		self.game.score_display.set_text(" ",1,justify='center')
+		self.acCoilPulse(coilname='outholeKicker_CaptiveFlashers',pulsetime=50)
+		if self.game.switches.trough1.is_active()==True:
+			self.acCoilPulse(coilname='ballReleaseShooterLane_CenterRampFlashers1',pulsetime=50)
+		else:
+			#this might cause an error
+			self.delay(delay=1,handler=self.acCoilPulse,param='ballReleaseShooterLane_CenterRampFlashers1')
+		self.delay(delay=2,handler=self.stopBallSaverMode)
 		return procgame.game.SwitchStop
+
+	def sw_outhole_closed(self, sw):
+		return procgame.game.SwitchStop
+
+	def sw_ballShooter_closed_for_1s(self, sw):
+		if clearForLaunch == True:
+			#launch Ball
+			self.game.coils.autoLauncher.pulse(100)
+		return procgame.game.SwitchStop
+
+	def sw_ballShooter_open_for_1s(self, sw):
+		self.delay('ballsaver',delay=ballSaverTime,handler=self.stopBallSaverMode)
