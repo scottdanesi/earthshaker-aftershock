@@ -52,7 +52,7 @@ PRSwitches:
         number: S81
     FlipperLwL:
         number: S82
-	dedicated1: 
+    dedicated1: 
         number: S08
     dedicated2: 
         number: S09
