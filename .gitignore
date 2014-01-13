@@ -1,10 +1,8 @@
+/assets/*
+/procgame/*
+/config/settings.yaml
+/config/game_data.yaml
 #############
 ## Python
 #############
 *.pyc
-
-#############
-## Audio
-#############
-*.wav
-*.sfk
