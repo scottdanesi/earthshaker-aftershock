@@ -47,8 +47,8 @@ class BaseGameMode(game.Mode):
 			
 	def mode_started(self):
 			#Start Attract Mode
-			self.attract_mode = AttractMode(self.game,priority=5)
-			self.game.modes.add(self.attract_mode)
+			#self.attract_mode = AttractMode(self.game,priority=5)
+			self.game.modes.add(self.game.attract_mode)
 			
 			self.releaseStuckBalls()
 			
@@ -115,36 +115,39 @@ class BaseGameMode(game.Mode):
 		#This function is to be used when starting a NEW game, player 1 and ball 1
 
 		#Clean Up
-		self.game.modes.remove(self.attract_mode)
+		self.game.modes.remove(self.game.attract_mode)
 		
 		self.game.add_player() #will be first player at this point
 		self.game.ball = 1
-		
-		#Reset Player Score - Might not be needed
-		#self.p = self.game.current_player()
-		#self.p.score = 0
+
+		# Define current Player
+		#self.game.p = self.game.current_player()
 
 		self.queueGameStartModes()
 		self.start_ball()
 		self.update_display()
 		#self.game.sound.load_music('main')
-		#print gameMusicPath+'twerk.wav'
+
+		print "Game Started"
 		
 	def start_ball(self):
-		#set p to the current player
-		#p = self.game.current_player()
 		self.acCoilPulse(coilname='ballReleaseShooterLane_CenterRampFlashers1',pulsetime=50)
-		#self.update_display()
+		print "Ball Started"
 		
 	def end_ball(self):
+		print "End Ball Called"
+		print "Current Ball: " + str(self.game.ball)
 		if self.game.current_player_index == len(self.game.players):
 			#Last Player or Single Player Drained
+			print "Last player or single player drained"
 			if self.game.ball == self.game.balls_per_game:
 				#Last Ball Drained
+				print "Last ball drained, ending game"
 				self.end_game()
 			else:
 				#Increment Current Ball
-				self.game.current_player_index += 1
+				print "Increment current ball and set player back to 1"
+				self.game.current_player_index = 1
 				#self.game.end_ball() #Should increment Player?
 				self.game.ball += 1
 				self.start_ball()
@@ -162,7 +165,7 @@ class BaseGameMode(game.Mode):
 		self.cancel_delayed(name='acEnableDelay')
 		self.game.coils.acSelect.disable()
 
-		self.game.modes.add(self.attract_mode)
+		self.game.modes.add(self.game.attract_mode)
 		self.game.sound.fadeout_music(time_ms=450)
 
 	###############################################################

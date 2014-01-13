@@ -39,8 +39,8 @@ import logging
 ###################################
 import base
 from base import *
-#import attract
-#from attract import *
+import attract
+from attract import *
 import scoredisplay
 from scoredisplay import AlphaScoreDisplay
 
@@ -97,17 +97,19 @@ class EarthshakerAftershock(game.BasicGame):
 		# software version number
 		self.revision = "1.0.0"
 
-		#boot into Base Mode
+		# Mode Definitions
 		self.base_mode = BaseGameMode(self,2)
-		self.modes.add(self.base_mode)
+		self.attract_mode = AttractMode(self,5)
 		
-		#could potentially put Attract mode here too
-		#self.attract_mode = AttractMode(game)
-		#self.modes.add(self.attract_mode)
+		# Initial Mode Queue
+		self.modes.add(self.base_mode)
 
 	def RegisterSound(self):
+		# Sound Settings:
 		self.sound.music_volume_offset = 10 #This will be hardcoded at 10 since I have external volume controls I will be using
+		# Music Registration
 		self.sound.register_music('main', game_music_path + 'test.mp3')
+		# Sound FX Registration
 		self.sound.register_sound('spinner', game_sound_path + 'spinner.wav')
 		
 ################################################
