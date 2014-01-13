@@ -46,7 +46,7 @@ class AttractMode(game.Mode):
 	def setDisplayContent(self):
 		#Script initialization
 		script=[]
-		animEarthshaker=[]
+		animEarthshaker=[] # This is a temporary placeholder until we define new transitions
 
 		animEarthshaker.append({'top':'                ','bottom':'                ','timer':.5,'transition':0})
 		animEarthshaker.append({'top':'               E','bottom':'                ','timer':.05,'transition':0})
@@ -91,9 +91,8 @@ class AttractMode(game.Mode):
 		animEarthshaker.append({'top':'U               ','bottom':'               Z','timer':.05,'transition':0})
 		animEarthshaker.append({'top':'                ','bottom':'                ','timer':.5,'transition':0})
 
-		#Title Screen
-		#script.append({'top':'<<<< Earthshaker','bottom':'Aftershock  >>>>','timer':5,'transition':3})
-		#script=script+animEarthshaker
+		#Title Screen Creation
+		script=script + animEarthshaker
 
 		#About
 		script.append({'top':'SOFTWARE BY','bottom':'SCOTT DANESI','timer':5,'transition':1})
@@ -108,9 +107,6 @@ class AttractMode(game.Mode):
 
 		#Start new display script
 		self.game.alpha_score_display.set_script(script)
-		print str(script)
-		#self.game.alpha_score_display.set_text("<<<< Earthshaker",0)
-		#self.game.alpha_score_display.set_text("Aftershock  >>>>",0)
 		
 	def startAttractLamps(self):
 		i = 0
