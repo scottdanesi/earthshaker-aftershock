@@ -43,7 +43,7 @@ class SkillshotMode(game.Mode):
 			#self.checkForStuckBalls()
 
 	def mode_started(self):
-		self.delay(delay=.5,handler=self.enableACSelect)
+		#self.delay(delay=.5,handler=self.enableACSelect)
 		self.startSkillshotLamps()
 
 		return super(SkillshotMode, self).mode_started()
@@ -105,15 +105,15 @@ class SkillshotMode(game.Mode):
 		return procgame.game.SwitchContinue
 
 	def sw_centerRampMiddle_active(self, sw):
-		self.game.coils.outholeKicker_CaptiveFlashers.pulse(5)
+		#self.game.coils.outholeKicker_CaptiveFlashers.pulse(5)
 		return procgame.game.SwitchContinue
 
 	def sw_centerRampEnd_active(self, sw):
-		self.game.coils.outholeKicker_CaptiveFlashers.pulse(5)
+		#self.game.coils.outholeKicker_CaptiveFlashers.pulse(5)
 		return procgame.game.SwitchContinue
 
 	def sw_captiveBall9_closed(self, sw):
-		self.game.coils.outholeKicker_CaptiveFlashers.schedule(schedule=0x33330000, cycle_seconds=1, now=True)
+		#self.game.coils.outholeKicker_CaptiveFlashers.schedule(schedule=0x33330000, cycle_seconds=1, now=True)
 		self.score(2500)
 		self.game.modes.remove(self)
 		return procgame.game.SwitchContinue
