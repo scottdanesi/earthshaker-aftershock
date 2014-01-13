@@ -111,8 +111,8 @@ class AlphaScoreDisplay(game.ScoreDisplay):
                         #update the data
                         self.update_alpha_display()
 
-        def update_layer_1p(self, font=None):
-                super(AlphaScoreDisplay, self).update_layer_1p(font)
+        def update_layer_1p(self):
+                super(AlphaScoreDisplay, self).update_layer_1p()
                 if self.game.current_player() == None:
                         score = 0 # Small hack to make *something* show up on startup.
                 elif self.game.ball>0:
