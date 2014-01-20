@@ -43,6 +43,8 @@ import attract
 from attract import *
 import scoredisplay
 from scoredisplay import AlphaScoreDisplay
+import skillshot 
+from skillshot import *
 
 # Import and Setup Logging
 logging.basicConfig(level=logging.WARN, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -100,6 +102,7 @@ class EarthshakerAftershock(game.BasicGame):
 		# Mode Definitions
 		self.base_mode = BaseGameMode(self,2)
 		self.attract_mode = AttractMode(self,5)
+		self.skillshot_mode = SkillshotMode(self,7)
 		
 		# Initial Mode Queue
 		self.modes.add(self.base_mode)
