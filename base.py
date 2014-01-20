@@ -31,12 +31,12 @@ import time
 import sys
 #import scoredisplay
 #from scoredisplay import *
-import attract
-from attract import *
-import skillshot
-from skillshot import SkillshotMode
-import ballsaver
-from ballsaver import BallSaver
+#import attract
+#from attract import *
+#import skillshot
+#from skillshot import SkillshotMode
+#import ballsaver
+#from ballsaver import BallSaver
 import locale
 
 class BaseGameMode(game.Mode):
@@ -90,22 +90,18 @@ class BaseGameMode(game.Mode):
 		self.delay(name='updatescore',delay=0.05,handler=self.update_display)
 
 	def queueGameStartModes(self):
-		#Skillshot Mode
-		skillshot_mode = SkillshotMode(self.game)
-		self.game.modes.add(skillshot_mode)
-		#Ballsaver Mode
-		#ballsaver_mode = BallSaver(self.game)
-		#self.game.modes.add(ballsaver_mode)
+		#### Skillshot Mode ####
+		#skillshot_mode = SkillshotMode(self.game)
+		self.game.modes.add(self.game.skillshot_mode)
 
 	def launch_ball(self):
 		if self.game.switches.ballShooter.is_active()==True:
-			#self.game.score_display.set_text("LAUNCH TEST",0)
 			self.game.coils.autoLauncher.pulse(100)
 
 	def update_display(self):
 		self.p = self.game.current_player()
 		self.game.alpha_score_display.set_text(locale.format("%d", self.p.score, grouping=True),0,justify='left')
-		self.game.alpha_score_display.set_text(self.p.name + "  Ball "+str(self.game.ball),1,justify='right')
+		self.game.alpha_score_display.set_text(self.p.name.upper() + "  BALL "+str(self.game.ball),1,justify='right')
 		print self.p.name
 		print "Ball " + str(self.game.ball)
 	###############################################################
@@ -120,41 +116,42 @@ class BaseGameMode(game.Mode):
 		self.game.add_player() #will be first player at this point
 		self.game.ball = 1
 
-		# Define current Player
-		#self.game.p = self.game.current_player()
-
 		self.queueGameStartModes()
 		self.start_ball()
 		self.update_display()
 		#self.game.sound.load_music('main')
-
+		#Enable Flippers
+		self.game.coils.flipperEnable.enable()
 		print "Game Started"
 		
 	def start_ball(self):
 		self.acCoilPulse(coilname='ballReleaseShooterLane_CenterRampFlashers1',pulsetime=50)
+		self.update_display()
 		print "Ball Started"
 		
 	def end_ball(self):
-		print "End Ball Called"
-		print "Current Ball: " + str(self.game.ball)
-		if self.game.current_player_index == len(self.game.players):
+		#print "End of Ball " + str(self.game.ball) + " Called"
+		#print "Total Players: " + str(len(self.game.players))
+		#print "Current Player: " + str(self.game.current_player_index)
+		#print "Balls Per Game: " + str(self.game.balls_per_game)
+		#print "Current Ball: " + str(self.game.ball)
+		if self.game.current_player_index == len(self.game.players) - 1:
 			#Last Player or Single Player Drained
-			print "Last player or single player drained"
+			#print "Last player or single player drained"
 			if self.game.ball == self.game.balls_per_game:
 				#Last Ball Drained
 				print "Last ball drained, ending game"
 				self.end_game()
 			else:
 				#Increment Current Ball
-				print "Increment current ball and set player back to 1"
-				self.game.current_player_index = 1
-				#self.game.end_ball() #Should increment Player?
+				#print "Increment current ball and set player back to 1"
+				self.game.current_player_index = 0
 				self.game.ball += 1
 				self.start_ball()
 		else:
 			#Not Last Player Drained
+			print "Not last player drained"
 			self.game.current_player_index += 1
-			#self.game.end_ball #Should inrement Player?
 			self.start_ball()
 
 	def end_game(self):
@@ -167,6 +164,7 @@ class BaseGameMode(game.Mode):
 
 		self.game.modes.add(self.game.attract_mode)
 		self.game.sound.fadeout_music(time_ms=450)
+		self.game.reset()
 
 	###############################################################
 	# BASE SWITCH HANDLING FUNCTIONS
@@ -178,26 +176,24 @@ class BaseGameMode(game.Mode):
 	def sw_startButton_active_for_20ms(self, sw):
 		print 'Player: ' + str(self.game.players.index)
 		print 'Ball' + str(self.game.ball)
-		if self.troughIsFull()==True:
-			#Trough is full!
-			if self.game.ball == 0:
+		#Trough is full!
+		if self.game.ball == 0:
+			if self.troughIsFull()==True:
 				#########################
 				#Start New Game
 				#########################
 				self.start_game()
 				#self.game.sound.play_music('main')
 				self.delay(name='lauchball',delay=2,handler=self.launch_ball)
-			elif self.game.ball == 1 and len(self.game.players) < 4:
-				self.game.add_player()
 			else:
-				pass
-			#Enable Flippers
-			self.game.coils.flipperEnable.enable()
+				#missing balls
+				self.releaseStuckBalls()
+				self.game.alpha_score_display.set_text("MISSING PINBALLS",0)
+				self.game.alpha_score_display.set_text("PLEASE WAIT",1)
+		elif self.game.ball == 1 and len(self.game.players) < 4:
+			self.game.add_player()
 		else:
-			#missing balls
-			self.releaseStuckBalls()
-			self.game.alpha_score_display.set_text("Missing Pinballs",0)
-			self.game.alpha_score_display.set_text("Please Wait",1)
+			pass		
 		return procgame.game.SwitchStop
 
 	def sw_startButton_active_for_1s(self, sw):
@@ -206,11 +202,7 @@ class BaseGameMode(game.Mode):
 		
 	def sw_outhole_closed_for_1s(self, sw):
 		self.acCoilPulse(coilname='outholeKicker_CaptiveFlashers',pulsetime=50)
-		#if self.game.ball == self.game.balls_per_game:
-			#self.end_game()
-		#else:
 		self.end_ball()
-			#self.start_ball()
 		return procgame.game.SwitchStop
 
 	def sw_ejectHole5_closed_for_1s(self, sw):
