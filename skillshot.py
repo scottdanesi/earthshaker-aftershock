@@ -31,8 +31,8 @@ from scoredisplay import AlphaScoreDisplay
 #from base import AlphaScoreDisplay
 
 class SkillshotMode(game.Mode):
-	def __init__(self, game):
-			super(SkillshotMode, self).__init__(game=game, priority=7)
+	def __init__(self, game, priority):
+			super(SkillshotMode, self).__init__(game, priority)
 			####################
 			#Mode Setup
 			####################
