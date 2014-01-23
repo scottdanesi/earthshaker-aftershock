@@ -29,14 +29,6 @@ import pinproc
 import random
 import time
 import sys
-#import scoredisplay
-#from scoredisplay import *
-#import attract
-#from attract import *
-#import skillshot
-#from skillshot import SkillshotMode
-#import ballsaver
-#from ballsaver import BallSaver
 import locale
 
 class BaseGameMode(game.Mode):
@@ -47,9 +39,7 @@ class BaseGameMode(game.Mode):
 			
 	def mode_started(self):
 			#Start Attract Mode
-			#self.attract_mode = AttractMode(self.game,priority=5)
 			self.game.modes.add(self.game.attract_mode)
-			
 			self.releaseStuckBalls()
 			
 	###############################################################

@@ -88,23 +88,23 @@ class EarthshakerAftershock(game.BasicGame):
 		#self.current_player_index = 0
 		#self.modes.modes = []
 
-		#Setup Alphanumeric Display Controller
+		#### Setup Alphanumeric Display Controller ####
 		self.alpha_score_display = AlphaScoreDisplay(self,0)
 		self.modes.add(self.alpha_score_display)
 		
-		# Setup Sound Controller
+		#### Setup Sound Controller ####
 		self.sound = procgame.sound.SoundController(self)
 		self.RegisterSound()
 
-		# software version number
+		#### software version number ####
 		self.revision = "1.0.0"
 
-		# Mode Definitions
+		#### Mode Definitions ####
 		self.base_mode = BaseGameMode(self,2)
 		self.attract_mode = AttractMode(self,5)
 		self.skillshot_mode = SkillshotMode(self,7)
 		
-		# Initial Mode Queue
+		#### Initial Mode Queue ####
 		self.modes.add(self.base_mode)
 
 	def RegisterSound(self):
