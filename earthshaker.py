@@ -45,6 +45,8 @@ import scoredisplay
 from scoredisplay import AlphaScoreDisplay
 import skillshot 
 from skillshot import *
+import utilities
+from utilities import *
 
 # Import and Setup Logging
 logging.basicConfig(level=logging.WARN, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -81,12 +83,12 @@ class EarthshakerAftershock(game.BasicGame):
 	def reset(self):
 		#super(EarthshakerAftershock, self).reset()
 
-		#self.ball = 0
-		#self.old_players = []
-		#self.old_players = self.players[:]
-		#self.players = []
-		#self.current_player_index = 0
-		#self.modes.modes = []
+		self.ball = 0
+		self.old_players = []
+		self.old_players = self.players[:]
+		self.players = []
+		self.current_player_index = 0
+		self.modes.modes = []
 
 		#### Setup Alphanumeric Display Controller ####
 		self.alpha_score_display = AlphaScoreDisplay(self,0)
@@ -103,9 +105,12 @@ class EarthshakerAftershock(game.BasicGame):
 		self.base_mode = BaseGameMode(self,2)
 		self.attract_mode = AttractMode(self,5)
 		self.skillshot_mode = SkillshotMode(self,7)
+		self.utilities = UtilitiesMode(self,0)
 		
 		#### Initial Mode Queue ####
+		self.modes.add(self.utilities)
 		self.modes.add(self.base_mode)
+		
 
 	def RegisterSound(self):
 		# Sound Settings:
@@ -114,6 +119,9 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_music('main', game_music_path + 'test.mp3')
 		# Sound FX Registration
 		self.sound.register_sound('spinner', game_sound_path + 'spinner.wav')
+		self.sound.register_sound('sling', game_sound_path + 'sling.wav')
+		self.sound.register_sound('jet', game_sound_path + 'jet.wav')
+		self.sound.register_sound('skillshotAwarded', game_sound_path + 'skillshotAwarded.wav')
 		
 ################################################
 # GAME DEFINITION
