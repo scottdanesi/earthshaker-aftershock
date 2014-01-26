@@ -45,11 +45,10 @@ class SkillshotMode(game.Mode):
 	def mode_started(self):
 		#self.delay(delay=.5,handler=self.enableACSelect)
 		self.startSkillshotLamps()
-
 		return super(SkillshotMode, self).mode_started()
 
-	def enableACSelect(self):
-		self.game.coils.acSelect.enable() #for Flashers
+	#def enableACSelect(self):
+		#self.game.coils.acSelect.enable() #for Flashers
 
 	def mode_stopped(self):
 		self.stopSkillshotLamps()
@@ -78,9 +77,9 @@ class SkillshotMode(game.Mode):
 		self.game.lamps.captiveArrow9.disable()
 		#self.game.coils.outholeKicker_CaptiveFlashers.disable()
 
-	def score(self, points):
-		p = self.game.current_player()
-		p.score += points
+	#def score(self, points):
+		#p = self.game.current_player()
+		#p.score += points
 		#self.cancel_delayed('updatescore')
 		#self.delay(name='updatescore',delay=0.5,handler=self.game.utilities.updateBaseDisplay)
 
@@ -94,7 +93,7 @@ class SkillshotMode(game.Mode):
 	def superSkillshotAwarded(self):
 		self.game.sound.play_voice('skillshotAwarded')
 		self.game.utilities.displayText(100,'SUPER SKILLSHOT','250,000 POINTS',seconds=3,justify='center')
-		self.score(250000)
+		self.game.utilities.score(250000)
 		self.game.modes.remove(self)
 
 	def skillshotMissed(self):
@@ -102,7 +101,7 @@ class SkillshotMode(game.Mode):
 		self.game.modes.remove(self)
 
 	def skillshotAwarded(self):
-		#self.game.utilities.displayText(100,'SKILLSHOT','250,000 POINTS',seconds=3,justify='center')
+		#points will be added in the base mode
 		self.game.modes.remove(self)
 
 	###########################
@@ -130,18 +129,21 @@ class SkillshotMode(game.Mode):
 		return procgame.game.SwitchContinue
 
 	def sw_onRampBypass_active(self, sw):
-		#need to score
 		self.skillshotMissed()
 		return procgame.game.SwitchContinue
 
+	def sw_rightStandup50k_active(self, sw):
+		self.superSkillshotMissed()
+		return procgame.game.SwitchContinue
+
 	def sw_centerRampMiddle_active(self, sw):
-		#self.game.coils.outholeKicker_CaptiveFlashers.pulse(5)
-		#self.skillshotMissed()
+		#Start Super Skillshot!
+		#self.startSkillshotLamps()
 		return procgame.game.SwitchContinue
 
 	def sw_centerRampEnd_active(self, sw):
-		#self.game.coils.outholeKicker_CaptiveFlashers.pulse(5)
-		#self.skillshotMissed()
+		#Start Super Skillshot!
+		#self.startSkillshotLamps()
 		return procgame.game.SwitchContinue
 
 	def sw_captiveBall9_closed(self, sw):
