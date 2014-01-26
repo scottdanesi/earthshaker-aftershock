@@ -46,11 +46,11 @@ class BaseGameMode(game.Mode):
 	# UTILITY FUNCTIONS
 	###############################################################
 
-	def score(self, points):
-		self.p = self.game.current_player()
-		self.p.score += points
-		self.cancel_delayed('updatescore')
-		self.delay(name='updatescore',delay=0.05,handler=self.game.utilities.updateBaseDisplay)
+	#def score(self, points):
+		#self.p = self.game.current_player()
+		#self.p.score += points
+		#self.cancel_delayed('updatescore')
+		#self.delay(name='updatescore',delay=0.05,handler=self.game.utilities.updateBaseDisplay)
 
 	def queueGameStartModes(self):
 		#Might use in the future
@@ -70,6 +70,7 @@ class BaseGameMode(game.Mode):
 		#This function is to be used when starting a NEW game, player 1 and ball 1
 		#Clean Up
 		self.game.modes.remove(self.game.attract_mode)
+		#self.game.modes.add(self.game.tilt)
 		
 		self.game.add_player() #will be first player at this point
 		self.game.ball = 1
@@ -78,16 +79,32 @@ class BaseGameMode(game.Mode):
 		self.start_ball()
 		self.game.utilities.updateBaseDisplay()
 		#self.game.sound.load_music('main')
-		#Enable Flippers
-		self.game.coils.flipperEnable.enable()
+		
 		print "Game Started"
 		
 	def start_ball(self):
-		#### Skillshot Mode ####
+		#### Queue Ball Modes ####
 		self.game.modes.add(self.game.skillshot_mode)
+		self.game.modes.add(self.game.centerramp_mode)
+		self.game.modes.add(self.game.tilt)
 
+		#### Enable Flippers ####
+		self.game.coils.flipperEnable.enable()
+
+		#### Kick Out Ball ####
 		self.game.utilities.acCoilPulse(coilname='ballReleaseShooterLane_CenterRampFlashers1',pulsetime=50)
+
+		#### Update Player Display ####
 		self.game.utilities.updateBaseDisplay()
+
+		#### Enable GI in case it is disabled from TILT ####
+		self.game.utilities.enableGI()
+
+		#### Start Shooter Lane Music ####
+		self.game.sound.play_music('shooter',loops=-1)
+		self.game.shooter_lane_status = 1
+
+		#### Debug Info ####
 		print "Ball Started"
 		
 	def end_ball(self):
@@ -96,6 +113,14 @@ class BaseGameMode(game.Mode):
 		#print "Current Player: " + str(self.game.current_player_index)
 		#print "Balls Per Game: " + str(self.game.balls_per_game)
 		#print "Current Ball: " + str(self.game.ball)
+
+		#### Remove Ball Modes ####
+		self.game.modes.remove(self.game.skillshot_mode)
+		self.game.modes.remove(self.game.centerramp_mode)
+		self.game.modes.remove(self.game.tilt)
+
+		#self.game.sound.fadeout_music(time_ms=1000) #This is causing delay issues with the AC Relay
+		self.game.sound.stop_music()
 
 		if self.game.current_player_index == len(self.game.players) - 1:
 			#Last Player or Single Player Drained
@@ -116,6 +141,7 @@ class BaseGameMode(game.Mode):
 			self.game.current_player_index += 1
 			self.start_ball()
 
+
 	def end_game(self):
 		#self.game.ball = 0
 		#self.players = []
@@ -127,7 +153,7 @@ class BaseGameMode(game.Mode):
 		self.game.coils.acSelect.disable()
 
 		#self.game.modes.add(self.game.attract_mode)
-		self.game.sound.fadeout_music(time_ms=450)
+		
 		self.game.reset()
 
 	###############################################################
@@ -171,76 +197,86 @@ class BaseGameMode(game.Mode):
 
 	def sw_ejectHole5_closed_for_1s(self, sw):
 		self.game.utilities.acCoilPulse(coilname='ejectHole_CenterRampFlashers4',pulsetime=50)
-		self.score(250)
+		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 
 	def sw_ballPopperBottom_closed_for_1s(self, sw):
 		self.game.utilities.acCoilPulse(coilname='bottomBallPopper_RightRampFlashers1',pulsetime=50)
-		self.score(250)
+		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 
 	def sw_ballPopperTop_closed_for_1s(self, sw):
 		self.game.coils.topBallPopper.pulse(50)
 		self.game.coils.quakeMotor.pulse(50)
-		self.score(250)
+		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 
 	def sw_ballPopperTop_closed(self, sw):
 		self.game.coils.quakeMotor.pulse(50)
 		self.game.coils.quakeInstitute.enable()
-		self.score(250)
+		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 
 	def sw_jetLeft_active(self, sw):
 		self.game.coils.jetLeft.pulse(30)
 		self.game.sound.play_voice('jet')
 		self.game.lamps.jetLeftLamp.enable()
-		self.score(500)
+		self.game.utilities.score(500)
 		return procgame.game.SwitchStop
 
 	def sw_jetRight_active(self, sw):
 		self.game.coils.jetRight.pulse(30)
 		self.game.sound.play_voice('jet')
 		self.game.lamps.jetRightLamp.enable()
-		self.score(500)
+		self.game.utilities.score(500)
 		return procgame.game.SwitchStop
 
 	def sw_jetTop_active(self, sw):
 		self.game.coils.jetTop.pulse(30)
 		self.game.sound.play_voice('jet')
 		self.game.lamps.jetTopLamp.enable()
-		self.score(500)
+		self.game.utilities.score(500)
 		return procgame.game.SwitchStop
 
 	def sw_slingL_active(self, sw):
 		self.game.coils.slingL.pulse(30)
 		self.game.sound.play_voice('sling')
-		self.score(100)
+		self.game.utilities.score(100)
 		return procgame.game.SwitchStop
 
 	def sw_slingR_active(self, sw):
 		self.game.coils.slingR.pulse(30)
 		self.game.sound.play_voice('sling')
-		self.score(100)
+		self.game.utilities.score(100)
 		return procgame.game.SwitchStop
 
 	def sw_spinner_active(self, sw):
 		self.game.coils.dropReset_CenterRampFlashers2.pulse(40)
 		self.game.sound.play_voice('spinner')
-		self.score(100)
+		self.game.utilities.score(100)
 		return procgame.game.SwitchStop
 
 	#############################
 	## Skillshot Switches
 	#############################
 	def sw_onRamp25k_active(self, sw):
-		self.score(25000)
+		self.game.utilities.score(25000)
+		#self.game.utilities.stopShooterLaneMusic()
+		return procgame.game.SwitchStop
 
 	def sw_onRamp50k_active(self, sw):
-		self.score(50000)
+		self.game.utilities.score(50000)
+		#self.game.utilities.stopShooterLaneMusic()
+		return procgame.game.SwitchStop
 
 	def sw_onRamp100k_active(self, sw):
-		self.score(100000)
+		self.game.utilities.score(100000)
+		#self.game.utilities.stopShooterLaneMusic()
+		return procgame.game.SwitchStop
+
+	def sw_onRampBypass_active(self, sw):
+		#self.game.utilities.stopShooterLaneMusic()
+		return procgame.game.SwitchStop
 
 	#############################
 	## Zone Switches
@@ -248,53 +284,57 @@ class BaseGameMode(game.Mode):
 	def sw_leftStandup1_closed(self, sw):
 		self.game.lamps.standupLeft1.enable()
 		self.game.lamps.building1.enable()
-		self.score(250)
+		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 
 	def sw_rightStandupHigh2_closed(self, sw):
 		self.game.lamps.standupRightHigh2.enable()
 		self.game.lamps.building2.enable()
-		self.score(250)
+		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 
 	def sw_rightStandupLow3_closed(self, sw):
 		self.game.lamps.standupRightLow3.enable()
 		self.game.lamps.building3.enable()
-		self.score(250)
+		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 		
 	def sw_centerStandup4_closed(self, sw):
 		self.game.lamps.standupCenter4.enable()
 		self.game.lamps.building4.enable()
-		self.score(250)
+		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 		
 	def sw_ejectHole5_closed(self, sw):
 		self.game.lamps.ejectTop5.enable()
 		self.game.lamps.building5.enable()
-		self.score(250)
+		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 		
 	def sw_rightLoop6_closed(self, sw):
 		self.game.lamps.underFaultLoop6.enable()
 		self.game.lamps.building6.enable()
-		self.score(250)
+		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 		
 	def sw_rightInsideReturn7_closed(self, sw):
 		self.game.lamps.inlaneRight7.enable()
 		self.game.lamps.building7.enable()
-		self.score(250)
+		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 		
 	def sw_leftReturnLane8_closed(self, sw):
 		self.game.lamps.inlaneLeft8.enable()
 		self.game.lamps.building8.enable()
-		self.score(250)
+		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 		
 	def sw_captiveBall9_closed(self, sw):
 		self.game.lamps.captiveArrow9.enable()
 		self.game.lamps.building9.enable()
-		self.score(250)
+		self.game.utilities.score(250)
+		return procgame.game.SwitchStop
+
+	def sw_ballShooter_open_for_1s(self, sw):
+		self.game.utilities.stopShooterLaneMusic()
 		return procgame.game.SwitchStop

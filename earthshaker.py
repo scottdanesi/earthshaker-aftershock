@@ -47,6 +47,10 @@ import skillshot
 from skillshot import *
 import utilities
 from utilities import *
+import tilt
+from tilt import *
+import centerramp
+from centerramp import *
 
 # Import and Setup Logging
 logging.basicConfig(level=logging.WARN, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -89,6 +93,7 @@ class EarthshakerAftershock(game.BasicGame):
 		self.players = []
 		self.current_player_index = 0
 		self.modes.modes = []
+		self.shooter_lane_status = 0
 
 		#### Setup Alphanumeric Display Controller ####
 		self.alpha_score_display = AlphaScoreDisplay(self,0)
@@ -106,17 +111,19 @@ class EarthshakerAftershock(game.BasicGame):
 		self.attract_mode = AttractMode(self,5)
 		self.skillshot_mode = SkillshotMode(self,7)
 		self.utilities = UtilitiesMode(self,0)
+		self.tilt = Tilt(self,200)
+		self.centerramp_mode = CenterRampMode(self,8)
 		
 		#### Initial Mode Queue ####
 		self.modes.add(self.utilities)
 		self.modes.add(self.base_mode)
-		
 
 	def RegisterSound(self):
 		# Sound Settings:
 		self.sound.music_volume_offset = 10 #This will be hardcoded at 10 since I have external volume controls I will be using
 		# Music Registration
-		self.sound.register_music('main', game_music_path + 'test.mp3')
+		self.sound.register_music('main', game_music_path + 'main1.wav')
+		self.sound.register_music('shooter', game_music_path + 'shooter.wav')
 		# Sound FX Registration
 		self.sound.register_sound('spinner', game_sound_path + 'spinner.wav')
 		self.sound.register_sound('sling', game_sound_path + 'sling.wav')
