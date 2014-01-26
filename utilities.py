@@ -61,7 +61,7 @@ class UtilitiesMode(game.Mode):
 			self.game.coils.autoLauncher.pulse(100) #Does not need AC Relay logic
 
 	def acCoilPulse(self,coilname,pulsetime):
-		self.acSelectTimeBuffer = .2
+		self.acSelectTimeBuffer = .3
 		self.acSelectEnableBuffer = (pulsetime/1000)+(self.acSelectTimeBuffer*2)
 		#Insert placeholder to stop flasher lampshows and schedules?
 		self.cancel_delayed(name='acEnableDelay')
@@ -73,10 +73,11 @@ class UtilitiesMode(game.Mode):
 		if self.game.switches.ballShooter.is_active()==True:
 			self.game.coils.autoLauncher.pulse(100)
 
-	def displayText(self,priority,topText=' ',bottomText=' ',seconds=2,justify='left'):
+	def displayText(self,priority,topText=' ',bottomText=' ',seconds=2,justify='left',topBlinkRate=0,bottomBlinkRate=0):
 		# This function will be used as a very basic display prioritizing helper
 		# Check if anything with a higher priority is running
 		if (priority >= self.currentDisplayPriority):
+			self.cancel_delayed('resetDisplayPriority')
 			self.game.alpha_score_display.cancel_script()
 			self.game.alpha_score_display.set_text(topText,0,justify)
 			self.game.alpha_score_display.set_text(bottomText,1,justify)
@@ -85,13 +86,39 @@ class UtilitiesMode(game.Mode):
 
 	def resetDisplayPriority(self):
 		self.currentDisplayPriority = 0
+		self.updateBaseDisplay()
 
 	def updateBaseDisplay(self):
 		print "Update Base Display Called"
-		if (self.currentDisplayPriority == 0):
+		if (self.currentDisplayPriority == 0 and self.game.tiltStatus == 0):
 			self.p = self.game.current_player()
 			self.game.alpha_score_display.cancel_script()
 			self.game.alpha_score_display.set_text(locale.format("%d", self.p.score, grouping=True),0,justify='left')
 			self.game.alpha_score_display.set_text(self.p.name.upper() + "  BALL "+str(self.game.ball),1,justify='right')
 			print self.p.name
 			print "Ball " + str(self.game.ball)
+
+	def score(self, points):
+		if (self.game.ball <> 0): #in case score() gets called when not in game
+			self.p = self.game.current_player()
+			self.p.score += points
+			self.cancel_delayed('updatescore')
+			self.delay(name='updatescore',delay=0.05,handler=self.game.utilities.updateBaseDisplay)
+
+	def stopShooterLaneMusic(self):
+		if (self.game.shooter_lane_status == 1):
+			self.game.sound.stop_music()
+			self.game.sound.play_music('main',loops=-1)
+			self.game.shooter_lane_status = 0
+
+	def disableGI(self):
+		self.game.coils.giUpper.enable()
+		self.game.coils.giLower.enable()
+		self.game.coils.giBackbox.enable()
+
+	def enableGI(self):
+		self.game.coils.giUpper.disable()
+		self.game.coils.giLower.disable()
+		self.game.coils.giBackbox.disable()
+
+			
