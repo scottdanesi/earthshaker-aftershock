@@ -195,11 +195,11 @@ class AttractMode(game.Mode):
 		self.game.coils.quakeInstitute.disable()
 		return procgame.game.SwitchStop
 		
-	def sw_startButton_active_for_50ms(self, sw):
+	#def sw_startButton_active_for_50ms(self, sw):
 		#if self.troughIsFull()==True:
 			#Game Starting
 			#self.game.modes.remove(self)
-			return procgame.game.SwitchContinue
+			#return procgame.game.SwitchContinue
 
 	def sw_outhole_closed(self, sw):
 		return procgame.game.SwitchStop
@@ -225,4 +225,16 @@ class AttractMode(game.Mode):
 		return procgame.game.SwitchStop
 
 	def sw_slingR_active(self, sw):
+		return procgame.game.SwitchStop
+
+	#############################
+	## Skillshot Switches
+	#############################
+	def sw_onRamp25k_active(self, sw):
+		return procgame.game.SwitchStop
+
+	def sw_onRamp50k_active(self, sw):
+		return procgame.game.SwitchStop
+
+	def sw_onRamp100k_active(self, sw):
 		return procgame.game.SwitchStop
