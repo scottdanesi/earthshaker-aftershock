@@ -33,11 +33,18 @@ class Player(procgame.game.Player):
 			#create player stats
 			self.player_stats = {}
 
-			#set player stats defaults
+			### Bonus and Status ###
 			self.player_stats['status']=''
 			self.player_stats['bonus_x']=1
+
+			### Skillshot ###
+			self.player_stats['skillshot_x']=1
+			#self.player_stats['skillshot_active']=False
+
+			### Center Ramp Stats ###
 			self.player_stats['miles']=0
 			self.player_stats['center_shots']=0
+
 			self.player_stats['fault_visits']=0
 			self.player_stats['inlanes_made']=0
 			self.player_stats['lock_lit']=False
