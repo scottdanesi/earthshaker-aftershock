@@ -30,6 +30,9 @@ from procgame import *
 import pinproc
 import locale
 
+import player
+from player import *
+
 class UtilitiesMode(game.Mode):
 	def __init__(self, game, priority):
 			super(UtilitiesMode, self).__init__(game, priority)
@@ -38,9 +41,9 @@ class UtilitiesMode(game.Mode):
 		## Set Global Variables ##
 		self.currentDisplayPriority = 0
 
-	def mode_stopped(self):
-		pass
-
+	#############################
+	## Ball Location Functions ##
+	#############################
 	def troughIsFull(self): #should be moved globally
 		if (self.game.switches.trough1.is_active()==True and self.game.switches.trough2.is_active()==True and self.game.switches.trough3.is_active()==True):
 			return True
@@ -60,6 +63,14 @@ class UtilitiesMode(game.Mode):
 		if self.game.switches.ballShooter.is_active()==True:
 			self.game.coils.autoLauncher.pulse(100) #Does not need AC Relay logic
 
+	def launch_ball(self):
+		if self.game.switches.ballShooter.is_active()==True:
+			self.game.coils.autoLauncher.pulse(100)
+
+
+	########################
+	## AC Relay Functions ##
+	########################
 	def acCoilPulse(self,coilname,pulsetime):
 		self.acSelectTimeBuffer = .3
 		self.acSelectEnableBuffer = (pulsetime/1000)+(self.acSelectTimeBuffer*2)
@@ -69,10 +80,10 @@ class UtilitiesMode(game.Mode):
 		self.delay(name='coilDelay',event_type=None,delay=self.acSelectTimeBuffer,handler=self.game.coils[coilname].pulse,param=pulsetime)
 		self.delay(name='acEnableDelay',delay=self.acSelectEnableBuffer,handler=self.game.coils.acSelect.enable)
 
-	def launch_ball(self):
-		if self.game.switches.ballShooter.is_active()==True:
-			self.game.coils.autoLauncher.pulse(100)
-
+	
+	#######################
+	## Display Functions ##
+	#######################
 	def displayText(self,priority,topText=' ',bottomText=' ',seconds=2,justify='left',topBlinkRate=0,bottomBlinkRate=0):
 		# This function will be used as a very basic display prioritizing helper
 		# Check if anything with a higher priority is running
@@ -97,20 +108,10 @@ class UtilitiesMode(game.Mode):
 			self.game.alpha_score_display.set_text(self.p.name.upper() + "  BALL "+str(self.game.ball),1,justify='right')
 			print self.p.name
 			print "Ball " + str(self.game.ball)
-
-	def score(self, points):
-		if (self.game.ball <> 0): #in case score() gets called when not in game
-			self.p = self.game.current_player()
-			self.p.score += points
-			self.cancel_delayed('updatescore')
-			self.delay(name='updatescore',delay=0.05,handler=self.game.utilities.updateBaseDisplay)
-
-	def stopShooterLaneMusic(self):
-		if (self.game.shooter_lane_status == 1):
-			self.game.sound.stop_music()
-			self.game.sound.play_music('main',loops=-1)
-			self.game.shooter_lane_status = 0
-
+	
+	##################
+	## GI Functions ##
+	##################
 	def disableGI(self):
 		self.game.coils.giUpper.enable()
 		self.game.coils.giLower.enable()
@@ -121,4 +122,32 @@ class UtilitiesMode(game.Mode):
 		self.game.coils.giLower.disable()
 		self.game.coils.giBackbox.disable()
 
-			
+
+	###############################
+	## Music and Sound Functions ##
+	###############################
+	def stopShooterLaneMusic(self):
+		if (self.game.shooter_lane_status == 1):
+			self.game.sound.stop_music()
+			self.game.sound.play_music('main',loops=-1)
+			self.game.shooter_lane_status = 0
+
+
+	######################
+	## Player Functions ##
+	######################
+	def set_player_stats(self,id,value):
+		self.p = self.game.current_player()
+		self.p.player_stats[id]=value
+
+	def get_player_stats(self,id):
+		self.p = self.game.current_player()
+		return self.p.player_stats[id]
+
+	def score(self, points):
+		if (self.game.ball <> 0): #in case score() gets called when not in game
+			self.p = self.game.current_player()
+			self.p.score += points
+			# Update the base display with the current players score
+			self.cancel_delayed('updatescore')
+			self.delay(name='updatescore',delay=0.05,handler=self.game.utilities.updateBaseDisplay)	
