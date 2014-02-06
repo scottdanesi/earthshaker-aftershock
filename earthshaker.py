@@ -51,6 +51,8 @@ import tilt
 from tilt import *
 import centerramp
 from centerramp import *
+import player
+from player import *
 
 # Import and Setup Logging
 logging.basicConfig(level=logging.WARN, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -120,7 +122,7 @@ class EarthshakerAftershock(game.BasicGame):
 
 	def RegisterSound(self):
 		# Sound Settings:
-		self.sound.music_volume_offset = 10 #This will be hardcoded at 10 since I have external volume controls I will be using
+		#self.sound.music_volume_offset = 10 #This will be hardcoded at 10 since I have external volume controls I will be using
 		# Music Registration
 		self.sound.register_music('main', game_music_path + 'main1.wav')
 		self.sound.register_music('shooter', game_music_path + 'shooter.wav')
@@ -129,6 +131,11 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_sound('sling', game_sound_path + 'sling.wav')
 		self.sound.register_sound('jet', game_sound_path + 'jet.wav')
 		self.sound.register_sound('skillshotAwarded', game_sound_path + 'skillshotAwarded.wav')
+		self.sound.register_sound('centerRampEnter', game_sound_path + 'centerRampEntry.wav')
+		self.sound.register_sound('centerRampComplete', game_sound_path + 'centerRampComplete.wav')
+
+	def create_player(self, name):
+		return Player(name)
 		
 ################################################
 # GAME DEFINITION
