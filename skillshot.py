@@ -28,7 +28,6 @@ from procgame import *
 import pinproc
 import scoredisplay
 from scoredisplay import AlphaScoreDisplay
-#from base import AlphaScoreDisplay
 
 class SkillshotMode(game.Mode):
 	def __init__(self, game, priority):
@@ -36,28 +35,17 @@ class SkillshotMode(game.Mode):
 			####################
 			#Mode Setup
 			####################
-			
-			#self.score_display = AlphaScoreDisplay(self.game,0)
-			#gameover_mode = GameOver(game)
-			
-			#self.checkForStuckBalls()
+			self.superSkillshotValue = 250000
+			self.skillshotDisplayTime = 2
 
 	def mode_started(self):
-		#self.delay(delay=.5,handler=self.enableACSelect)
 		self.startSkillshotLamps()
+		self.game.utilities.displayText(100,'SKILLSHOT READY','MULTIPLIER X' + str(self.game.utilities.get_player_stats('skillshot_x')),seconds=4,justify='center')
 		return super(SkillshotMode, self).mode_started()
-
-	#def enableACSelect(self):
-		#self.game.coils.acSelect.enable() #for Flashers
 
 	def mode_stopped(self):
 		self.stopSkillshotLamps()
 		return super(SkillshotMode, self).mode_stopped()
-
-	#def update_display(self):
-		#self.p = self.game.current_player()
-		#self.game.score_display.set_text(str(self.p.score),0)
-		#self.game.score_display.set_text("Ball "+str(self.game.ball),1)
 		
 	def startSkillshotLamps(self):
 		self.game.lamps.captive25k.schedule(schedule=0x0000000F, cycle_seconds=0, now=False)
@@ -77,27 +65,22 @@ class SkillshotMode(game.Mode):
 		self.game.lamps.captiveArrow9.disable()
 		#self.game.coils.outholeKicker_CaptiveFlashers.disable()
 
-	#def score(self, points):
-		#p = self.game.current_player()
-		#p.score += points
-		#self.cancel_delayed('updatescore')
-		#self.delay(name='updatescore',delay=0.5,handler=self.game.utilities.updateBaseDisplay)
-
 	##############################
 	## Skillshot Handling Modes ##
 	##############################
 	def superSkillshotMissed(self):
-		self.game.utilities.displayText(100,'SUPER SKILLSHOT','MISSED',seconds=3,justify='center')
+		self.game.utilities.displayText(100,'SUPER SKILLSHOT','MISSED',seconds=self.skillshotDisplayTime,justify='center')
 		self.game.modes.remove(self)
 
 	def superSkillshotAwarded(self):
 		self.game.sound.play_voice('skillshotAwarded')
-		self.game.utilities.displayText(100,'SUPER SKILLSHOT','250,000 POINTS',seconds=3,justify='center')
-		self.game.utilities.score(250000)
+		self.game.utilities.displayText(100,'SUPER SKILLSHOT',locale.format("%d", str(self.superSkillshotValue * self.game.utilities.get_player_stats('skillshot_x')), grouping=True) + ' POINTS',seconds=self.skillshotDisplayTime,justify='center')
+		self.game.utilities.score(self.superSkillshotValue * self.game.utilities.get_player_stats('skillshot_x'))
+		self.game.utilities.set_player_stats('skillshot_x',self.game.utilities.get_player_stats('skillshot_x') + 1)
 		self.game.modes.remove(self)
 
 	def skillshotMissed(self):
-		self.game.utilities.displayText(100,'SKILLSHOT','MISSED',seconds=3,justify='center')
+		self.game.utilities.displayText(100,'SKILLSHOT','MISSED',seconds=self.skillshotDisplayTime,justify='center')
 		self.game.modes.remove(self)
 
 	def skillshotAwarded(self):
@@ -114,17 +97,20 @@ class SkillshotMode(game.Mode):
 		return procgame.game.SwitchContinue
 
 	def sw_onRamp50k_active(self, sw):
-		self.game.utilities.displayText(100,'SKILLSHOT','50,000 POINTS',seconds=3,justify='center')
+		self.game.utilities.displayText(100,'SKILLSHOT',locale.format("%d", str(50000 * self.game.utilities.get_player_stats('skillshot_x')), grouping=True) + ' POINTS',seconds=self.skillshotDisplayTime,justify='center')
+		self.game.utilities.score(50000) * self.game.utilities.get_player_stats('skillshot_x')
 		self.skillshotAwarded()
 		return procgame.game.SwitchContinue
 
 	def sw_onRamp25k_active(self, sw):
-		self.game.utilities.displayText(100,'SKILLSHOT','25,000 POINTS',seconds=3,justify='center')
+		self.game.utilities.displayText(100,'SKILLSHOT',locale.format("%d", str(25000 * self.game.utilities.get_player_stats('skillshot_x')), grouping=True) + ' POINTS',seconds=self.skillshotDisplayTime,justify='center')
+		self.game.utilities.score(25000) * self.game.utilities.get_player_stats('skillshot_x')
 		self.skillshotAwarded()
 		return procgame.game.SwitchContinue
 
 	def sw_onRamp100k_active(self, sw):
-		self.game.utilities.displayText(100,'SKILLSHOT','100,000 POINTS',seconds=3,justify='center')
+		self.game.utilities.displayText(100,'SKILLSHOT',locale.format("%d", str(100000 * self.game.utilities.get_player_stats('skillshot_x')), grouping=True) + ' POINTS',seconds=self.skillshotDisplayTime,justify='center')
+		self.game.utilities.score(100000) * self.game.utilities.get_player_stats('skillshot_x')
 		self.skillshotAwarded()
 		return procgame.game.SwitchContinue
 
@@ -136,17 +122,14 @@ class SkillshotMode(game.Mode):
 		self.superSkillshotMissed()
 		return procgame.game.SwitchContinue
 
-	def sw_centerRampMiddle_active(self, sw):
-		#Start Super Skillshot!
-		#self.startSkillshotLamps()
+	def sw_rightStandupHigh2_active(self, sw):
+		self.superSkillshotMissed()
 		return procgame.game.SwitchContinue
 
-	def sw_centerRampEnd_active(self, sw):
-		#Start Super Skillshot!
-		#self.startSkillshotLamps()
+	def sw_rightStandupLow3_active(self, sw):
+		self.superSkillshotMissed()
 		return procgame.game.SwitchContinue
 
 	def sw_captiveBall9_closed(self, sw):
-		#self.game.coils.outholeKicker_CaptiveFlashers.schedule(schedule=0x33330000, cycle_seconds=1, now=True)
 		self.superSkillshotAwarded()
 		return procgame.game.SwitchContinue

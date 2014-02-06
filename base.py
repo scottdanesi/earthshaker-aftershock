@@ -260,17 +260,17 @@ class BaseGameMode(game.Mode):
 	## Skillshot Switches
 	#############################
 	def sw_onRamp25k_active(self, sw):
-		self.game.utilities.score(25000)
+		#self.game.utilities.score(25000)
 		#self.game.utilities.stopShooterLaneMusic()
 		return procgame.game.SwitchStop
 
 	def sw_onRamp50k_active(self, sw):
-		self.game.utilities.score(50000)
+		#self.game.utilities.score(50000)
 		#self.game.utilities.stopShooterLaneMusic()
 		return procgame.game.SwitchStop
 
 	def sw_onRamp100k_active(self, sw):
-		self.game.utilities.score(100000)
+		#self.game.utilities.score(100000)
 		#self.game.utilities.stopShooterLaneMusic()
 		return procgame.game.SwitchStop
 
