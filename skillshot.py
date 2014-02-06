@@ -26,8 +26,9 @@
 import procgame.game
 from procgame import *
 import pinproc
-import scoredisplay
-from scoredisplay import AlphaScoreDisplay
+#import scoredisplay
+#from scoredisplay import AlphaScoreDisplay
+import locale
 
 class SkillshotMode(game.Mode):
 	def __init__(self, game, priority):
@@ -74,7 +75,7 @@ class SkillshotMode(game.Mode):
 
 	def superSkillshotAwarded(self):
 		self.game.sound.play_voice('skillshotAwarded')
-		self.game.utilities.displayText(100,'SUPER SKILLSHOT',locale.format("%d", str(self.superSkillshotValue * self.game.utilities.get_player_stats('skillshot_x')), grouping=True) + ' POINTS',seconds=self.skillshotDisplayTime,justify='center')
+		self.game.utilities.displayText(100,'SUPER SKILLSHOT',locale.format("%d", self.superSkillshotValue * self.game.utilities.get_player_stats('skillshot_x'), grouping=True) + ' POINTS',seconds=self.skillshotDisplayTime,justify='center')
 		self.game.utilities.score(self.superSkillshotValue * self.game.utilities.get_player_stats('skillshot_x'))
 		self.game.utilities.set_player_stats('skillshot_x',self.game.utilities.get_player_stats('skillshot_x') + 1)
 		self.game.modes.remove(self)
@@ -97,20 +98,20 @@ class SkillshotMode(game.Mode):
 		return procgame.game.SwitchContinue
 
 	def sw_onRamp50k_active(self, sw):
-		self.game.utilities.displayText(100,'SKILLSHOT',locale.format("%d", str(50000 * self.game.utilities.get_player_stats('skillshot_x')), grouping=True) + ' POINTS',seconds=self.skillshotDisplayTime,justify='center')
-		self.game.utilities.score(50000) * self.game.utilities.get_player_stats('skillshot_x')
+		self.game.utilities.displayText(100,'SKILLSHOT',locale.format("%d", 50000 * self.game.utilities.get_player_stats('skillshot_x'), grouping=True) + ' POINTS',seconds=self.skillshotDisplayTime,justify='center')
+		self.game.utilities.score(50000 * self.game.utilities.get_player_stats('skillshot_x'))
 		self.skillshotAwarded()
 		return procgame.game.SwitchContinue
 
 	def sw_onRamp25k_active(self, sw):
-		self.game.utilities.displayText(100,'SKILLSHOT',locale.format("%d", str(25000 * self.game.utilities.get_player_stats('skillshot_x')), grouping=True) + ' POINTS',seconds=self.skillshotDisplayTime,justify='center')
-		self.game.utilities.score(25000) * self.game.utilities.get_player_stats('skillshot_x')
+		self.game.utilities.displayText(100,'SKILLSHOT',locale.format("%d", 25000 * self.game.utilities.get_player_stats('skillshot_x'), grouping=True) + ' POINTS',seconds=self.skillshotDisplayTime,justify='center')
+		self.game.utilities.score(25000 * self.game.utilities.get_player_stats('skillshot_x'))
 		self.skillshotAwarded()
 		return procgame.game.SwitchContinue
 
 	def sw_onRamp100k_active(self, sw):
-		self.game.utilities.displayText(100,'SKILLSHOT',locale.format("%d", str(100000 * self.game.utilities.get_player_stats('skillshot_x')), grouping=True) + ' POINTS',seconds=self.skillshotDisplayTime,justify='center')
-		self.game.utilities.score(100000) * self.game.utilities.get_player_stats('skillshot_x')
+		self.game.utilities.displayText(100,'SKILLSHOT',locale.format("%d", 100000 * self.game.utilities.get_player_stats('skillshot_x'), grouping=True) + ' POINTS',seconds=self.skillshotDisplayTime,justify='center')
+		self.game.utilities.score(100000 * self.game.utilities.get_player_stats('skillshot_x'))
 		self.skillshotAwarded()
 		return procgame.game.SwitchContinue
 
