@@ -33,11 +33,18 @@ class Player(procgame.game.Player):
 			#create player stats
 			self.player_stats = {}
 
+			### General Stats ###
+			self.player_stats['ball_in_play']=False
+
 			### Bonus and Status ###
 			self.player_stats['status']=''
 			self.player_stats['bonus_x']=1
 
+			### Ball Saver ###
+			self.player_stats['ballsave_active']=False
+
 			### Skillshot ###
+			self.player_stats['skillshot_active']=False
 			self.player_stats['skillshot_x']=1
 			#self.player_stats['skillshot_active']=False
 
