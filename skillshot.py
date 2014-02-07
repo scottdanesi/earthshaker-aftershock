@@ -40,13 +40,21 @@ class SkillshotMode(game.Mode):
 			self.skillshotDisplayTime = 2
 
 	def mode_started(self):
-		self.startSkillshotLamps()
+		self.game.utilities.set_player_stats('skillshot_active',True)
+		self.update_lamps()
 		self.game.utilities.displayText(100,'SKILLSHOT READY','MULTIPLIER X' + str(self.game.utilities.get_player_stats('skillshot_x')),seconds=4,justify='center')
 		return super(SkillshotMode, self).mode_started()
 
 	def mode_stopped(self):
-		self.stopSkillshotLamps()
+		self.game.utilities.set_player_stats('skillshot_active',False)
+		self.update_lamps()
 		return super(SkillshotMode, self).mode_stopped()
+
+	def update_lamps(self):
+		if (self.game.utilities.get_player_stats('skillshot_active') == True):
+			self.startSkillshotLamps()
+		else:
+			self.stopSkillshotLamps()
 		
 	def startSkillshotLamps(self):
 		self.game.lamps.captive25k.schedule(schedule=0x0000000F, cycle_seconds=0, now=False)
