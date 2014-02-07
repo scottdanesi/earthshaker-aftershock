@@ -27,61 +27,80 @@ import procgame.game
 from procgame import *
 import pinproc
 
-ballSaverTime = 15
-clearForLaunch = False
+#ballSaverTime = 15
+#ballSaverWarningThreshold = ballSaverTime
+#ballSaverTimeLeft = ballSaverTime
 
 class BallSaver(game.Mode):
-	def __init__(self, game):
-			super(BallSaver, self).__init__(game=game, priority=100)
+	def __init__(self, game, priority):
+			super(BallSaver, self).__init__(game, priority)
+
+			self.ballSaverTime = 15
+			self.ballSaverGracePeriodThreshold = 3
+			self.ballSaveLampsActive = True
 
 	def mode_started(self):
-		self.startBallSaverLamps()
-
+		self.cancel_delayed('stopballsavelamps')
+		self.game.utilities.set_player_stats('ballsave_active',True)
+		self.ballSaveLampsActive = True
+		self.update_lamps()
+		
 	def mode_stopped(self):
-		self.stopBallSaverLamps()
+		self.cancel_delayed('stopballsavelamps')
+		self.cancel_delayed('ballsaver')
+		self.game.utilities.set_player_stats('ballsave_active',False)
+		self.update_lamps()
 
-	def acCoilPulse(self,coilname,pulsetime=50):
-		self.acSelectTimeBuffer = .2
-		#Insert placeholder to stop flasher lampshows and schedules?
-		self.cancel_delayed(name='acEnableDelay')
-		self.game.coils.acSelect.disable()
-		self.delay(name='coilDelay',event_type=None,delay=self.acSelectTimeBuffer,handler=self.game.coils[coilname].pulse,param=pulsetime)
-		self.delay(name='acEnableDelay',delay=pulsetime+(self.acSelectTimeBuffer*2),handler=self.game.coils.acSelect.enable)
-
-	def update_display(self):
-		pass
+	def update_lamps(self):
+		if (self.game.utilities.get_player_stats('ballsave_active') == True and self.ballSaveLampsActive == True):
+			self.startBallSaverLamps()
+		else:
+			self.stopBallSaverLamps()
 		
 	def startBallSaverLamps(self):
-		self.game.lamps.shootAgain.schedule(schedule=0xFF00FF00, cycle_seconds=0, now=False)
+		self.game.lamps.shootAgain.schedule(schedule=0x00FF00FF, cycle_seconds=0, now=False)
+
+	def startBallSaverLampsWarning(self):
+		self.game.lamps.shootAgain.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=False)
 
 	def stopBallSaverLamps(self):
+		self.ballSaveLampsActive = False
 		self.game.lamps.shootAgain.disable()
 
 	def stopBallSaverMode(self):
 		self.game.modes.remove(self)
 
-	def sw_outhole_closed_for_1s(self, sw):
+	def kickBallToTrough(self):
+		self.game.utilities.acCoilPulse(coilname='outholeKicker_CaptiveFlashers',pulsetime=50)
+
+	def kickBallToShooterLane(self):
+		self.game.utilities.acCoilPulse(coilname='ballReleaseShooterLane_CenterRampFlashers1',pulsetime=100)
+
+	def saveBall(self):
 		#Kick another ball
-		clearForLaunch = True
-		self.game.score_display.set_text("BALL SAVED",0,justify='center')
-		self.game.score_display.set_text(" ",1,justify='center')
-		self.acCoilPulse(coilname='outholeKicker_CaptiveFlashers',pulsetime=50)
-		if self.game.switches.trough1.is_active()==True:
-			self.acCoilPulse(coilname='ballReleaseShooterLane_CenterRampFlashers1',pulsetime=50)
+		self.game.utilities.displayText(199,topText='BALL SAVED',bottomText=' ',seconds=3,justify='center')
+
+		#Stop Skillshot
+		self.game.modes.remove(self.game.skillshot_mode)
+
+		self.kickBallToTrough()
+		self.kickBallToShooterLane()
+		self.stopBallSaverMode()
+
+	def sw_outhole_closed_for_1s(self, sw):
+		self.saveBall()
+		if (self.game.utilities.get_player_stats('ballsave_active') == True):
+			return procgame.game.SwitchStop
 		else:
-			#this might cause an error
-			self.delay(delay=1,handler=self.acCoilPulse,param='ballReleaseShooterLane_CenterRampFlashers1')
-		self.delay(delay=2,handler=self.stopBallSaverMode)
-		return procgame.game.SwitchStop
+			return procgame.game.SwitchContinue
 
 	def sw_outhole_closed(self, sw):
-		return procgame.game.SwitchStop
-
-	def sw_ballShooter_closed_for_1s(self, sw):
-		if clearForLaunch == True:
-			#launch Ball
-			self.game.coils.autoLauncher.pulse(100)
-		return procgame.game.SwitchStop
+		if (self.game.utilities.get_player_stats('ballsave_active') == True):
+			return procgame.game.SwitchStop
+		else:
+			return procgame.game.SwitchContinue
 
 	def sw_ballShooter_open_for_1s(self, sw):
-		self.delay('ballsaver',delay=ballSaverTime,handler=self.stopBallSaverMode)
+		self.delay(name='ballsaver',delay=self.ballSaverTime,handler=self.stopBallSaverMode)
+		self.delay(name='stopballsavelamps',delay=self.ballSaverTime - self.ballSaverGracePeriodThreshold,handler=self.stopBallSaverLamps)
+		return procgame.game.SwitchContinue

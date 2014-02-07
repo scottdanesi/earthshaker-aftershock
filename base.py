@@ -87,6 +87,7 @@ class BaseGameMode(game.Mode):
 		self.game.modes.add(self.game.skillshot_mode)
 		self.game.modes.add(self.game.centerramp_mode)
 		self.game.modes.add(self.game.tilt)
+		self.game.modes.add(self.game.ballsaver_mode)
 
 		#### Enable Flippers ####
 		self.game.coils.flipperEnable.enable()
