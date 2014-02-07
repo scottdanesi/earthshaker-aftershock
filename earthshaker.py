@@ -53,6 +53,8 @@ import centerramp
 from centerramp import *
 import player
 from player import *
+import ballsaver
+from ballsaver import *
 
 # Import and Setup Logging
 logging.basicConfig(level=logging.WARN, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -115,6 +117,7 @@ class EarthshakerAftershock(game.BasicGame):
 		self.utilities = UtilitiesMode(self,0)
 		self.tilt = Tilt(self,200)
 		self.centerramp_mode = CenterRampMode(self,8)
+		self.ballsaver_mode = BallSaver(self,199)
 		
 		#### Initial Mode Queue ####
 		self.modes.add(self.utilities)
