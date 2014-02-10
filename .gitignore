@@ -3,6 +3,10 @@
 /config/settings.yaml
 /config/game_data.yaml
 #############
+## Log File
+#############
+aftershockLog.txt
+#############
 ## Python
 #############
 *.pyc
