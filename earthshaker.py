@@ -56,9 +56,6 @@ from player import *
 import ballsaver
 from ballsaver import *
 
-# Import and Setup Logging
-logging.basicConfig(level=logging.WARN, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-
 # Used to put commas in the score.
 locale.setlocale(locale.LC_ALL, "")
 
@@ -86,6 +83,9 @@ class EarthshakerAftershock(game.BasicGame):
 		self.load_config(game_machine_yaml)
 		self.logging_enabled = True
 		self.balls_per_game = ballsPerGame
+
+		### Set Logging Info ###
+		logging.basicConfig(filename='aftershockLog.txt',level=logging.INFO)
 		
 		
 	def reset(self):

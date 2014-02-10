@@ -67,6 +67,7 @@ class BaseGameMode(game.Mode):
 	# MAIN GAME HANDLING FUNCTIONS
 	###############################################################
 	def start_game(self):
+		self.game.utilities.log('Start Game','info')
 		#This function is to be used when starting a NEW game, player 1 and ball 1
 		#Clean Up
 		self.game.modes.remove(self.game.attract_mode)
@@ -83,6 +84,7 @@ class BaseGameMode(game.Mode):
 		print "Game Started"
 		
 	def start_ball(self):
+		self.game.utilities.log('Start Ball','info')
 		#### Queue Ball Modes ####
 		self.game.modes.add(self.game.skillshot_mode)
 		self.game.modes.add(self.game.centerramp_mode)
@@ -109,11 +111,11 @@ class BaseGameMode(game.Mode):
 		print "Ball Started"
 		
 	def end_ball(self):
-		#print "End of Ball " + str(self.game.ball) + " Called"
-		#print "Total Players: " + str(len(self.game.players))
-		#print "Current Player: " + str(self.game.current_player_index)
-		#print "Balls Per Game: " + str(self.game.balls_per_game)
-		#print "Current Ball: " + str(self.game.ball)
+		self.game.utilities.log("End of Ball " + str(self.game.ball) + " Called",'info')
+		self.game.utilities.log("Total Players: " + str(len(self.game.players)),'info')
+		self.game.utilities.log("Current Player: " + str(self.game.current_player_index),'info')
+		self.game.utilities.log("Balls Per Game: " + str(self.game.balls_per_game),'info')
+		self.game.utilities.log("Current Ball: " + str(self.game.ball),'info')
 
 		#### Remove Ball Modes ####
 		self.game.modes.remove(self.game.skillshot_mode)
@@ -122,6 +124,8 @@ class BaseGameMode(game.Mode):
 
 		#self.game.sound.fadeout_music(time_ms=1000) #This is causing delay issues with the AC Relay
 		self.game.sound.stop_music()
+
+		
 
 		if self.game.current_player_index == len(self.game.players) - 1:
 			#Last Player or Single Player Drained
@@ -144,17 +148,14 @@ class BaseGameMode(game.Mode):
 
 
 	def end_game(self):
-		#self.game.ball = 0
-		#self.players = []
-		#self.current_player_index = 0
+		self.game.utilities.log('Game Ended','info')
+		
 		self.game.coils.flipperEnable.disable()
 
 		#disable AC Relay
 		self.cancel_delayed(name='acEnableDelay')
 		self.game.coils.acSelect.disable()
 
-		#self.game.modes.add(self.game.attract_mode)
-		
 		self.game.reset()
 
 	###############################################################
@@ -174,8 +175,6 @@ class BaseGameMode(game.Mode):
 				#Start New Game
 				#########################
 				self.start_game()
-				#self.game.sound.play_music('main')
-				self.delay(name='lauchball',delay=2,handler=self.game.utilities.launch_ball)
 			else:
 				#missing balls
 				self.game.utilities.releaseStuckBalls()
@@ -192,8 +191,10 @@ class BaseGameMode(game.Mode):
 		pass
 		
 	def sw_outhole_closed_for_1s(self, sw):
-		self.game.utilities.acCoilPulse(coilname='outholeKicker_CaptiveFlashers',pulsetime=50)
-		self.end_ball()
+		### Ball handling ###
+		self.game.utilities.setBallInPlay(False)
+		self.game.utilities.acCoilPulse('outholeKicker_CaptiveFlashers')
+		self.delay('endBall',delay=1,handler=self.end_ball)
 		return procgame.game.SwitchStop
 
 	def sw_ejectHole5_closed_for_1s(self, sw):
@@ -257,26 +258,32 @@ class BaseGameMode(game.Mode):
 		self.game.utilities.score(100)
 		return procgame.game.SwitchStop
 
-	#############################
+	##################################################
 	## Skillshot Switches
-	#############################
+	## These will set the ball in play when tripped
+	##################################################
 	def sw_onRamp25k_active(self, sw):
-		#self.game.utilities.score(25000)
-		#self.game.utilities.stopShooterLaneMusic()
+		self.game.utilities.setBallInPlay(True)
 		return procgame.game.SwitchStop
 
 	def sw_onRamp50k_active(self, sw):
-		#self.game.utilities.score(50000)
-		#self.game.utilities.stopShooterLaneMusic()
+		self.game.utilities.setBallInPlay(True)
 		return procgame.game.SwitchStop
 
 	def sw_onRamp100k_active(self, sw):
-		#self.game.utilities.score(100000)
-		#self.game.utilities.stopShooterLaneMusic()
+		self.game.utilities.setBallInPlay(True)
 		return procgame.game.SwitchStop
 
 	def sw_onRampBypass_active(self, sw):
-		#self.game.utilities.stopShooterLaneMusic()
+		self.game.utilities.setBallInPlay(True)
+		return procgame.game.SwitchStop
+
+	def sw_centerRampMiddle_active(self, sw):
+		self.game.utilities.setBallInPlay(True)
+		return procgame.game.SwitchStop
+
+	def sw_centerRampEnd_active(self, sw):
+		self.game.utilities.setBallInPlay(True)
 		return procgame.game.SwitchStop
 
 	#############################
@@ -336,6 +343,8 @@ class BaseGameMode(game.Mode):
 		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 
-	def sw_ballShooter_open_for_1s(self, sw):
-		self.game.utilities.stopShooterLaneMusic()
+	def sw_ballShooter_closed_for_1s(self, sw):
+		if (self.game.utilities.get_player_stats('ball_in_play') == True):
+			#Kick the ball into play
+			self.game.utilities.launch_ball()
 		return procgame.game.SwitchStop

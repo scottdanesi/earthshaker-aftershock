@@ -29,6 +29,7 @@ import procgame.game
 from procgame import *
 import pinproc
 import locale
+import logging
 
 import player
 from player import *
@@ -39,7 +40,22 @@ class UtilitiesMode(game.Mode):
 
 	def mode_started(self):
 		## Set Global Variables ##
-		self.currentDisplayPriority = 0
+		self.currentDisplayPriority = 0		
+
+
+	###################
+	## Log Functions ##
+	###################
+
+	def log(self,text,level='info'):
+		if (level == 'error'):
+			logging.error(text)
+		elif (level == 'warning'):
+			logging.warning(text)
+		else:
+			logging.info(text)
+		print level + " - " + text
+
 
 	#############################
 	## Ball Location Functions ##
@@ -67,11 +83,18 @@ class UtilitiesMode(game.Mode):
 		if self.game.switches.ballShooter.is_active()==True:
 			self.game.coils.autoLauncher.pulse(100)
 
+	def setBallInPlay(self,ballInPlay=True):
+		self.previousBallInPlay = self.get_player_stats('ball_in_play')
+		if (ballInPlay == True and self.previousBallInPlay == False):
+			self.set_player_stats('ball_in_play',True)
+			self.stopShooterLaneMusic()
+		elif (ballInPlay == False and self.previousBallInPlay == True):
+			self.set_player_stats('ball_in_play',False)
 
 	########################
 	## AC Relay Functions ##
 	########################
-	def acCoilPulse(self,coilname,pulsetime):
+	def acCoilPulse(self,coilname,pulsetime=50):
 		self.acSelectTimeBuffer = .3
 		self.acSelectEnableBuffer = (pulsetime/1000)+(self.acSelectTimeBuffer*2)
 		#Insert placeholder to stop flasher lampshows and schedules?

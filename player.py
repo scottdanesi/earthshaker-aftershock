@@ -42,6 +42,7 @@ class Player(procgame.game.Player):
 
 			### Ball Saver ###
 			self.player_stats['ballsave_active']=False
+			self.player_stats['ballsave_timer_active']=False
 
 			### Skillshot ###
 			self.player_stats['skillshot_active']=False

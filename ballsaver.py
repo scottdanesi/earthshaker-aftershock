@@ -46,10 +46,7 @@ class BallSaver(game.Mode):
 		self.update_lamps()
 		
 	def mode_stopped(self):
-		self.cancel_delayed('stopballsavelamps')
-		self.cancel_delayed('ballsaver')
-		self.game.utilities.set_player_stats('ballsave_active',False)
-		self.update_lamps()
+		pass
 
 	def update_lamps(self):
 		if (self.game.utilities.get_player_stats('ballsave_active') == True and self.ballSaveLampsActive == True):
@@ -68,7 +65,20 @@ class BallSaver(game.Mode):
 		self.game.lamps.shootAgain.disable()
 
 	def stopBallSaverMode(self):
+		self.game.utilities.set_player_stats('ballsave_active',False)
+		self.stopBallSaverTimers()
+		self.update_lamps()
 		self.game.modes.remove(self)
+
+	def startBallSaverTimers(self):
+		self.game.utilities.set_player_stats('ballsave_timer_active',True)
+		self.delay(name='ballsaver',delay=self.ballSaverTime,handler=self.stopBallSaverMode)
+		self.delay(name='stopballsavelamps',delay=self.ballSaverTime - self.ballSaverGracePeriodThreshold,handler=self.stopBallSaverLamps)
+
+	def stopBallSaverTimers(self):
+		self.game.utilities.set_player_stats('ballsave_timer_active',False)
+		self.cancel_delayed('stopballsavelamps')
+		self.cancel_delayed('ballsaver')
 
 	def kickBallToTrough(self):
 		self.game.utilities.acCoilPulse(coilname='outholeKicker_CaptiveFlashers',pulsetime=50)
@@ -88,19 +98,53 @@ class BallSaver(game.Mode):
 		self.stopBallSaverMode()
 
 	def sw_outhole_closed_for_1s(self, sw):
-		self.saveBall()
 		if (self.game.utilities.get_player_stats('ballsave_active') == True):
+			self.saveBall()
+			self.game.utilities.log('BALLSAVE - Ouhole closed for 1s - SwitchStop','info')
 			return procgame.game.SwitchStop
 		else:
+			self.game.utilities.log('BALLSAVE - Ouhole closed for 1s - SwitchContinue','info')
 			return procgame.game.SwitchContinue
 
 	def sw_outhole_closed(self, sw):
 		if (self.game.utilities.get_player_stats('ballsave_active') == True):
+			self.game.utilities.log('BALLSAVE - Ouhole closed - SwitchStop - Disabling timers','info')
+			self.cancel_delayed('ballsaver')
 			return procgame.game.SwitchStop
 		else:
+			self.game.utilities.log('BALLSAVE - Ouhole closed - SwitchContinue','info')
 			return procgame.game.SwitchContinue
 
-	def sw_ballShooter_open_for_1s(self, sw):
-		self.delay(name='ballsaver',delay=self.ballSaverTime,handler=self.stopBallSaverMode)
-		self.delay(name='stopballsavelamps',delay=self.ballSaverTime - self.ballSaverGracePeriodThreshold,handler=self.stopBallSaverLamps)
+	##################################################
+	## Skillshot Switches
+	## These will set the ball in play when tripped
+	##################################################
+	def sw_onRamp25k_active(self, sw):
+		if (self.game.utilities.get_player_stats('ballsave_timer_active') == False):
+			self.startBallSaverTimers()
+		return procgame.game.SwitchContinue
+
+	def sw_onRamp50k_active(self, sw):
+		if (self.game.utilities.get_player_stats('ballsave_timer_active') == False):
+			self.startBallSaverTimers()
+		return procgame.game.SwitchContinue
+
+	def sw_onRamp100k_active(self, sw):
+		if (self.game.utilities.get_player_stats('ballsave_timer_active') == False):
+			self.startBallSaverTimers()
+		return procgame.game.SwitchContinue
+
+	def sw_onRampBypass_active(self, sw):
+		if (self.game.utilities.get_player_stats('ballsave_timer_active') == False):
+			self.startBallSaverTimers()
+		return procgame.game.SwitchContinue
+
+	def sw_centerRampMiddle_active(self, sw):
+		if (self.game.utilities.get_player_stats('ballsave_timer_active') == False):
+			self.startBallSaverTimers()
+		return procgame.game.SwitchContinue
+
+	def sw_centerRampEnd_active(self, sw):
+		if (self.game.utilities.get_player_stats('ballsave_timer_active') == False):
+			self.startBallSaverTimers()
 		return procgame.game.SwitchContinue

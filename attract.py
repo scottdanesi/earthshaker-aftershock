@@ -238,3 +238,6 @@ class AttractMode(game.Mode):
 
 	def sw_onRamp100k_active(self, sw):
 		return procgame.game.SwitchStop
+
+	def sw_onRampBypass_active(self, sw):
+		return procgame.game.SwitchStop
