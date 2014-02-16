@@ -1,159 +1,46 @@
-##   ____           _                ____
-##  / ___|__ _  ___| |_ _   _ ___   / ___|__ _ _ __  _   _  ___  _ __
-## | |   / _` |/ __| __| | | / __| | |   / _` | '_ \| | | |/ _ \| '_ \
-## | |__| (_| | (__| |_| |_| \__ \ | |__| (_| | | | | |_| | (_) | | | |
-##  \____\__,_|\___|\__|\__,_|___/  \____\__,_|_| |_|\__, |\___/|_| |_|
-##                                                   |___/
-##           ___ ___  _  _ _____ ___ _  _ _   _ ___ ___
-##          / __/ _ \| \| |_   _|_ _| \| | | | | __|   \
-##         | (_| (_) | .` | | |  | || .` | |_| | _|| |) |
-##          \___\___/|_|\_| |_| |___|_|\_|\___/|___|___/
-##
-## A P-ROC Project by Eric Priepke, Copyright 2012-2013
-## Built on the PyProcGame Framework from Adam Preble and Gerry Stellenberg
-## Original Cactus Canyon software by Matt Coriale
-##
-# This file is a template for all of the statistical data to be kept for the game.
-# The game code will load this file along with a game_data.yaml file.
+# This file is a template for all of the statistical data to be kept for the game.# The game code will load this file along with a game_data.yaml file.  
 # Any items not present in the game_data.yaml file will default to the 
 # value specified here.  When game ends or when defaults are restored, 
 # game_data will be written and will then contain every item here.
 
 Audits:
-  Avg Ball Time: 0:00
-  Avg Extra Balls: 0
-  Avg Game Time: 0:00
-  Avg Score: 0
+  Average Ball Time: 0
+  Average Game Time: 0
+  Average Score: 0
   Games Played: 0
   Games Started: 0
   Balls Played: 0
-  Extra Balls Earned: 0
-  Left Drains: 0
-  Right Drains: 0
+  Left Flippers: 0
+  Right Flippers: 0
+  Left Inlanes: 0
+  Right Inlanes: 0
+  Left Outlane Drains: 0
+  Right Outlane Drains: 0
+  Jet Hits: 0
+  Saucers: 0
+  Credits: 0
+  Skyway Tolls: 0
+  Shelter Visits: 0
+  Center Ramps: 0
+  3-Bank Drop Targets Hits: 0
+  Warnings: 0
   Tilts: 0
-  Left Flipper: 0
-  Right Flipper: 0
-Feature:
-  Ball Searches: 0
-  Ball Saves: 0
-  Left Loop Hits: 0
-  Left Ramp Hits: 0
-  Center Ramp Hits: 0
-  Right Loop Hits: 0
-  Right Ramp Hits: 0
-  Bart Hits: 0
-  Barts Defeated: 0
-  Motherlodes Lit: 0
-  Motherlode Hits: 0
-  Stampede Started: 0
-  Stampede Jackpots: 0
-  Combos Complete: 0
-  Bart Bros Complete: 0
-  Showdown Started: 0
-  Showdown Racks Clear: 0
-  Ambush Started: 0
-  Ambush Kills: 0
-  Bionic Bart Started: 0
-  Bionic Bart Hits: 0
-  Bionic Bart Kills: 0
-  Gunfights Started: 0
-  Gunfights Won: 0
-  Quickdraws Started: 0
-  Quickdraws Won: 0
-  Right Quickdraw Lit: 0
-  Left Quickdraw Lit: 0
-  Left Polly Started: 0
-  Center Polly Started: 0
-  Right Polly Started: 0
-  Left Polly Won: 0
-  Center Polly Won: 0
-  Right Polly Won: 0
-  Gold Mine Started: 0
-  Gold Mine Jackpots: 0
-  Bounty Awards: 0
-  Stranger At End: 0
-  Partner At End: 0
-  Deputy At End: 0
-  Sheriff At End: 0
-  Marshall At End: 0
-  High Noon Started: 0
-  High Noon Won: 0
-  Drunk MB Started: 0
-  Drunk MB Beers: 0
-  Drunk MB Jackpots: 0
-  CVA Started: 0
-  CVA Ships Hit: 0
-  CVA Aliens Hit: 0
-  EB Lit Skillshot: 0
-  EB Lit Bounty: 0
-  EB Lit Quickdraws: 0
-  Last Call Started: 0
-  Marshall MB Started: 0
-SwitchHits:
-  18 SHOOTER LANE: 0
-  67 SKILL BOWL: 0
-  66 R RAMP ENTER: 0
-  65 R RAMP MAKE: 0
-  68 R RAMP BOTTOM: 0
-  17 R RETURN LANE: 0
-  27 R OUTLANE: 0
-  85 L RAMP ENTER: 0
-  83 L RAMP MAKE: 0
-  26 L RETURN LANE: 0
-  16 L OUTLANE: 0
-  82 C RAMP ENTER: 0
-  84 C RAMP MAKE: 0
-  58 L LOOP TOP: 0
-  36 L LOOP BOT: 0
-  56 R LOOP TOP: 0
-  37 R LOOP BOT: 0
-  57 R BONUS LANE: 0
-  47 L BONUS LANE: 0
-  28 BOT R QUICKDRAW: 0
-  44 TOP R QUICKDRAW: 0
-  87 BOT L QUICKDRAW: 0
-  86 TOP L QUICKDRAW: 0
-  15 MINE ENTRANCE: 0
-  46 BEER MUG: 0
-  48 JETS EXIT: 0
-  51 L SLINGSHOT: 0
-  52 R SLINGSHOT: 0
-  54 R JET BUMPER: 0
-  53 L JET BUMPER: 0
-  55 BOT JET BUMPER: 0
-  73 SALOON GATE: 0
-  75 BART TOY: 0
+Time Stamps:
+  First Boot-Up: 'Not Set'
+  Last Boot-Up: 'Not Set'
+  Overall Time On: 0
+  Overall Game Time: 0
+  Last Game Start: 'Not Set'
+  Last GC Score Entry: 'Not Set'
+  Last High Score Entry: 'Not Set'
+  Last Replay: 'Not Set'
 ClassicHighScoreData:
-- {date: 'Sun Oct  3 17:38:46 2010', inits: OIC, score: 500000}
-- {date: 'Sun Oct  3 17:44:49 2010', inits: LIZ, score: 400000}
-- {date: 'Sun Oct  3 16:22:47 2010', inits: ABI, score: 300000}
-- {date: 'Sun Oct  3 15:04:27 2010', inits: EMM, score: 200000}
-- {date: 'Sun Oct  3 22:05:01 2010', inits: OIC, score: 100000}
-MarshallHighScoreData:
-- {date: 'Sun Oct  3 17:38:46 2010', inits: OIC, score: 500}
-- {date: 'Sun Oct  3 17:44:49 2010', inits: LIZ, score: 400}
-- {date: 'Sun Oct  3 16:22:47 2010', inits: ABI, score: 300}
-RiverBankHighScoreData:
-- {date: 'Sun Oct  3 22:05:01 2010', inits: OIC, score: 2}
-QuickdrawChampHighScoreData:
-- {date: 'Sun Oct  3 22:05:01 2010', inits: LIZ, score: 2}
-ComboChampHighScoreData:
-- {date: 'Sun Oct  3 22:05:01 2010', inits: ABI, score: 2}
-ShowdownChampHighScoreData:
-- {date: 'Sun Oct  3 22:05:01 2010', inits: EMM, score: 2}
-AmbushChampHighScoreData:
-- {date: 'Sun Oct  3 22:05:01 2010', inits: OIC, score: 2}
-TownDrunkHighScoreData:
-- {date: 'Sun Oct  3 22:05:01 2010', inits: LIZ, score: 2}
-TumbleweedChampHighScoreData:
-- {date: 'Sun Oct  3 22:05:01 2010', inits: ABI, score: 2}
-UndertakerHighScoreData:
-- {date: 'Sun Oct  3 22:05:01 2010', inits: EMM, score: 2}
-BountyHunterHighScoreData:
-- {date: 'Sun Oct  3 22:05:01 2010', inits: OIC, score: 3}
-MotherlodeChampHighScoreData:
-- {date: 'Sun Oct  3 22:05:01 2010', inits: LIZ, score: 250000}
-LastCallHighScoreData:
-- {date: 'Sun Oct  3 17:38:46 2010', inits: ABI, score: 50000}
-MoonlightHighScoreData:
-- {date: 'Sun Oct  3 17:38:46 2010', inits: EMM, score: 50000}
+- {date: 'Sun Oct  3 17:38:46 2010', inits: M_S, score: 5000000}
+- {date: 'Sun Oct  3 17:44:49 2010', inits: JIM, score: 4000000}
+- {date: 'Sun Oct  3 16:22:47 2010', inits: KHE, score: 3000000}
+- {date: 'Sun Oct  3 15:04:27 2010', inits: DRB, score: 2000000}
+- {date: 'Sun Oct  3 22:05:01 2010', inits: SSD, score: 1000000}
+MilesChampion:
+- {date: 'Sun Oct  3 17:38:46 2010', inits: SRD, score: 30}
+Hidden:
+  Total Score: 0

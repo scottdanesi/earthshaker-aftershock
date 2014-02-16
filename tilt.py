@@ -44,17 +44,37 @@ class Tilt(game.Mode):
 		self.game.times_warned = 0
 		self.game.allowWarnings = True
 
+	def disableAllBallModes(self):
+		#### Remove Ball Modes ####
+		self.game.modes.remove(self.game.skillshot_mode)
+		self.game.modes.remove(self.game.centerramp_mode)
+		self.game.modes.remove(self.game.ballsaver_mode)
+		self.game.modes.remove(self.game.drops_mode)
+		self.game.modes.remove(self.game.collect_mode)
+
+	def playTiltSounds(self):
+		self.game.sound.play('tilt_fx')
+		self.delay(name='tiltVoice',delay=.5,handler=self.game.sound.play_voice,param='tilt_vox')
+
+	def playWarningSounds(self):
+		self.game.sound.play_voice('warning_vox')
+
 	def warning(self):
 		self.game.times_warned += 1
 		#Need to Play sound here
+		self.playWarningSounds()
 
 		#Flash GI - Not using schedule
-		self.flashDelay = .15 #used for the delay between GI flashes
-		self.flashDelayGap = .25
+		self.flashDelay = .1 #used for the delay between GI flashes
+		self.flashDelayGap = .1
 		self.game.utilities.disableGI()
 		self.delay(name='reenableGI',delay=self.flashDelay,handler=self.game.utilities.enableGI)
 		self.delay(name='disableGI',delay=(self.flashDelay*2)+self.flashDelayGap,handler=self.game.utilities.disableGI)
 		self.delay(name='reenableGI',delay=(self.flashDelay*3)+self.flashDelayGap,handler=self.game.utilities.enableGI)
+
+		#### Update Audits ####
+		self.game.game_data['Audits']['Warnings'] += 1
+		self.game.save_game_data()
 
 		#Update Display
 		time=2
@@ -66,6 +86,9 @@ class Tilt(game.Mode):
 			self.game.tiltStatus = 1
 
 			self.game.sound.stop_music()
+
+			#Remove all ball modes
+			self.disableAllBallModes()
 
 			#Update Display
 			#######################################################################
@@ -83,6 +106,19 @@ class Tilt(game.Mode):
 
 			#Disable GI
 			self.game.utilities.disableGI()
+
+			#Stop Music
+			self.game.sound.stop_music()
+
+			#Play Sounds
+			self.playTiltSounds()
+
+			#Need to release stuck balls
+			self.game.utilities.releaseStuckBalls()
+
+			#### Update Audits ####
+			self.game.game_data['Audits']['Tilts'] += 1
+			self.game.save_game_data()
 
 			#Wait for balls to empty
 				#self.waitUntilTroughIsFull()

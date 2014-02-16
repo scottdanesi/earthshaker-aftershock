@@ -31,6 +31,8 @@ import time
 import sys
 import locale
 
+#from bonus import *
+
 class BaseGameMode(game.Mode):
 	def __init__(self, game, priority):
 			#locale.setlocale(locale.LC_ALL, '') #Might not be needed
@@ -42,27 +44,6 @@ class BaseGameMode(game.Mode):
 			self.game.modes.add(self.game.attract_mode)
 			self.game.utilities.releaseStuckBalls()
 			
-	###############################################################
-	# UTILITY FUNCTIONS
-	###############################################################
-
-	#def score(self, points):
-		#self.p = self.game.current_player()
-		#self.p.score += points
-		#self.cancel_delayed('updatescore')
-		#self.delay(name='updatescore',delay=0.05,handler=self.game.utilities.updateBaseDisplay)
-
-	def queueGameStartModes(self):
-		#Might use in the future
-		pass
-
-	#def update_display(self):
-		#self.p = self.game.current_player()
-		#self.game.alpha_score_display.set_text(locale.format("%d", self.p.score, grouping=True),0,justify='left')
-		#self.game.alpha_score_display.set_text(self.p.name.upper() + "  BALL "+str(self.game.ball),1,justify='right')
-		#print self.p.name
-		#print "Ball " + str(self.game.ball)
-
 	###############################################################
 	# MAIN GAME HANDLING FUNCTIONS
 	###############################################################
@@ -76,7 +57,6 @@ class BaseGameMode(game.Mode):
 		self.game.add_player() #will be first player at this point
 		self.game.ball = 1
 
-		self.queueGameStartModes()
 		self.start_ball()
 		self.game.utilities.updateBaseDisplay()
 		#self.game.sound.load_music('main')
@@ -85,14 +65,24 @@ class BaseGameMode(game.Mode):
 		
 	def start_ball(self):
 		self.game.utilities.log('Start Ball','info')
+
+		#### Update Audits ####
+		self.game.game_data['Audits']['Balls Played'] += 1
+		self.game.save_game_data()
+
 		#### Queue Ball Modes ####
 		self.game.modes.add(self.game.skillshot_mode)
 		self.game.modes.add(self.game.centerramp_mode)
 		self.game.modes.add(self.game.tilt)
 		self.game.modes.add(self.game.ballsaver_mode)
+		self.game.modes.add(self.game.drops_mode)
+		self.game.modes.add(self.game.collect_mode)
 
 		#### Enable Flippers ####
 		self.game.coils.flipperEnable.enable()
+
+		#### Ensure GI is on ####
+		self.game.utilities.enableGI()
 
 		#### Kick Out Ball ####
 		self.game.utilities.acCoilPulse(coilname='ballReleaseShooterLane_CenterRampFlashers1',pulsetime=50)
@@ -109,8 +99,22 @@ class BaseGameMode(game.Mode):
 
 		#### Debug Info ####
 		print "Ball Started"
+
+	def finish_ball(self):
+		self.game.modes.add(self.game.bonus_mode)
+		if self.game.tiltStatus == 0:
+			self.game.bonus_mode.calculate(self.game.base_mode.end_ball)
+		else:
+			self.end_ball()
 		
 	def end_ball(self):
+		#Remove Bonus
+		self.game.modes.remove(self.game.bonus_mode)
+		#update games played stats
+		self.game.game_data['Audits']['Balls Played'] += 1
+		#save game audit data
+		self.game.save_game_data()
+
 		self.game.utilities.log("End of Ball " + str(self.game.ball) + " Called",'info')
 		self.game.utilities.log("Total Players: " + str(len(self.game.players)),'info')
 		self.game.utilities.log("Current Player: " + str(self.game.current_player_index),'info')
@@ -121,11 +125,11 @@ class BaseGameMode(game.Mode):
 		self.game.modes.remove(self.game.skillshot_mode)
 		self.game.modes.remove(self.game.centerramp_mode)
 		self.game.modes.remove(self.game.tilt)
+		self.game.modes.remove(self.game.drops_mode)
+		self.game.modes.remove(self.game.collect_mode)
 
 		#self.game.sound.fadeout_music(time_ms=1000) #This is causing delay issues with the AC Relay
 		self.game.sound.stop_music()
-
-		
 
 		if self.game.current_player_index == len(self.game.players) - 1:
 			#Last Player or Single Player Drained
@@ -155,6 +159,11 @@ class BaseGameMode(game.Mode):
 		#disable AC Relay
 		self.cancel_delayed(name='acEnableDelay')
 		self.game.coils.acSelect.disable()
+
+		#update games played stats
+		self.game.game_data['Audits']['Games Played'] += 1
+		#save game audit data
+		self.game.save_game_data()
 
 		self.game.reset()
 
@@ -194,12 +203,11 @@ class BaseGameMode(game.Mode):
 		### Ball handling ###
 		self.game.utilities.setBallInPlay(False)
 		self.game.utilities.acCoilPulse('outholeKicker_CaptiveFlashers')
-		self.delay('endBall',delay=1,handler=self.end_ball)
+		self.delay('finishBall',delay=1,handler=self.finish_ball)
 		return procgame.game.SwitchStop
 
 	def sw_ejectHole5_closed_for_1s(self, sw):
 		self.game.utilities.acCoilPulse(coilname='ejectHole_CenterRampFlashers4',pulsetime=50)
-		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 
 	def sw_ballPopperBottom_closed_for_1s(self, sw):
@@ -253,7 +261,8 @@ class BaseGameMode(game.Mode):
 		return procgame.game.SwitchStop
 
 	def sw_spinner_active(self, sw):
-		self.game.coils.dropReset_CenterRampFlashers2.pulse(40)
+		self.game.utilities.acFlashPulse(coilname='dropReset_CenterRampFlashers2',pulsetime=40)
+		#self.game.coils.dropReset_CenterRampFlashers2.pulse(40)
 		self.game.sound.play('spinner')
 		self.game.utilities.score(100)
 		return procgame.game.SwitchStop
@@ -290,57 +299,30 @@ class BaseGameMode(game.Mode):
 	## Zone Switches
 	#############################
 	def sw_leftStandup1_closed(self, sw):
-		self.game.lamps.standupLeft1.enable()
-		self.game.lamps.building1.enable()
-		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 
 	def sw_rightStandupHigh2_closed(self, sw):
-		self.game.lamps.standupRightHigh2.enable()
-		self.game.lamps.building2.enable()
-		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 
 	def sw_rightStandupLow3_closed(self, sw):
-		self.game.lamps.standupRightLow3.enable()
-		self.game.lamps.building3.enable()
-		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 		
 	def sw_centerStandup4_closed(self, sw):
-		self.game.lamps.standupCenter4.enable()
-		self.game.lamps.building4.enable()
-		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 		
 	def sw_ejectHole5_closed(self, sw):
-		self.game.lamps.ejectTop5.enable()
-		self.game.lamps.building5.enable()
-		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 		
 	def sw_rightLoop6_closed(self, sw):
-		self.game.lamps.underFaultLoop6.enable()
-		self.game.lamps.building6.enable()
-		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 		
 	def sw_rightInsideReturn7_closed(self, sw):
-		self.game.lamps.inlaneRight7.enable()
-		self.game.lamps.building7.enable()
-		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 		
 	def sw_leftReturnLane8_closed(self, sw):
-		self.game.lamps.inlaneLeft8.enable()
-		self.game.lamps.building8.enable()
-		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 		
 	def sw_captiveBall9_closed(self, sw):
-		self.game.lamps.captiveArrow9.enable()
-		self.game.lamps.building9.enable()
-		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 
 	def sw_ballShooter_closed_for_1s(self, sw):

@@ -109,11 +109,11 @@ PRSwitches:
         type: 'NC'
     instituteDown:
         number: S42
-    3BankLeft:
+    dropBankLeft:
         number: S43
-    3BankMid:
+    dropBankMid:
         number: S44
-    3BankRight:
+    dropBankRight:
         number: S45
     centerStandup4:
         number: S46

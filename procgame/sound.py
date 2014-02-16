@@ -29,7 +29,7 @@ class SoundController(object):
             self.logger.error("pygame mixer init failed; sound will be disabled: "+str(e))
         self.sounds = {}
         self.music = {}
-        self.music_volume_offset = 0
+        self.music_volume_offset = -0.5
         self.set_volume(0.5)
         self.voice_end_time = 0
 
@@ -57,13 +57,13 @@ class SoundController(object):
         if not self.enabled: return
         mixer.music.load(self.music[key][0])
 
-    def register_sound(self, key, sound_file):
+    def register_sound(self, key, sound_file, new_sound_volume=1):
         """ """
         self.logger.info("Registering sound - key: %s, file: %s", key, sound_file)
         if not self.enabled: return
         if os.path.isfile(sound_file):
             self.new_sound = mixer.Sound(str(sound_file))
-            self.new_sound.set_volume(self.volume)
+            self.new_sound.set_volume(new_sound_volume)
             if key in self.sounds:
                 if not self.new_sound in self.sounds[key]:
                     self.sounds[key].append(self.new_sound)

@@ -26,6 +26,10 @@
 import procgame.game
 from procgame import *
 import pinproc
+import locale
+
+# Used to put commas in the score.
+locale.setlocale(locale.LC_ALL, "")
 
 class AttractMode(game.Mode):
 	def __init__(self, game, priority):
@@ -35,6 +39,8 @@ class AttractMode(game.Mode):
 		self.resetQuakeInstitute()
 		self.startAttractLamps2()
 		self.setDisplayContent()
+		#### Ensure GI is on ####
+		self.game.utilities.enableGI()
 
 	def mode_stopped(self):
 		for lamp in self.game.lamps:
@@ -141,6 +147,32 @@ class AttractMode(game.Mode):
 
 		#About
 		script.append({'top':'SOFTWARE BY','bottom':'SCOTT DANESI','timer':5,'transition':1})
+
+		##############
+		## High Scores
+		##############
+		for category in self.game.highscore_categories:
+			for index, score in enumerate(category.scores):
+				score_str = locale.format("%d", score.score, True)
+				ranking = str(index)
+				name = str(score.inits)
+				data={'score':score_str, 'ranking':ranking}
+
+				#### Classic High Score Data ####
+				if category.game_data_key == 'ClassicHighScoreData':
+					if index == 0:
+						text1 = 'GRAND CHAMPION'
+						text2 = name + ' ' + score_str
+					else:
+						text1 = 'HIGH SCORE ' + ranking
+						text2 = name + ' ' + score_str
+				#### Mileage Champion ####
+				elif category.game_data_key == 'MilesChampion':
+					if index == 0:
+						text1 = 'MILEAGE CHAMP'
+						text2 = name + ' ' + score_str + ' MILES'
+
+				script.append({'top':text1,'bottom':text2,'timer':5,'transition':1})
 
 		#Special Thanks
 		script.append({'top':'SPECIAL THANKS','bottom':'MYPINBALLS','timer':3,'transition':1})

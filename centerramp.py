@@ -115,6 +115,7 @@ class CenterRampMode(game.Mode):
 		else:
 			self.game.utilities.set_player_stats('miles',self.game.utilities.get_player_stats('miles') + 1)
 
+		self.game.utilities.displayText(self.priority,topText=str(self.game.utilities.get_player_stats('miles')) + ' TOTAL MILES',seconds=1)
 		self.cancel_delayed('reset2MilesAward')
 		self.enabled2Miles = True
 		self.delay(name='reset2MilesAward',delay=self.centerRamp2MilesTimer,handler=self.reset2MilesAward)
@@ -132,8 +133,9 @@ class CenterRampMode(game.Mode):
 	def sw_centerRampEntry_active(self, sw):
 		self.cancel_delayed('centerRampShotStarted')
 		self.game.coils.ballReleaseShooterLane_CenterRampFlashers1.disable()
-		self.game.coils.ballReleaseShooterLane_CenterRampFlashers1.schedule(schedule=0x00000CCC, cycle_seconds=1, now=True)
-		self.game.coils.dropReset_CenterRampFlashers2.schedule(schedule=0x0000F000, cycle_seconds=1, now=True)
+		self.game.coils.dropReset_CenterRampFlashers2.disable()
+		self.game.utilities.acFlashSchedule(coilname='ballReleaseShooterLane_CenterRampFlashers1',schedule=0x00000CCC, cycle_seconds=1, now=True)
+		self.game.utilities.acFlashSchedule(coilname='dropReset_CenterRampFlashers2',schedule=0x0000F000, cycle_seconds=1, now=True)
 		# Sound FX #
 		self.game.sound.play('centerRampEnter')
 		self.centerRampShotStarted = True
@@ -154,7 +156,7 @@ class CenterRampMode(game.Mode):
 	def sw_rightStandup50k_active(self, sw):
 		if (self.enabled50k == True):
 			self.game.utilities.score(50000)
-			self.game.coils.outholeKicker_CaptiveFlashers.schedule(schedule=0x0000000F, cycle_seconds=1, now=True)
+			self.game.utilities.acFlashSchedule(coilname='outholeKicker_CaptiveFlashers',schedule=0x0000000F, cycle_seconds=1, now=True)
 			self.disable50kTarget()
 			self.update_lamps()
 		return procgame.game.SwitchContinue

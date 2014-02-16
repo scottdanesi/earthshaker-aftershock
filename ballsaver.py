@@ -87,11 +87,12 @@ class BallSaver(game.Mode):
 		self.game.utilities.acCoilPulse(coilname='ballReleaseShooterLane_CenterRampFlashers1',pulsetime=100)
 
 	def saveBall(self):
-		#Kick another ball
 		self.game.utilities.displayText(199,topText='BALL SAVED',bottomText=' ',seconds=3,justify='center')
 
 		#Stop Skillshot
 		self.game.modes.remove(self.game.skillshot_mode)
+
+		self.game.sound.play('ball_saved')
 
 		self.kickBallToTrough()
 		self.kickBallToShooterLane()

@@ -47,11 +47,25 @@ class Player(procgame.game.Player):
 			### Skillshot ###
 			self.player_stats['skillshot_active']=False
 			self.player_stats['skillshot_x']=1
-			#self.player_stats['skillshot_active']=False
 
 			### Center Ramp Stats ###
 			self.player_stats['miles']=0
 			self.player_stats['center_shots']=0
+
+			### Jackpot Stats ###
+			self.player_stats['jackpot_level']=1
+
+			### Zone Status Stats ###
+			self.player_stats['zones_visited']=0
+			self.player_stats['zone1_status']=-1
+			self.player_stats['zone2_status']=-1
+			self.player_stats['zone3_status']=-1
+			self.player_stats['zone4_status']=-1
+			self.player_stats['zone5_status']=-1
+			self.player_stats['zone6_status']=-1
+			self.player_stats['zone7_status']=-1
+			self.player_stats['zone8_status']=-1
+			self.player_stats['zone9_status']=-1
 
 			self.player_stats['fault_visits']=0
 			self.player_stats['inlanes_made']=0

@@ -37,16 +37,26 @@ from player import *
 class UtilitiesMode(game.Mode):
 	def __init__(self, game, priority):
 			super(UtilitiesMode, self).__init__(game, priority)
+			## Set Global Variables ##
+			self.currentDisplayPriority = 0	
+			self.ACCoilInProgress = False
+			self.ACNameArray = []
+			self.ACNameArray.append('outholeKicker_CaptiveFlashers')
+			self.ACNameArray.append('ballReleaseShooterLane_CenterRampFlashers1')
+			self.ACNameArray.append('dropReset_CenterRampFlashers2')
+			self.ACNameArray.append('californiaFault_CenterRampFlashers3')
+			self.ACNameArray.append('ejectHole_CenterRampFlashers4')
+			self.ACNameArray.append('bottomBallPopper_RightRampFlashers1')
+			self.ACNameArray.append('knocker_RightRampFlashers2')
+			
 
 	def mode_started(self):
-		## Set Global Variables ##
-		self.currentDisplayPriority = 0		
+			pass
 
 
 	###################
 	## Log Functions ##
 	###################
-
 	def log(self,text,level='info'):
 		if (level == 'error'):
 			logging.error(text)
@@ -68,12 +78,12 @@ class UtilitiesMode(game.Mode):
 
 	def releaseStuckBalls(self):
 		#Checks for balls in locks or outhole and kicks them out
-		if self.game.switches.outhole.is_active()==True:
+		if self.game.switches.outhole.is_active()==True and self.game.tiltStatus == 0: #Exception for when in tilt
 			self.game.utilities.acCoilPulse(coilname='outholeKicker_CaptiveFlashers',pulsetime=50)
 		if self.game.switches.ejectHole5.is_active()==True:
 			self.game.utilities.acCoilPulse(coilname='ejectHole_CenterRampFlashers4',pulsetime=50)
 		if self.game.switches.ballPopperBottom.is_active()==True:
-			selfgame.utilities.acCoilPulse(coilname='bottomBallPopper_RightRampFlashers1',pulsetime=50)
+			self.game.utilities.acCoilPulse(coilname='bottomBallPopper_RightRampFlashers1',pulsetime=50)
 		if self.game.switches.ballPopperTop.is_active()==True:
 			self.game.coils.topBallPopper.pulse(50) #Does not need AC Relay logic
 		if self.game.switches.ballShooter.is_active()==True:
@@ -94,14 +104,42 @@ class UtilitiesMode(game.Mode):
 	########################
 	## AC Relay Functions ##
 	########################
+	def ACRelayEnable(self):
+		self.game.coils.acSelect.enable()
+		self.ACCoilInProgress = False
+
 	def acCoilPulse(self,coilname,pulsetime=50):
+		### Setup variables ###
+		self.ACCoilInProgress = True
 		self.acSelectTimeBuffer = .3
 		self.acSelectEnableBuffer = (pulsetime/1000)+(self.acSelectTimeBuffer*2)
-		#Insert placeholder to stop flasher lampshows and schedules?
+
+		### Remove any scheduling of the AC coils ###
+		for item in self.ACNameArray:
+			self.game.coils[item].disable()
+
+		### Start the pulse process ###
 		self.cancel_delayed(name='acEnableDelay')
 		self.game.coils.acSelect.disable()
 		self.delay(name='coilDelay',event_type=None,delay=self.acSelectTimeBuffer,handler=self.game.coils[coilname].pulse,param=pulsetime)
-		self.delay(name='acEnableDelay',delay=self.acSelectEnableBuffer,handler=self.game.coils.acSelect.enable)
+		self.delay(name='acEnableDelay',delay=self.acSelectEnableBuffer,handler=self.ACRelayEnable)
+
+	def acFlashPulse(self,coilname,pulsetime=50):
+		if (self.ACCoilInProgress == False or coilname not in self.ACNameArray):
+			self.game.coils[coilname].pulse(pulsetime)
+		else:
+			#Should this try again or just cancel?
+			#cannot since the delay function does not allow me to pass more than 1 parameter :(
+			pass
+
+	def acFlashSchedule(self,coilname,schedule,cycle_seconds,now=True):
+		if (self.ACCoilInProgress == False or coilname not in self.ACNameArray):
+			self.game.coils[coilname].disable()
+			self.game.coils[coilname].schedule(schedule=schedule, cycle_seconds=cycle_seconds, now=now)
+		else:
+			#Should this try again or just cancel?
+			#cannot since the delay function does not allow me to pass more than 1 parameter :(
+			pass
 
 	
 	#######################
@@ -124,7 +162,7 @@ class UtilitiesMode(game.Mode):
 
 	def updateBaseDisplay(self):
 		print "Update Base Display Called"
-		if (self.currentDisplayPriority == 0 and self.game.tiltStatus == 0):
+		if (self.currentDisplayPriority == 0 and self.game.tiltStatus == 0 and self.game.ball <> 0):
 			self.p = self.game.current_player()
 			self.game.alpha_score_display.cancel_script()
 			self.game.alpha_score_display.set_text(locale.format("%d", self.p.score, grouping=True),0,justify='left')
@@ -160,12 +198,16 @@ class UtilitiesMode(game.Mode):
 	## Player Functions ##
 	######################
 	def set_player_stats(self,id,value):
-		self.p = self.game.current_player()
-		self.p.player_stats[id]=value
+		if (self.game.ball <> 0):
+			self.p = self.game.current_player()
+			self.p.player_stats[id]=value
 
 	def get_player_stats(self,id):
-		self.p = self.game.current_player()
-		return self.p.player_stats[id]
+		if (self.game.ball <> 0):
+			self.p = self.game.current_player()
+			return self.p.player_stats[id]
+		else:
+			return False
 
 	def score(self, points):
 		if (self.game.ball <> 0): #in case score() gets called when not in game
@@ -174,3 +216,10 @@ class UtilitiesMode(game.Mode):
 			# Update the base display with the current players score
 			self.cancel_delayed('updatescore')
 			self.delay(name='updatescore',delay=0.05,handler=self.game.utilities.updateBaseDisplay)	
+
+	def currentPlayerScore(self):
+		if (self.game.ball <> 0): #in case score() gets called when not in game
+			self.p = self.game.current_player()
+			return self.p.score
+		else:
+			return 0
