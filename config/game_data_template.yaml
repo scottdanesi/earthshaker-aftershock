@@ -44,3 +44,8 @@ MilesChampion:
 - {date: 'Sun Oct  3 17:38:46 2010', inits: SRD, score: 30}
 Hidden:
   Total Score: 0
+LastGameScores:
+  LastPlayer1Score: 2000000
+  LastPlayer2Score: 400
+  LastPlayer3Score: 0
+  LastPlayer4Score: 0

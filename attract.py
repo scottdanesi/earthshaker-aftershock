@@ -148,6 +148,41 @@ class AttractMode(game.Mode):
 		#About
 		script.append({'top':'SOFTWARE BY','bottom':'SCOTT DANESI','timer':5,'transition':1})
 
+		#####################
+		#Previous Game Scores
+		#####################
+		self.player1Score = self.game.game_data['LastGameScores']['LastPlayer1Score']
+		self.player2Score = self.game.game_data['LastGameScores']['LastPlayer2Score']
+		self.player3Score = self.game.game_data['LastGameScores']['LastPlayer3Score']
+		self.player4Score = self.game.game_data['LastGameScores']['LastPlayer4Score']
+
+		#Set Top Text
+		self.scoreSpaceCount = 16 - (len(str(self.player1Score)) + len(str(self.player2Score)))
+		#Just in case scores get very large
+		if self.scoreSpaceCount < 0:
+			self.scoreSpaceCount = 0
+		self.topScoresText = str(self.player1Score)
+		for i in range (0,self.scoreSpaceCount):
+			self.topScoresText += ' '
+		self.topScoresText += str(self.player2Score)
+
+		#Set Bottom Text
+		self.scoreSpaceCount = 16 - (len(str(self.player3Score)) + len(str(self.player4Score)))
+		#Just in case scores get very large
+		if self.scoreSpaceCount < 0:
+			self.scoreSpaceCount = 0
+		self.bottomScoresText = str(self.player3Score)
+		for i in range (0,self.scoreSpaceCount):
+			self.bottomScoresText += ' '
+		self.bottomScoresText += str(self.player4Score)
+
+		script.append({'top':self.topScoresText,'bottom':self.bottomScoresText,'timer':7,'transition':0})
+
+		############
+		## Game Over
+		############
+		script.append({'top':'GAME OVER','bottom':'PRESS START','timer':5,'transition':1})
+
 		##############
 		## High Scores
 		##############

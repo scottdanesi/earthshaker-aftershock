@@ -49,6 +49,13 @@ class BaseGameMode(game.Mode):
 	###############################################################
 	def start_game(self):
 		self.game.utilities.log('Start Game','info')
+
+		#Reset Prior Game Scores
+		self.game.game_data['LastGameScores']['LastPlayer1Score'] = ' '
+		self.game.game_data['LastGameScores']['LastPlayer2Score'] = ' '
+		self.game.game_data['LastGameScores']['LastPlayer3Score'] = ' '
+		self.game.game_data['LastGameScores']['LastPlayer4Score'] = ' '
+
 		#This function is to be used when starting a NEW game, player 1 and ball 1
 		#Clean Up
 		self.game.modes.remove(self.game.attract_mode)
@@ -77,6 +84,7 @@ class BaseGameMode(game.Mode):
 		self.game.modes.add(self.game.ballsaver_mode)
 		self.game.modes.add(self.game.drops_mode)
 		self.game.modes.add(self.game.collect_mode)
+		self.game.modes.add(self.game.spinner_mode)
 
 		#### Enable Flippers ####
 		self.game.coils.flipperEnable.enable()
@@ -112,6 +120,12 @@ class BaseGameMode(game.Mode):
 		self.game.modes.remove(self.game.bonus_mode)
 		#update games played stats
 		self.game.game_data['Audits']['Balls Played'] += 1
+
+		#Update Last Game Scores in game data file
+		if self.game.ball == self.game.balls_per_game:
+			self.playerAuditKey = 'LastPlayer' + str(self.game.current_player_index + 1) + 'Score'
+			self.game.game_data['LastGameScores'][self.playerAuditKey] = self.game.utilities.currentPlayerScore()
+
 		#save game audit data
 		self.game.save_game_data()
 
@@ -127,6 +141,7 @@ class BaseGameMode(game.Mode):
 		self.game.modes.remove(self.game.tilt)
 		self.game.modes.remove(self.game.drops_mode)
 		self.game.modes.remove(self.game.collect_mode)
+		self.game.modes.remove(self.game.spinner_mode)
 
 		#self.game.sound.fadeout_music(time_ms=1000) #This is causing delay issues with the AC Relay
 		self.game.sound.stop_music()
@@ -261,10 +276,10 @@ class BaseGameMode(game.Mode):
 		return procgame.game.SwitchStop
 
 	def sw_spinner_active(self, sw):
-		self.game.utilities.acFlashPulse(coilname='dropReset_CenterRampFlashers2',pulsetime=40)
+		#self.game.utilities.acFlashPulse(coilname='dropReset_CenterRampFlashers2',pulsetime=40)
 		#self.game.coils.dropReset_CenterRampFlashers2.pulse(40)
-		self.game.sound.play('spinner')
-		self.game.utilities.score(100)
+		#self.game.sound.play('spinner')
+		#self.game.utilities.score(100)
 		return procgame.game.SwitchStop
 
 	##################################################
