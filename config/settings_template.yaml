@@ -128,32 +128,11 @@ Feature:
     increments: 1
     default: 15
   'Active Zone Limit':
-    options: [1,5]
-    default: 3
-  'Motor Installed':
-    options: ['Yes', 'No']
-    default: 'No'
-  'Stepper Installed':
-    options: ['Yes', 'No']
-    default: 'No'
-  'Stepper Speed':
-    options: [10,110]
-    increments: 10
-    default: 50
-Network:
-  'IP Address':
-    options: [0,255]
-    increments: 1
-    default: 0
-  'Subnet':
-    options: [0,255]
-    increments: 1
-    default: 0
-  'Gateway':
-    options: [0,255]
-    increments: 1
-    default: 0
-  'Tournament Server':
-    options: [0,255]
-    increments: 1
-    default: 0
+    options: [1,9]
+    default: 5
+  'Super Spinner Spins':
+    options: [10,100]
+    default: 10
+  'Super Spinner Time':
+    options: [-1,200]
+    default: -1
