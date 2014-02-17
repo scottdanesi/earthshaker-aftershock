@@ -62,6 +62,7 @@ import droptargets
 from droptargets import *
 import collectzones
 from collectzones import *
+from spinner import *
 
 # Used to put commas in the score.
 locale.setlocale(locale.LC_ALL, "")
@@ -147,10 +148,11 @@ class EarthshakerAftershock(game.BasicGame):
 		self.utilities = UtilitiesMode(self,0)
 		self.base_mode = BaseGameMode(self,2)
 		self.attract_mode = AttractMode(self,5)
-		self.skillshot_mode = SkillshotMode(self,7)
 		self.centerramp_mode = CenterRampMode(self,8)
 		self.drops_mode = DropTargets(self,9)
 		self.collect_mode = CollectZones(self,10)
+		self.spinner_mode = Spinner(self,11)
+		self.skillshot_mode = SkillshotMode(self,100)
 		self.ballsaver_mode = BallSaver(self,199)
 		self.tilt = Tilt(self,200)
 		self.bonus_mode = Bonus(self,1000)
@@ -171,8 +173,12 @@ class EarthshakerAftershock(game.BasicGame):
 		# Music Registration
 		self.sound.register_music('main', game_music_path + 'main1.wav')
 		self.sound.register_music('shooter', game_music_path + 'shooter.wav')
+		#self.sound.register_music('main', game_music_path + 'music_001_main_loop.wav')
+		#self.sound.register_music('shooter', game_music_path + 'music_001_shooter_loop.wav')
 		# Sound FX Registration
 		self.sound.register_sound('spinner', game_sound_path + 'spinner2.wav')
+		self.sound.register_sound('super_spinner', game_sound_path + 'spinner3.wav')
+		self.sound.register_sound('super_spinner_lit', game_sound_path + 'dirty_kick.wav')
 		self.sound.register_sound('sling', game_sound_path + 'sling2.wav')
 		self.sound.register_sound('jet', game_sound_path + 'jet_a.wav')
 		self.sound.register_sound('skillshotAwarded', game_sound_path + 'skillshotAwarded.wav')
@@ -192,6 +198,9 @@ class EarthshakerAftershock(game.BasicGame):
 		# Bonus Sounds #
 		self.sound.register_sound('bonus_features', game_sound_path + 'bonus_feature.wav')
 		self.sound.register_sound('bonus_total', game_sound_path + 'bonus_total.wav')
+		# Zone Sounds #
+		self.sound.register_sound('zone_na', game_sound_path + 'zone_na.wav')
+		self.sound.register_sound('zone_awarded', game_sound_path + 'zone_awarded.wav')
 
 		self.sound.set_volume(10)
 
