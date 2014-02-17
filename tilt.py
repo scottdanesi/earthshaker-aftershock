@@ -51,6 +51,7 @@ class Tilt(game.Mode):
 		self.game.modes.remove(self.game.ballsaver_mode)
 		self.game.modes.remove(self.game.drops_mode)
 		self.game.modes.remove(self.game.collect_mode)
+		self.game.modes.remove(self.game.spinner_mode)
 
 	def playTiltSounds(self):
 		self.game.sound.play('tilt_fx')
