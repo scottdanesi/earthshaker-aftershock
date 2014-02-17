@@ -159,6 +159,11 @@ class CollectZones(game.Mode):
 	def scoreZoneCollected(self):
 		self.game.utilities.score(2500)
 		self.game.utilities.set_player_stats('zones_visited',self.game.utilities.get_player_stats('zones_visited') + 1)
+		self.game.sound.play('zone_awarded')
+
+	def zoneNotAwarded(self):
+		self.game.utilities.score(250)
+		self.game.sound.play('zone_na')
 
 
 	#############################
@@ -169,6 +174,8 @@ class CollectZones(game.Mode):
 			self.game.utilities.set_player_stats('zone1_status',1)
 			self.scoreZoneCollected()
 			self.updateAllZoneLists()
+		else:
+			self.zoneNotAwarded()
 		return procgame.game.SwitchContinue
 
 	def sw_rightStandupHigh2_closed(self, sw):
@@ -176,6 +183,8 @@ class CollectZones(game.Mode):
 			self.game.utilities.set_player_stats('zone2_status',1)
 			self.scoreZoneCollected()
 			self.updateAllZoneLists()
+		else:
+			self.zoneNotAwarded()
 		return procgame.game.SwitchContinue
 
 	def sw_rightStandupLow3_closed(self, sw):
@@ -183,6 +192,8 @@ class CollectZones(game.Mode):
 			self.game.utilities.set_player_stats('zone3_status',1)
 			self.scoreZoneCollected()
 			self.updateAllZoneLists()
+		else:
+			self.zoneNotAwarded()
 		return procgame.game.SwitchContinue
 		
 	def sw_centerStandup4_closed(self, sw):
@@ -190,13 +201,18 @@ class CollectZones(game.Mode):
 			self.game.utilities.set_player_stats('zone4_status',1)
 			self.scoreZoneCollected()
 			self.updateAllZoneLists()
+		else:
+			self.zoneNotAwarded()
 		return procgame.game.SwitchContinue
 		
-	def sw_ejectHole5_closed(self, sw):
+	def sw_ejectHole5_closed_for_100ms(self, sw):
 		if ('zone5_status' in self.activeZones):
 			self.game.utilities.set_player_stats('zone5_status',1)
 			self.scoreZoneCollected()
 			self.updateAllZoneLists()
+		else:
+			pass
+			#self.zoneNotAwarded()
 		return procgame.game.SwitchContinue
 		
 	def sw_rightLoop6_closed(self, sw):
@@ -204,6 +220,9 @@ class CollectZones(game.Mode):
 			self.game.utilities.set_player_stats('zone6_status',1)
 			self.scoreZoneCollected()
 			self.updateAllZoneLists()
+		else:
+			#self.zoneNotAwarded()
+			pass
 		return procgame.game.SwitchContinue
 		
 	def sw_rightInsideReturn7_closed(self, sw):
@@ -211,6 +230,8 @@ class CollectZones(game.Mode):
 			self.game.utilities.set_player_stats('zone7_status',1)
 			self.scoreZoneCollected()
 			self.updateAllZoneLists()
+		else:
+			self.zoneNotAwarded()
 		return procgame.game.SwitchContinue
 		
 	def sw_leftReturnLane8_closed(self, sw):
@@ -218,6 +239,8 @@ class CollectZones(game.Mode):
 			self.game.utilities.set_player_stats('zone8_status',1)
 			self.scoreZoneCollected()
 			self.updateAllZoneLists()
+		else:
+			self.zoneNotAwarded()
 		return procgame.game.SwitchContinue
 		
 	def sw_captiveBall9_closed(self, sw):
@@ -225,4 +248,6 @@ class CollectZones(game.Mode):
 			self.game.utilities.set_player_stats('zone9_status',1)
 			self.scoreZoneCollected()
 			self.updateAllZoneLists()
+		else:
+			self.zoneNotAwarded()
 		return procgame.game.SwitchContinue
