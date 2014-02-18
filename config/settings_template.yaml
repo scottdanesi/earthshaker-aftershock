@@ -129,7 +129,7 @@ Feature:
     default: 15
   'Active Zone Limit':
     options: [1,9]
-    default: 5
+    default: 3
   'Super Spinner Spins':
     options: [10,100]
     default: 10
