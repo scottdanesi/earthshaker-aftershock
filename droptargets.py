@@ -85,6 +85,7 @@ class DropTargets(game.Mode):
 			self.resetDrops()
 
 	def dropsSwitchHandler(self):
+		self.game.sound.play('drop')
 		if self.jackpotMaxed == False:
 			if (self.dropTargetHurryUpEnabled == False):
 				self.dropTargetHurryUpEnabled = True
