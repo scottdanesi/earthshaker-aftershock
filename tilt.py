@@ -52,6 +52,7 @@ class Tilt(game.Mode):
 		self.game.modes.remove(self.game.drops_mode)
 		self.game.modes.remove(self.game.collect_mode)
 		self.game.modes.remove(self.game.spinner_mode)
+		self.game.modes.remove(self.game.multiball_mode)
 
 	def playTiltSounds(self):
 		self.game.sound.play('tilt_fx')
@@ -74,8 +75,8 @@ class Tilt(game.Mode):
 		self.delay(name='reenableGI',delay=(self.flashDelay*3)+self.flashDelayGap,handler=self.game.utilities.enableGI)
 
 		#### Update Audits ####
-		self.game.game_data['Audits']['Warnings'] += 1
-		self.game.save_game_data()
+		#self.game.game_data['Audits']['Warnings'] += 1
+		#self.game.save_game_data()
 
 		#Update Display
 		time=2
@@ -118,8 +119,8 @@ class Tilt(game.Mode):
 			self.game.utilities.releaseStuckBalls()
 
 			#### Update Audits ####
-			self.game.game_data['Audits']['Tilts'] += 1
-			self.game.save_game_data()
+			#self.game.game_data['Audits']['Tilts'] += 1
+			#self.game.save_game_data()
 
 			#Wait for balls to empty
 				#self.waitUntilTroughIsFull()
