@@ -67,13 +67,18 @@ class Player(procgame.game.Player):
 			self.player_stats['zone8_status']=-1
 			self.player_stats['zone9_status']=-1
 
+			### Multiball Stats ###
+			self.player_stats['lock1_lit']=False
+			self.player_stats['lock2_lit']=False
+			self.player_stats['lock3_lit']=False
+			self.player_stats['multiball_running']=False
+			self.player_stats['balls_locked']=0
+
 			self.player_stats['fault_visits']=0
 			self.player_stats['inlanes_made']=0
 			self.player_stats['lock_lit']=False
 			self.player_stats['multiball_ready']=False
 			self.player_stats['multiball_started']=False
-			self.player_stats['multiball_running']=False
-			self.player_stats['balls_locked']=0
 			self.player_stats['million_lit']=False
 			self.player_stats['ball_start_time']=0
 			self.player_stats['drop_banks_completed']=0
