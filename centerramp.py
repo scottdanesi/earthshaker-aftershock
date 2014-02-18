@@ -38,10 +38,15 @@ class CenterRampMode(game.Mode):
 			self.centerRampShotStartedDelay = 3 #in seconds
 			self.centerRamp2MilesTimer = 8 #in Seconds
 
-			## Global System Variables ##
-			self.centerRampShotStarted = False
-			self.enabled50k = False
-			self.enabled2Miles = False
+	def mode_started(self):
+		## Global System Variables ##
+		self.centerRampShotStarted = False
+		self.enabled50k = False
+		self.enabled2Miles = False
+		self.update_lamps()
+
+	def mode_stopped(self):
+		pass
 
 	def update_lamps(self):
 		### 2 Miles Lamp ###
