@@ -209,6 +209,11 @@ class AttractMode(game.Mode):
 
 				script.append({'top':text1,'bottom':text2,'timer':5,'transition':1})
 
+		########################
+		#Previous Game Scores #2
+		########################
+		script.append({'top':self.topScoresText,'bottom':self.bottomScoresText,'timer':7,'transition':0})
+
 		#Special Thanks
 		script.append({'top':'SPECIAL THANKS','bottom':'MYPINBALLS','timer':3,'transition':1})
 		script.append({'top':'SPECIAL THANKS','bottom':'MARK SUNNUCKS','timer':3,'transition':2})
