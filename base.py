@@ -85,6 +85,7 @@ class BaseGameMode(game.Mode):
 		self.game.modes.add(self.game.drops_mode)
 		self.game.modes.add(self.game.collect_mode)
 		self.game.modes.add(self.game.spinner_mode)
+		self.game.modes.add(self.game.multiball_mode)
 
 		#### Enable Flippers ####
 		self.game.coils.flipperEnable.enable()
@@ -142,6 +143,7 @@ class BaseGameMode(game.Mode):
 		self.game.modes.remove(self.game.drops_mode)
 		self.game.modes.remove(self.game.collect_mode)
 		self.game.modes.remove(self.game.spinner_mode)
+		self.game.modes.remove(self.game.multiball_mode)
 
 		#self.game.sound.fadeout_music(time_ms=1000) #This is causing delay issues with the AC Relay
 		self.game.sound.stop_music()
