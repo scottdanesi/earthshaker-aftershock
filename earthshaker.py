@@ -38,31 +38,21 @@ from time import strftime
 ###################################
 # MODE IMPORTS
 ###################################
-import base
 from base import *
-import attract
 from attract import *
 import scoredisplay
 from scoredisplay import AlphaScoreDisplay
-import skillshot 
 from skillshot import *
-import utilities
 from utilities import *
-import tilt
 from tilt import *
-import centerramp
 from centerramp import *
-import player
 from player import *
-import ballsaver
 from ballsaver import *
-import bonus
 from bonus import *
-import droptargets
 from droptargets import *
-import collectzones
 from collectzones import *
 from spinner import *
+from multiball import *
 
 # Used to put commas in the score.
 locale.setlocale(locale.LC_ALL, "")
@@ -156,6 +146,7 @@ class EarthshakerAftershock(game.BasicGame):
 		self.ballsaver_mode = BallSaver(self,199)
 		self.tilt = Tilt(self,200)
 		self.bonus_mode = Bonus(self,1000)
+		self.multiball_mode = Multiball(self,101)
 		
 		#### Initial Mode Queue ####
 		self.modes.add(self.utilities)
@@ -201,6 +192,8 @@ class EarthshakerAftershock(game.BasicGame):
 		# Zone Sounds #
 		self.sound.register_sound('zone_na', game_sound_path + 'zone_na.wav')
 		self.sound.register_sound('zone_awarded', game_sound_path + 'zone_awarded.wav')
+		# Drop Sounds #
+		self.sound.register_sound('drop', game_sound_path + 'drop_1.wav')
 
 		self.sound.set_volume(10)
 
