@@ -58,7 +58,9 @@ class CollectZones(game.Mode):
 
 
 	def mode_started(self):
-		self.updateAllZoneLists()
+		self.refreshAllZoneLists()
+		if (len(self.activeZones) == 0):
+			self.setNewActiveZones()
 		return super(CollectZones, self).mode_started()
 
 	def mode_stopped(self):
@@ -115,13 +117,20 @@ class CollectZones(game.Mode):
 		for item in self.allZones:
 			self.game.utilities.set_player_stats(item,-1)
 
-	def updateAllZoneLists(self):
+	def refreshAllZoneLists(self):
 		self.updateAvailableZoneList()
 		self.updateActiveZoneList()
 		self.updateCompletedZoneList()
-		if (len(self.activeZones) == 0):
-			self.setNewActiveZones()
+		self.checkForAllCompletedZones()
+		#if (len(self.activeZones) == 0):
+			#self.setNewActiveZones()
 		self.update_lamps()
+
+	def checkForAllCompletedZones(self):
+		if (len(self.activeZones) == 0):
+			#All active zones completed
+			self.game.multiball_mode.liteLock(self.game.collect_mode.setNewActiveZones)
+			pass
 
 	def updateAvailableZoneList(self):
 		self.availableZones = []
@@ -173,7 +182,7 @@ class CollectZones(game.Mode):
 		if ('zone1_status' in self.activeZones):
 			self.game.utilities.set_player_stats('zone1_status',1)
 			self.scoreZoneCollected()
-			self.updateAllZoneLists()
+			self.refreshAllZoneLists()
 		else:
 			self.zoneNotAwarded()
 		return procgame.game.SwitchContinue
@@ -182,7 +191,7 @@ class CollectZones(game.Mode):
 		if ('zone2_status' in self.activeZones):
 			self.game.utilities.set_player_stats('zone2_status',1)
 			self.scoreZoneCollected()
-			self.updateAllZoneLists()
+			self.refreshAllZoneLists()
 		else:
 			self.zoneNotAwarded()
 		return procgame.game.SwitchContinue
@@ -191,7 +200,7 @@ class CollectZones(game.Mode):
 		if ('zone3_status' in self.activeZones):
 			self.game.utilities.set_player_stats('zone3_status',1)
 			self.scoreZoneCollected()
-			self.updateAllZoneLists()
+			self.refreshAllZoneLists()
 		else:
 			self.zoneNotAwarded()
 		return procgame.game.SwitchContinue
@@ -200,7 +209,7 @@ class CollectZones(game.Mode):
 		if ('zone4_status' in self.activeZones):
 			self.game.utilities.set_player_stats('zone4_status',1)
 			self.scoreZoneCollected()
-			self.updateAllZoneLists()
+			self.refreshAllZoneLists()
 		else:
 			self.zoneNotAwarded()
 		return procgame.game.SwitchContinue
@@ -209,7 +218,7 @@ class CollectZones(game.Mode):
 		if ('zone5_status' in self.activeZones):
 			self.game.utilities.set_player_stats('zone5_status',1)
 			self.scoreZoneCollected()
-			self.updateAllZoneLists()
+			self.refreshAllZoneLists()
 		else:
 			pass
 			#self.zoneNotAwarded()
@@ -219,7 +228,7 @@ class CollectZones(game.Mode):
 		if ('zone6_status' in self.activeZones):
 			self.game.utilities.set_player_stats('zone6_status',1)
 			self.scoreZoneCollected()
-			self.updateAllZoneLists()
+			self.refreshAllZoneLists()
 		else:
 			#self.zoneNotAwarded()
 			pass
@@ -229,7 +238,7 @@ class CollectZones(game.Mode):
 		if ('zone7_status' in self.activeZones):
 			self.game.utilities.set_player_stats('zone7_status',1)
 			self.scoreZoneCollected()
-			self.updateAllZoneLists()
+			self.refreshAllZoneLists()
 		else:
 			self.zoneNotAwarded()
 		return procgame.game.SwitchContinue
@@ -238,7 +247,7 @@ class CollectZones(game.Mode):
 		if ('zone8_status' in self.activeZones):
 			self.game.utilities.set_player_stats('zone8_status',1)
 			self.scoreZoneCollected()
-			self.updateAllZoneLists()
+			self.refreshAllZoneLists()
 		else:
 			self.zoneNotAwarded()
 		return procgame.game.SwitchContinue
@@ -247,7 +256,7 @@ class CollectZones(game.Mode):
 		if ('zone9_status' in self.activeZones):
 			self.game.utilities.set_player_stats('zone9_status',1)
 			self.scoreZoneCollected()
-			self.updateAllZoneLists()
+			self.refreshAllZoneLists()
 		else:
 			self.zoneNotAwarded()
 		return procgame.game.SwitchContinue

@@ -48,6 +48,7 @@ class SkillshotMode(game.Mode):
 	def mode_stopped(self):
 		self.game.utilities.set_player_stats('skillshot_active',False)
 		self.update_lamps()
+		self.game.collect_mode.update_lamps()
 		return super(SkillshotMode, self).mode_stopped()
 
 	def update_lamps(self):
