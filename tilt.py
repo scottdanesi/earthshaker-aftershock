@@ -99,7 +99,13 @@ class Tilt(game.Mode):
 			## until the start of a new ball when the tilt status resets.        ##
 			#######################################################################
 			self.game.utilities.displayText(200,topText='TILT',bottomText=' ',seconds=1,justify='center')
+
+			#### Disable Bumpers ####
 			self.game.coils.flipperEnable.disable()
+
+			#### Disable Bumpers ####
+			self.game.enable_bumpers(enable=False)
+
 			#self.game.utilities.releaseStuckBalls()
 
 			#turn off all lamps

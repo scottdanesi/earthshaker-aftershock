@@ -90,6 +90,8 @@ class BaseGameMode(game.Mode):
 		#### Enable Flippers ####
 		self.game.coils.flipperEnable.enable()
 
+		self.game.enable_bumpers(enable=True)
+
 		#### Ensure GI is on ####
 		self.game.utilities.enableGI()
 
@@ -170,16 +172,21 @@ class BaseGameMode(game.Mode):
 
 	def end_game(self):
 		self.game.utilities.log('Game Ended','info')
-		
+
+		#### Disable Flippers ####
 		self.game.coils.flipperEnable.disable()
 
-		#disable AC Relay
+		#### Disable Bumpers ####
+		self.game.enable_bumpers(enable=False)
+
+		#### Disable AC Relay ####
 		self.cancel_delayed(name='acEnableDelay')
 		self.game.coils.acSelect.disable()
 
-		#update games played stats
+		#### Update Gmaes Played Stats ####
 		self.game.game_data['Audits']['Games Played'] += 1
-		#save game audit data
+
+		#### Save Game Audit Data ####
 		self.game.save_game_data()
 
 		self.game.reset()
@@ -245,34 +252,34 @@ class BaseGameMode(game.Mode):
 		return procgame.game.SwitchStop
 
 	def sw_jetLeft_active(self, sw):
-		self.game.coils.jetLeft.pulse(30)
+		#self.game.coils.jetLeft.pulse(30)
 		self.game.sound.play('jet')
 		self.game.lamps.jetLeftLamp.enable()
 		self.game.utilities.score(500)
 		return procgame.game.SwitchStop
 
 	def sw_jetRight_active(self, sw):
-		self.game.coils.jetRight.pulse(30)
+		#self.game.coils.jetRight.pulse(30)
 		self.game.sound.play('jet')
 		self.game.lamps.jetRightLamp.enable()
 		self.game.utilities.score(500)
 		return procgame.game.SwitchStop
 
 	def sw_jetTop_active(self, sw):
-		self.game.coils.jetTop.pulse(30)
+		#self.game.coils.jetTop.pulse(30)
 		self.game.sound.play('jet')
 		self.game.lamps.jetTopLamp.enable()
 		self.game.utilities.score(500)
 		return procgame.game.SwitchStop
 
 	def sw_slingL_active(self, sw):
-		self.game.coils.slingL.pulse(30)
+		#self.game.coils.slingL.pulse(30)
 		self.game.sound.play('sling')
 		self.game.utilities.score(100)
 		return procgame.game.SwitchStop
 
 	def sw_slingR_active(self, sw):
-		self.game.coils.slingR.pulse(30)
+		#self.game.coils.slingR.pulse(30)
 		self.game.sound.play('sling')
 		self.game.utilities.score(100)
 		return procgame.game.SwitchStop
