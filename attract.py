@@ -28,7 +28,7 @@ from procgame import *
 import pinproc
 import locale
 
-# Used to put commas in the score.
+#### Set Locale ####
 locale.setlocale(locale.LC_ALL, "")
 
 class AttractMode(game.Mode):
@@ -36,24 +36,39 @@ class AttractMode(game.Mode):
 			super(AttractMode, self).__init__(game, priority)
 
 	def mode_started(self):
+		#### Reset Quake Instituet ####
+		#### Be sure it is in the upright position ####
 		self.resetQuakeInstitute()
+
+		#### Start Attract Mode Lamps ####
 		self.startAttractLamps2()
+
+		#### Create and Set Display Content ####
 		self.setDisplayContent()
+
 		#### Ensure GI is on ####
 		self.game.utilities.enableGI()
 
 	def mode_stopped(self):
+		#### Disable All Lamps ####
 		for lamp in self.game.lamps:
 			lamp.disable()
-		#Cancel Display Script
+
+		#### Cancel Display Script ####
 		self.game.alpha_score_display.cancel_script()
+
+		#### Enable AC Relay for Flashers ####
+		#### This is only needed for using lampshows that contain flashers on the AC Relay ####
 		self.game.coils.acSelect.enable()
 			
 	def setDisplayContent(self):
-		#Script initialization
+		#### Script List Variable Initialization ####
 		script=[]
-		animEarthshaker=[] # This is a temporary placeholder until we define new transitions
 
+		################################################
+		#### Earthshaker Title Animation Definition ####
+		################################################
+		animEarthshaker=[] # This is a temporary placeholder until we define new transitions
 		animEarthshaker.append({'top':'                ','bottom':'                ','timer':.5,'transition':0})
 		animEarthshaker.append({'top':'               E','bottom':'                ','timer':.05,'transition':0})
 		animEarthshaker.append({'top':'              EA','bottom':'K               ','timer':.05,'transition':0})
@@ -97,8 +112,13 @@ class AttractMode(game.Mode):
 		animEarthshaker.append({'top':'r               ','bottom':'               a','timer':.05,'transition':0})
 		animEarthshaker.append({'top':'                ','bottom':'                ','timer':.5,'transition':0})
 
+		######################################################
+		#### Earthshaker Original Animation ##################
+		#### This animation is currently not used, but was the 
+		#### original test that was created for animating on 
+		#### the alphanumeric display.
+		######################################################
 		animEarthshaker2=[] # This is a temporary placeholder until we define new transitions
-
 		animEarthshaker2.append({'top':'                ','bottom':'                ','timer':.5,'transition':0})
 		animEarthshaker2.append({'top':'               E','bottom':'                ','timer':.05,'transition':0})
 		animEarthshaker2.append({'top':'              EA','bottom':'K               ','timer':.05,'transition':0})
@@ -142,50 +162,59 @@ class AttractMode(game.Mode):
 		animEarthshaker2.append({'top':'U               ','bottom':'               Z','timer':.05,'transition':0})
 		animEarthshaker2.append({'top':'                ','bottom':'                ','timer':.5,'transition':0})
 
-		#Title Screen Creation
+		########################################################
+		#### Title Screen Animation ############################
+		#### Adds the animation defined above to the script list
+		########################################################
 		script=script + animEarthshaker
 
-		#About
+		########################
+		#### About Game Software
+		########################
 		script.append({'top':'SOFTWARE BY','bottom':'SCOTT DANESI','timer':5,'transition':1})
 
-		#####################
-		#Previous Game Scores
-		#####################
+		#########################
+		#### Previous Game Scores
+		#########################
 		self.player1Score = self.game.game_data['LastGameScores']['LastPlayer1Score']
 		self.player2Score = self.game.game_data['LastGameScores']['LastPlayer2Score']
 		self.player3Score = self.game.game_data['LastGameScores']['LastPlayer3Score']
 		self.player4Score = self.game.game_data['LastGameScores']['LastPlayer4Score']
 
-		#Set Top Text
+		#######################################################################
+		#### Set Top and Bottom Text for Previous Game Scores #################
+		#### This section will create a string of 16 characters for the top 
+		#### and bottom score displays that contains 2 scores for for each row.  
+		#### It also contains error checking for when both scores on 1 line are 
+		#### larger than 16 characters.
+		#######################################################################
 		self.scoreSpaceCount = 16 - (len(str(self.player1Score)) + len(str(self.player2Score)))
-		#Just in case scores get very large
-		if self.scoreSpaceCount < 0:
+		if self.scoreSpaceCount < 0: # Just in case scores get very large (over 8 characters each)
 			self.scoreSpaceCount = 0
 		self.topScoresText = str(self.player1Score)
-		for i in range (0,self.scoreSpaceCount):
-			self.topScoresText += ' '
-		self.topScoresText += str(self.player2Score)
-
-		#Set Bottom Text
+		for i in range (0,self.scoreSpaceCount): # Puts a space between the scores for i places
+			self.topScoresText += ' ' 
+		self.topScoresText += str(self.player2Score) # Add the score to the end
+		# Set Bottom Text
 		self.scoreSpaceCount = 16 - (len(str(self.player3Score)) + len(str(self.player4Score)))
-		#Just in case scores get very large
-		if self.scoreSpaceCount < 0:
+		if self.scoreSpaceCount < 0: # Just in case scores get very large (over 8 characters each)
 			self.scoreSpaceCount = 0
 		self.bottomScoresText = str(self.player3Score)
 		for i in range (0,self.scoreSpaceCount):
 			self.bottomScoresText += ' '
 		self.bottomScoresText += str(self.player4Score)
 
+		# Append Prev Game Scores to Script
 		script.append({'top':self.topScoresText,'bottom':self.bottomScoresText,'timer':7,'transition':0})
 
-		############
-		## Game Over
-		############
+		##############
+		#### Game Over
+		##############
 		script.append({'top':'GAME OVER','bottom':'PRESS START','timer':5,'transition':1})
 
-		##############
-		## High Scores
-		##############
+		################
+		#### High Scores
+		################
 		for category in self.game.highscore_categories:
 			for index, score in enumerate(category.scores):
 				score_str = locale.format("%d", score.score, True)
@@ -209,23 +238,37 @@ class AttractMode(game.Mode):
 
 				script.append({'top':text1,'bottom':text2,'timer':5,'transition':1})
 
-		########################
-		#Previous Game Scores #2
-		########################
+		#####################################################
+		#### Previous Game Scores #2 ########################
+		#### This is used to append the previous game scores 
+		#### defined above to the script again after the high 
+		#### scores have been displayed.
+		##################################################### 
 		script.append({'top':self.topScoresText,'bottom':self.bottomScoresText,'timer':7,'transition':0})
 
-		#Special Thanks
+		###################
+		#### Special Thanks
+		###################
 		script.append({'top':'SPECIAL THANKS','bottom':'MYPINBALLS','timer':3,'transition':1})
 		script.append({'top':'SPECIAL THANKS','bottom':'MARK SUNNUCKS','timer':3,'transition':2})
 		script.append({'top':'SPECIAL THANKS','bottom':'MULTIMORPHIC','timer':3,'transition':2})
 		
+		#############################
+		#### Start New Display Script
+		#############################
 		#Cancel any score display scripts that may be running
 		self.game.alpha_score_display.cancel_script()
-
-		#Start new display script
 		self.game.alpha_score_display.set_script(script)
 		
 	def startAttractLamps(self):
+		##############################################################
+		#### Start Attract Lamps Version 1 ###########################
+		#### This basic attract lamp show uses a schedule to cycle 
+		#### through the lamps in the game.  This surprisingly creates 
+		#### a nice attract mode for those looking to get something 
+		#### basic up and running.  It uses a mod function to cycle 
+		#### through every 4 lamps.
+		##############################################################
 		i = 0
 		for lamp in self.game.lamps:
 			if i % 4 == 3:
@@ -239,6 +282,14 @@ class AttractMode(game.Mode):
 			i = i + 1
 
 	def startAttractLamps2(self):
+		##############################################################
+		#### Start Attract Lamps Version 2 ###########################
+		#### This basic attract lamp show uses a schedule to cycle 
+		#### through the lamps in the game.  This surprisingly creates 
+		#### a nice attract mode for those looking to get something 
+		#### basic up and running.  It uses a mod function to cycle 
+		#### through every 8 lamps.
+		##############################################################
 		i = 0
 		for lamp in self.game.lamps:
 			if i % 8 == 7:
@@ -266,12 +317,6 @@ class AttractMode(game.Mode):
 	def sw_instituteUp_open(self, sw):
 		self.game.coils.quakeInstitute.disable()
 		return procgame.game.SwitchStop
-		
-	#def sw_startButton_active_for_50ms(self, sw):
-		#if self.troughIsFull()==True:
-			#Game Starting
-			#self.game.modes.remove(self)
-			#return procgame.game.SwitchContinue
 
 	def sw_outhole_closed(self, sw):
 		return procgame.game.SwitchStop
