@@ -223,3 +223,16 @@ class UtilitiesMode(game.Mode):
 			return self.p.score
 		else:
 			return 0
+
+	######################
+	## Shaker Functions ##
+	######################
+
+	def shakerPulseLow(self):
+		self.game.coils.quakeMotor.schedule(schedule=0x00000888,cycle_seconds=1,now=True)
+
+	def shakerPulseMedium(self):
+		self.game.coils.quakeMotor.schedule(schedule=0x00000CCC,cycle_seconds=1,now=True)
+
+	def shakerPulseHigh(self):
+		self.game.coils.quakeMotor.schedule(schedule=0x00000F0F,cycle_seconds=1,now=True)
