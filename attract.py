@@ -27,6 +27,7 @@ import procgame.game
 from procgame import *
 import pinproc
 import locale
+import math
 
 #### Set Locale ####
 locale.setlocale(locale.LC_ALL, "")
@@ -34,6 +35,7 @@ locale.setlocale(locale.LC_ALL, "")
 class AttractMode(game.Mode):
 	def __init__(self, game, priority):
 			super(AttractMode, self).__init__(game, priority)
+			self.fade_counter = 0
 
 	def mode_started(self):
 		#### Reset Quake Instituet ####
@@ -49,6 +51,9 @@ class AttractMode(game.Mode):
 		#### Ensure GI is on ####
 		self.game.utilities.enableGI()
 
+		#### Enable Backbox Lighting ####
+		self.game.coils.backboxLighting.enable()
+
 	def mode_stopped(self):
 		#### Disable All Lamps ####
 		for lamp in self.game.lamps:
@@ -60,6 +65,9 @@ class AttractMode(game.Mode):
 		#### Enable AC Relay for Flashers ####
 		#### This is only needed for using lampshows that contain flashers on the AC Relay ####
 		self.game.coils.acSelect.enable()
+
+		#### Disable Backbox Lighting ####
+		self.game.coils.backboxLighting.disable()
 			
 	def setDisplayContent(self):
 		#### Script List Variable Initialization ####

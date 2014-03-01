@@ -230,7 +230,7 @@ PRCoils:
         number: C23
     autoLauncher:
         number: C25
-    extraDrive2:
+    backboxLighting:
         number: C26
     extraDrive3:
         number: C27
