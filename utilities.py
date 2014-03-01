@@ -37,7 +37,9 @@ from player import *
 class UtilitiesMode(game.Mode):
 	def __init__(self, game, priority):
 			super(UtilitiesMode, self).__init__(game, priority)
-			## Set Global Variables ##
+			##############################
+			#### Set Global Variables ####
+			##############################
 			self.currentDisplayPriority = 0	
 			self.ACCoilInProgress = False
 			self.ACNameArray = []
@@ -48,15 +50,11 @@ class UtilitiesMode(game.Mode):
 			self.ACNameArray.append('ejectHole_CenterRampFlashers4')
 			self.ACNameArray.append('bottomBallPopper_RightRampFlashers1')
 			self.ACNameArray.append('knocker_RightRampFlashers2')
-			
-
-	def mode_started(self):
-			pass
 
 
-	###################
-	## Log Functions ##
-	###################
+	#######################
+	#### Log Functions ####
+	#######################
 	def log(self,text,level='info'):
 		if (level == 'error'):
 			logging.error(text)
@@ -67,9 +65,9 @@ class UtilitiesMode(game.Mode):
 		print level + " - " + text
 
 
-	#############################
-	## Ball Location Functions ##
-	#############################
+	#################################
+	#### Ball Location Functions ####
+	#################################
 	def troughIsFull(self): #should be moved globally
 		if (self.game.switches.trough1.is_active()==True and self.game.switches.trough2.is_active()==True and self.game.switches.trough3.is_active()==True):
 			return True
@@ -101,9 +99,9 @@ class UtilitiesMode(game.Mode):
 		elif (ballInPlay == False and self.previousBallInPlay == True):
 			self.set_player_stats('ball_in_play',False)
 
-	########################
-	## AC Relay Functions ##
-	########################
+	############################
+	#### AC Relay Functions ####
+	############################
 	def ACRelayEnable(self):
 		self.game.coils.acSelect.enable()
 		self.ACCoilInProgress = False
@@ -142,9 +140,9 @@ class UtilitiesMode(game.Mode):
 			pass
 
 	
-	#######################
-	## Display Functions ##
-	#######################
+	###########################
+	#### Display Functions ####
+	###########################
 	def displayText(self,priority,topText=' ',bottomText=' ',seconds=2,justify='left',topBlinkRate=0,bottomBlinkRate=0):
 		# This function will be used as a very basic display prioritizing helper
 		# Check if anything with a higher priority is running
@@ -170,9 +168,9 @@ class UtilitiesMode(game.Mode):
 			print self.p.name
 			print "Ball " + str(self.game.ball)
 	
-	##################
-	## GI Functions ##
-	##################
+	######################
+	#### GI Functions ####
+	######################
 	def disableGI(self):
 		self.game.coils.giUpper.enable()
 		self.game.coils.giLower.enable()
@@ -184,9 +182,9 @@ class UtilitiesMode(game.Mode):
 		self.game.coils.giBackbox.disable()
 
 
-	###############################
-	## Music and Sound Functions ##
-	###############################
+	###################################
+	#### Music and Sound Functions ####
+	###################################
 	def stopShooterLaneMusic(self):
 		if (self.game.shooter_lane_status == 1):
 			self.game.sound.stop_music()
@@ -194,9 +192,9 @@ class UtilitiesMode(game.Mode):
 			self.game.shooter_lane_status = 0
 
 
-	######################
-	## Player Functions ##
-	######################
+	##########################
+	#### Player Functions ####
+	##########################
 	def set_player_stats(self,id,value):
 		if (self.game.ball <> 0):
 			self.p = self.game.current_player()
@@ -224,15 +222,14 @@ class UtilitiesMode(game.Mode):
 		else:
 			return 0
 
-	######################
-	## Shaker Functions ##
-	######################
-
+	##########################
+	#### Shaker Functions ####
+	##########################
 	def shakerPulseLow(self):
-		self.game.coils.quakeMotor.schedule(schedule=0x00000888,cycle_seconds=1,now=True)
+		self.game.coils.quakeMotor.pulsed_patter(on_time=5,off_time=25,run_time=255)
 
 	def shakerPulseMedium(self):
-		self.game.coils.quakeMotor.schedule(schedule=0x00000CCC,cycle_seconds=1,now=True)
+		self.game.coils.quakeMotor.pulsed_patter(on_time=15,off_time=15,run_time=255)
 
 	def shakerPulseHigh(self):
-		self.game.coils.quakeMotor.schedule(schedule=0x00000F0F,cycle_seconds=1,now=True)
+		self.game.coils.quakeMotor.pulse(255)
