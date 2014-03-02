@@ -44,6 +44,7 @@ class Bonus(game.Mode):
 	def mode_stopped(self):
 		# Enable the flippers
 		self.game.coils.flipperEnable.enable()
+		#self.game.utilties.setBackboxLED()
 		self.game.sound.stop_music()
 
 	def calculate(self,callback):
@@ -55,20 +56,23 @@ class Bonus(game.Mode):
 	def miles(self):
 		self.game.utilities.displayText(priority=self.priority,topText=str(self.game.utilities.get_player_stats('miles'))+' MILES'.upper(),bottomText=locale.format("%d", self.game.utilities.get_player_stats('miles') * self.miles_value, True),justify='center',seconds=self.delay_time)
 		self.game.sound.play('bonus_features')
-		self.game.coils.backboxLighting.pulse(100)
+		self.game.utilities.setBackboxLED(255,0,0,pulsetime=100)
+		#self.game.coils.backboxLightingR.pulse(100)
 		self.delay(name='next_frame', event_type=None, delay=self.delay_time, handler=self.multiplier)
 
 	def multiplier(self):
 		self.game.utilities.displayText(priority=self.priority,topText='X'+str(self.game.utilities.get_player_stats('bonus_x')).upper(),bottomText=locale.format("%d", self.total_value, True),justify='center',seconds=self.delay_time)
 		self.game.sound.play('bonus_features')
-		self.game.coils.backboxLighting.pulse(100)
+		self.game.utilities.setBackboxLED(0,255,0,pulsetime=100)
+		#self.game.coils.backboxLightingG.pulse(100)
 		self.delay(name='next_frame', event_type=None, delay=self.delay_time, handler=self.total)
 
 	def total(self):
 		self.game.utilities.score(self.total_value) # this should upadte the player score in question
 		self.game.utilities.displayText(priority=self.priority,topText=locale.format("%d", self.game.utilities.currentPlayerScore(), True),justify='center',seconds=self.delay_time)
 		self.game.sound.play('bonus_total')
-		self.game.coils.backboxLighting.schedule(schedule=0x00CCCCCC, cycle_seconds=1, now=True)
+		self.game.utilities.setBackboxLED(0,0,255,pulsetime=200)
+		#self.game.coils.backboxLightingB.schedule(schedule=0x00CCCCCC, cycle_seconds=1, now=True)
 		self.delay(name='next_frame', event_type=None, delay=self.delay_time, handler=self.finish)		
 
 	def finish(self):

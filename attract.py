@@ -28,6 +28,7 @@ from procgame import *
 import pinproc
 import locale
 import math
+import random
 
 #### Set Locale ####
 locale.setlocale(locale.LC_ALL, "")
@@ -35,7 +36,7 @@ locale.setlocale(locale.LC_ALL, "")
 class AttractMode(game.Mode):
 	def __init__(self, game, priority):
 			super(AttractMode, self).__init__(game, priority)
-			self.fade_counter = 0
+			self.modeTickCounter = 0
 
 	def mode_started(self):
 		#### Reset Quake Instituet ####
@@ -52,7 +53,15 @@ class AttractMode(game.Mode):
 		self.game.utilities.enableGI()
 
 		#### Enable Backbox Lighting ####
-		self.game.coils.backboxLighting.enable()
+		self.game.utilities.setBackboxLED(127,0,255)
+
+	#def mode_tick(self):
+		#This will cycle random colors through the backbox during Attract Mode
+		#if(self.modeTickCounter == 1000):
+			#self.game.utilities.setBackboxLED(random.randint(0,255),random.randint(0,255),random.randint(0,255))
+			#self.modeTickCounter = 0
+		#else:
+			#self.modeTickCounter += 1
 
 	def mode_stopped(self):
 		#### Disable All Lamps ####
@@ -67,7 +76,7 @@ class AttractMode(game.Mode):
 		self.game.coils.acSelect.enable()
 
 		#### Disable Backbox Lighting ####
-		self.game.coils.backboxLighting.disable()
+		self.game.utilities.setBackboxLED()
 			
 	def setDisplayContent(self):
 		#### Script List Variable Initialization ####

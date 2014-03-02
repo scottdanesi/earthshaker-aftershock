@@ -30,6 +30,7 @@ from procgame import *
 import pinproc
 import locale
 import logging
+import math
 
 import player
 from player import *
@@ -233,3 +234,64 @@ class UtilitiesMode(game.Mode):
 
 	def shakerPulseHigh(self):
 		self.game.coils.quakeMotor.pulse(255)
+
+	###############################
+	#### Backbox LED Functions ####
+	###############################
+	def setBackboxLED(self,r=0,g=0,b=0,pulsetime=0):
+		#Global Constants
+		self.totalResolutionMS = 10
+		self.divisor = 255 / self.totalResolutionMS
+		#Check for Reset
+		if(r==0 and g==0 and b==0):
+			self.game.coils.backboxLightingR.disable()
+			self.game.coils.backboxLightingG.disable()
+			self.game.coils.backboxLightingB.disable()
+			return
+		#RED Color Evaluation
+		self.rOn = math.floor(r/self.divisor)
+		self.rOff = self.totalResolutionMS - self.rOn
+		if(self.rOn == self.totalResolutionMS):
+			if(pulsetime == 0):
+				self.game.coils.backboxLightingR.enable()
+			else:
+				self.game.coils.backboxLightingR.pulse(pulsetime)
+		elif(self.rOn == 0):
+			self.game.coils.backboxLightingR.disable()
+		else:
+			if(pulsetime == 0):
+				self.game.coils.backboxLightingR.patter(self.rOn,self.rOff)
+			else:
+				self.game.coils.backboxLightingR.pulsed_patter(self.rOn,self.rOff,run_time=pulsetime)
+		#GREEN Color Evaluation
+		self.gOn = math.floor(g/self.divisor)
+		self.gOff = self.totalResolutionMS - self.gOn
+		if(self.gOn == self.totalResolutionMS):
+			if(pulsetime == 0):
+				self.game.coils.backboxLightingG.enable()
+			else:
+				self.game.coils.backboxLightingG.pulse(pulsetime)
+		elif(self.gOn == 0):
+			self.game.coils.backboxLightingG.disable()
+		else:
+			if(pulsetime == 0):
+				self.game.coils.backboxLightingG.patter(self.gOn,self.gOff)
+			else:
+				self.game.coils.backboxLightingG.pulsed_patter(self.gOn,self.gOff,run_time=pulsetime)
+		#BLUE Color Evaluation
+		self.bOn = math.floor(b/self.divisor)
+		self.bOff = self.totalResolutionMS - self.bOn
+		if(self.bOn == self.totalResolutionMS):
+			if(pulsetime == 0):
+				self.game.coils.backboxLightingB.enable()
+			else:
+				self.game.coils.backboxLightingB.pulse(pulsetime)
+		elif(self.bOn == 0):
+			self.game.coils.backboxLightingB.disable()
+		else:
+			if(pulsetime == 0):
+				self.game.coils.backboxLightingB.patter(self.bOn,self.bOff)
+			else:
+				self.game.coils.backboxLightingB.pulsed_patter(self.bOn,self.bOff,run_time=pulsetime)
+
+

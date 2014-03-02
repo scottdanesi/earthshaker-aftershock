@@ -230,11 +230,11 @@ PRCoils:
         number: C23
     autoLauncher:
         number: C25
-    backboxLighting:
+    backboxLightingR:
         number: C26
-    extraDrive3:
+    backboxLightingG:
         number: C27
-    extraDrive4:
+    backboxLightingB:
         number: C28
     extraDrive5:
         number: S35
