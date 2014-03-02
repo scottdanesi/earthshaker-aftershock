@@ -27,26 +27,22 @@ import procgame.game
 from procgame import *
 import pinproc
 
-#ballSaverTime = 15
-#ballSaverWarningThreshold = ballSaverTime
-#ballSaverTimeLeft = ballSaverTime
-
 class BallSaver(game.Mode):
 	def __init__(self, game, priority):
 			super(BallSaver, self).__init__(game, priority)
 
-			self.ballSaverTime = 15
-			self.ballSaverGracePeriodThreshold = 3
-			self.ballSaveLampsActive = True
+			self.ballSaverTime = 15 #This needs to be moved to pull from the configuration file
+			self.ballSaverGracePeriodThreshold = 3 #This needs to be moved to pull from the configuration file
+			self.ballSaveLampsActive = True #Probably shoudl move to mode started instead of init...
 
+	############################
+	#### Standard Functions ####
+	############################
 	def mode_started(self):
 		self.cancel_delayed('stopballsavelamps')
 		self.game.utilities.set_player_stats('ballsave_active',True)
 		self.ballSaveLampsActive = True
 		self.update_lamps()
-		
-	def mode_stopped(self):
-		pass
 
 	def update_lamps(self):
 		if (self.game.utilities.get_player_stats('ballsave_active') == True and self.ballSaveLampsActive == True):
