@@ -173,7 +173,7 @@ class CollectZones(game.Mode):
 
 	def zoneNotAwarded(self):
 		self.game.utilities.score(250)
-		self.game.sound.play('zone_na')
+		
 
 
 	#############################
@@ -187,6 +187,7 @@ class CollectZones(game.Mode):
 			self.refreshAllZoneLists()
 		else:
 			self.zoneNotAwarded()
+			self.game.sound.play('zone_na')
 		return procgame.game.SwitchContinue
 
 	def sw_rightStandupHigh2_closed(self, sw):
@@ -197,6 +198,7 @@ class CollectZones(game.Mode):
 			self.refreshAllZoneLists()
 		else:
 			self.zoneNotAwarded()
+			self.game.sound.play('zone_na')
 		return procgame.game.SwitchContinue
 
 	def sw_rightStandupLow3_closed(self, sw):
@@ -207,6 +209,7 @@ class CollectZones(game.Mode):
 			self.refreshAllZoneLists()
 		else:
 			self.zoneNotAwarded()
+			self.game.sound.play('zone_na')
 		return procgame.game.SwitchContinue
 		
 	def sw_centerStandup4_closed(self, sw):
@@ -217,6 +220,7 @@ class CollectZones(game.Mode):
 			self.refreshAllZoneLists()
 		else:
 			self.zoneNotAwarded()
+			self.game.sound.play('zone_na')
 		return procgame.game.SwitchContinue
 		
 	def sw_ejectHole5_closed_for_100ms(self, sw):
@@ -250,6 +254,7 @@ class CollectZones(game.Mode):
 			self.refreshAllZoneLists()
 		else:
 			self.zoneNotAwarded()
+			self.game.sound.play('inlane')
 		return procgame.game.SwitchContinue
 		
 	def sw_leftReturnLane8_closed(self, sw):
@@ -260,6 +265,7 @@ class CollectZones(game.Mode):
 			self.refreshAllZoneLists()
 		else:
 			self.zoneNotAwarded()
+			self.game.sound.play('inlane')
 		return procgame.game.SwitchContinue
 		
 	def sw_captiveBall9_closed(self, sw):
@@ -270,4 +276,5 @@ class CollectZones(game.Mode):
 			self.refreshAllZoneLists()
 		else:
 			self.zoneNotAwarded()
+			self.game.sound.play('zone_na')
 		return procgame.game.SwitchContinue
