@@ -76,20 +76,26 @@ PRSwitches:
         number: S21
     outhole:
         number: S22
+        tags: outhole
     trough1:
         number: S23
+        tags: trough,trough_eject
     trough2:
         number: S24
+        tags: trough
     trough3:
         number: S25
+        tags: trough
     rightInsideReturn7:
         number: S26
     rightOutsideReturn:
         number: S27
     rightOutlane:
         number: S28
+        tags: early_save
     leftOutlane:
         number: S31
+        tags: early_save
     leftReturnLane8:
         number: S32
     leftStandup1:
@@ -157,6 +163,7 @@ PRSwitches:
         number: S71
     ballShooter: 
         number: S72
+        tags: shooter_lane
     unusedS73:
         number: S73
     jetLeft: 
@@ -184,8 +191,10 @@ PRSwitches:
 PRCoils:
     outholeKicker_CaptiveFlashers:
         number: C01
+        tags: outhole
     ballReleaseShooterLane_CenterRampFlashers1:
         number: C02
+        tags: trough_eject
     dropReset_CenterRampFlashers2:
         number: C03
     californiaFault_CenterRampFlashers3:
