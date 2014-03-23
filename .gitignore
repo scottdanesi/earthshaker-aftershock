@@ -1,5 +1,6 @@
 /assets/*
 /procgame/*
+/gamedesign/*
 /config/settings.yaml
 /config/game_data.yaml
 #############
