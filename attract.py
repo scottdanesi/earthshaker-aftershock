@@ -44,7 +44,7 @@ class AttractMode(game.Mode):
 		self.resetQuakeInstitute()
 
 		#### Start Attract Mode Lamps ####
-		self.startAttractLamps2()
+		self.startAttractLamps3()
 
 		#### Create and Set Display Content ####
 		self.setDisplayContent()
@@ -53,7 +53,7 @@ class AttractMode(game.Mode):
 		self.game.utilities.enableGI()
 
 		#### Enable Backbox Lighting ####
-		self.game.utilities.setBackboxLED(127,0,255)
+		self.game.utilities.setBackboxLED(100,100,255)
 
 	#def mode_tick(self):
 		#This will cycle random colors through the backbox during Attract Mode
@@ -188,7 +188,7 @@ class AttractMode(game.Mode):
 		########################
 		#### About Game Software
 		########################
-		script.append({'top':'SOFTWARE BY','bottom':'SCOTT DANESI','timer':5,'transition':1})
+		script.append({'top':'SOFTWARE BY','bottom':'SCOTT DANESI','timer':5,'transition':3})
 
 		#########################
 		#### Previous Game Scores
@@ -227,7 +227,7 @@ class AttractMode(game.Mode):
 		##############
 		#### Game Over
 		##############
-		script.append({'top':'GAME OVER','bottom':'PRESS START','timer':5,'transition':1})
+		script.append({'top':'GAME OVER','bottom':'PRESS START','timer':5,'transition':0})
 
 		################
 		#### High Scores
@@ -266,9 +266,10 @@ class AttractMode(game.Mode):
 		###################
 		#### Special Thanks
 		###################
-		script.append({'top':'SPECIAL THANKS','bottom':'MYPINBALLS','timer':3,'transition':1})
-		script.append({'top':'SPECIAL THANKS','bottom':'MARK SUNNUCKS','timer':3,'transition':2})
-		script.append({'top':'SPECIAL THANKS','bottom':'MULTIMORPHIC','timer':3,'transition':2})
+		script.append({'top':'SPECIAL THANKS','bottom':'MYPINBALLS','timer':2,'transition':2})
+		script.append({'top':'SPECIAL THANKS','bottom':'MARK SUNNUCKS','timer':2,'transition':2})
+		script.append({'top':'SPECIAL THANKS','bottom':'EP THE GEEK','timer':2,'transition':2})
+		script.append({'top':'SPECIAL THANKS','bottom':'MULTIMORPHIC','timer':2,'transition':2})
 		
 		#############################
 		#### Start New Display Script
@@ -326,26 +327,69 @@ class AttractMode(game.Mode):
 			elif i % 8 == 0:
 				lamp.schedule(schedule=0x0000000f, cycle_seconds=0, now=False)
 			i = i + 1
+
+	def startAttractLamps3(self):
+		##############################################################
+		#### Start Attract Lamps Version 2 ###########################
+		#### This basic attract lamp show uses a schedule to cycle 
+		#### through the lamps in the game.  This surprisingly creates 
+		#### a nice attract mode for those looking to get something 
+		#### basic up and running.  It uses a mod function to cycle 
+		#### through every 8 lamps.
+		##############################################################
+		i = 0
+		for lamp in self.game.lamps:
+			if i % 8 == 7:
+				lamp.schedule(schedule=0xf00000ff, cycle_seconds=0, now=False)
+			elif i % 8 == 6:
+				lamp.schedule(schedule=0xff00000f, cycle_seconds=0, now=False)
+			elif i % 8 == 5:
+				lamp.schedule(schedule=0xfff00000, cycle_seconds=0, now=False)
+			elif i % 8 == 4:
+				lamp.schedule(schedule=0x0fff0000, cycle_seconds=0, now=False)
+			elif i % 8 == 3:
+				lamp.schedule(schedule=0x00fff000, cycle_seconds=0, now=False)
+			elif i % 8 == 2:
+				lamp.schedule(schedule=0x000fff00, cycle_seconds=0, now=False)
+			elif i % 8 == 1:
+				lamp.schedule(schedule=0x0000fff0, cycle_seconds=0, now=False)
+			elif i % 8 == 0:
+				lamp.schedule(schedule=0x00000fff, cycle_seconds=0, now=False)
+			i = i + 1
 		
 	def resetQuakeInstitute(self):
+		#### Quake Institute Reset ###############################
+		#### In case the Quake Institute is down, this will start 
+		#### the motor and the Institute Up switch will activate 
+		#### and stop in the switch handler below
+		##########################################################
 		if self.game.switches.instituteUp.is_active()==False:
 			self.game.coils.quakeInstitute.enable()
 
+	################################
+	#### Switch Handler Section ####
+	################################
 	def sw_instituteUp_open(self, sw):
 		self.game.coils.quakeInstitute.disable()
 		return procgame.game.SwitchStop
 
 	def sw_outhole_closed(self, sw):
+		#This will eventually be moved to the Trough mode
 		return procgame.game.SwitchStop
 
 	def sw_outhole_active_for_1s(self, sw):
+		#This will eventually be moved to the Trough mode
 		self.game.coils.acSelect.disable()
 		self.game.coils.flipperEnable.disable()
 		self.game.coils.outholeKicker_CaptiveFlashers.pulse(50)
 		self.game.alpha_score_display.set_text("GAME OVER",0)
 		self.game.alpha_score_display.set_text("PRESS START",1)
 		return procgame.game.SwitchStop
-
+	
+	#######################################################################
+	#### Jet, Sling and Skillshot Switch Handling #########################
+	#### Stop the switches from registering during Attract Mode ###########
+	#######################################################################
 	def sw_jetLeft_active(self, sw):
 		return procgame.game.SwitchStop
 
@@ -361,9 +405,6 @@ class AttractMode(game.Mode):
 	def sw_slingR_active(self, sw):
 		return procgame.game.SwitchStop
 
-	#############################
-	## Skillshot Switches
-	#############################
 	def sw_onRamp25k_active(self, sw):
 		return procgame.game.SwitchStop
 
