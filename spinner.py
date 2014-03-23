@@ -98,6 +98,6 @@ class Spinner(game.Mode):
 			self.update_lamps()
 			self.game.sound.play('super_spinner_lit')
 		else:
-			self.game.sound.play('zone_na')
+			self.game.sound.play('inlane')
 
 
