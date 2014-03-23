@@ -41,7 +41,7 @@ from time import strftime
 from base import *
 from attract import *
 import scoredisplay
-from scoredisplay import AlphaScoreDisplay
+from scoredisplay import AlphaScoreDisplay #test and see about converting this to *
 from skillshot import *
 from utilities import *
 from tilt import *
@@ -53,6 +53,7 @@ from droptargets import *
 from collectzones import *
 from spinner import *
 from multiball import *
+from trough import *
 
 # Used to put commas in the score.
 locale.setlocale(locale.LC_ALL, "")
@@ -136,6 +137,7 @@ class EarthshakerAftershock(game.BasicGame):
 
 		#### Mode Definitions ####
 		self.utilities = UtilitiesMode(self,0)
+		self.trough = Trough(self,2000)
 		self.base_mode = BaseGameMode(self,2)
 		self.attract_mode = AttractMode(self,5)
 		self.centerramp_mode = CenterRampMode(self,8)
@@ -150,6 +152,7 @@ class EarthshakerAftershock(game.BasicGame):
 		
 		#### Initial Mode Queue ####
 		self.modes.add(self.utilities)
+		self.modes.add(self.trough)
 		self.modes.add(self.base_mode)
 
 	def save_settings(self):
@@ -166,6 +169,8 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_music('shooter', game_music_path + 'shooter.wav')
 		#self.sound.register_music('main', game_music_path + 'music_001_main_loop.wav')
 		#self.sound.register_music('shooter', game_music_path + 'music_001_shooter_loop.wav')
+		#self.sound.register_music('main', game_music_path + 'music_002_main_loop.wav')
+		#self.sound.register_music('shooter', game_music_path + 'music_002_shooter_loop.wav')
 		# Sound FX Registration
 		self.sound.register_sound('spinner', game_sound_path + 'spinner2.wav')
 		self.sound.register_sound('super_spinner', game_sound_path + 'spinner3.wav')
@@ -194,6 +199,19 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_sound('zone_awarded', game_sound_path + 'zone_awarded.wav')
 		# Drop Sounds #
 		self.sound.register_sound('drop', game_sound_path + 'drop_1.wav')
+		# Outlane Sounds #
+		self.sound.register_sound('outlane', game_sound_path + 'outlane1.wav')
+		self.sound.register_sound('inlane', game_sound_path + 'zone_na2.wav')
+		# Game Start Voice #
+		self.sound.register_sound('game_start', game_sound_path + 'vocal_game_start_1.wav')
+		self.sound.register_sound('game_start', game_sound_path + 'vocal_game_start_2.wav')
+		self.sound.register_sound('game_start', game_sound_path + 'vocal_game_start_3.wav')
+		self.sound.register_sound('game_start', game_sound_path + 'vocal_game_start_4.wav')
+		# Player Voice #
+		self.sound.register_sound('player_1_vox', game_sound_path + 'vocal_player_1.wav')
+		self.sound.register_sound('player_2_vox', game_sound_path + 'vocal_player_2.wav')
+		self.sound.register_sound('player_3_vox', game_sound_path + 'vocal_player_3.wav')
+		self.sound.register_sound('player_4_vox', game_sound_path + 'vocal_player_4.wav')
 
 		self.sound.set_volume(10)
 

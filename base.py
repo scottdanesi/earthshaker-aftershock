@@ -96,7 +96,12 @@ class BaseGameMode(game.Mode):
 		self.game.utilities.enableGI()
 
 		#### Kick Out Ball ####
-		self.game.utilities.acCoilPulse(coilname='ballReleaseShooterLane_CenterRampFlashers1',pulsetime=50)
+		# This is from the original code.  Replacing with the trough mode functions
+		#self.game.utilities.acCoilPulse(coilname='ballReleaseShooterLane_CenterRampFlashers1',pulsetime=50)
+		#self.game.trough.num_balls_in_play = 1
+		#self.game.trough.num_balls_to_launch = 1
+		self.game.trough.launch_balls(num=1)
+
 
 		#### Update Player Display ####
 		self.game.utilities.updateBaseDisplay()
@@ -207,14 +212,24 @@ class BaseGameMode(game.Mode):
 				#########################
 				#Start New Game
 				#########################
+				self.game.sound.play('game_start')
 				self.start_game()
 			else:
 				#missing balls
 				self.game.utilities.releaseStuckBalls()
-				self.game.alpha_score_display.set_text("MISSING PINBALLS",0)
-				self.game.alpha_score_display.set_text("PLEASE WAIT",1)
+				#self.game.alpha_score_display.set_text("MISSING PINBALLS",0)
+				#self.game.alpha_score_display.set_text("PLEASE WAIT",1)
 		elif self.game.ball == 1 and len(self.game.players) < 4:
 			self.game.add_player()
+			if (len(self.game.players) == 2):
+				self.game.sound.play('player_2_vox')
+				self.game.utilities.displayText(200,topText='PLAYER 2',bottomText='ADDED',seconds=1,justify='center')
+			elif (len(self.game.players) == 3):
+				self.game.sound.play('player_3_vox')
+				self.game.utilities.displayText(200,topText='PLAYER 3',bottomText='ADDED',seconds=1,justify='center')
+			elif (len(self.game.players) == 4):
+				self.game.sound.play('player_4_vox')
+				self.game.utilities.displayText(200,topText='PLAYER 4',bottomText='ADDED',seconds=1,justify='center')
 		else:
 			pass		
 		return procgame.game.SwitchStop
@@ -225,8 +240,8 @@ class BaseGameMode(game.Mode):
 		
 	def sw_outhole_closed_for_1s(self, sw):
 		### Ball handling ###
-		self.game.utilities.setBallInPlay(False)
-		self.game.utilities.acCoilPulse('outholeKicker_CaptiveFlashers')
+		self.game.utilities.setBallInPlay(False) # Will need to use the trough mode for this
+		#self.game.utilities.acCoilPulse('outholeKicker_CaptiveFlashers')
 		self.delay('finishBall',delay=1,handler=self.finish_ball)
 		return procgame.game.SwitchStop
 
@@ -354,3 +369,12 @@ class BaseGameMode(game.Mode):
 			#Kick the ball into play
 			self.game.utilities.launch_ball()
 		return procgame.game.SwitchStop
+
+	#############################
+	## Outlane Switches
+	#############################
+	def sw_rightOutlane_closed(self, sw):
+		self.game.sound.play('outlane')
+
+	def sw_leftOutlane_closed(self, sw):
+		self.game.sound.play('outlane')

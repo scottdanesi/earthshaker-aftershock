@@ -33,7 +33,8 @@ class BallSaver(game.Mode):
 
 			self.ballSaverTime = 15 #This needs to be moved to pull from the configuration file
 			self.ballSaverGracePeriodThreshold = 3 #This needs to be moved to pull from the configuration file
-			self.ballSaveLampsActive = True #Probably shoudl move to mode started instead of init...
+			self.ballSaveLampsActive = True #Probably should move to mode started instead of init...
+			self.ballSavedEarly = False 
 
 	############################
 	#### Standard Functions ####
@@ -42,7 +43,12 @@ class BallSaver(game.Mode):
 		self.cancel_delayed('stopballsavelamps')
 		self.game.utilities.set_player_stats('ballsave_active',True)
 		self.ballSaveLampsActive = True
+		self.game.trough.ball_save_active = True
 		self.update_lamps()
+
+	def mode_stopped(self):
+		self.game.trough.ball_save_active = False
+		return super(BallSaver, self).mode_stopped()
 
 	def update_lamps(self):
 		if (self.game.utilities.get_player_stats('ballsave_active') == True and self.ballSaveLampsActive == True):
@@ -90,8 +96,24 @@ class BallSaver(game.Mode):
 
 		self.game.sound.play('ball_saved')
 
-		self.kickBallToTrough()
-		self.kickBallToShooterLane()
+		#These are from the original code
+		#self.kickBallToTrough()
+		#self.kickBallToShooterLane()
+		self.game.trough.launch_balls(num=1)
+		self.stopBallSaverMode()
+
+	def saveBallEarly(self): #Need to work on this...
+		self.game.utilities.displayText(199,topText='BALL SAVED',bottomText=' ',seconds=3,justify='center')
+
+		#Stop Skillshot
+		self.game.modes.remove(self.game.skillshot_mode)
+
+		self.game.sound.play('ball_saved')
+
+		#These are from the original code
+		#self.kickBallToTrough()
+		#self.kickBallToShooterLane()
+		self.game.trough.launch_balls(num=1)
 		self.stopBallSaverMode()
 
 	def sw_outhole_closed_for_1s(self, sw):
@@ -145,3 +167,12 @@ class BallSaver(game.Mode):
 		if (self.game.utilities.get_player_stats('ballsave_timer_active') == False):
 			self.startBallSaverTimers()
 		return procgame.game.SwitchContinue
+
+	##################################################
+	## Early Ballsave Switches
+	## These will save the ball early if the trough has enough balls to support
+	## WORK IN PROGRESS
+	##################################################
+
+	#def sw_rightOutlane_active(self, sw):
+		#if (self.game.utilities.get_player_stats('ballsave_active') == True):
