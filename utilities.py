@@ -238,7 +238,7 @@ class UtilitiesMode(game.Mode):
 	###############################
 	#### Backbox LED Functions ####
 	###############################
-	def setBackboxLED(self,r=0,g=0,b=0,pulsetime=0):
+	def setBackboxLED(self,r=0,g=0,b=0,pulsetime=0,schedule=0x00000000):
 		#Global Constants
 		self.totalResolutionMS = 10
 		self.divisor = 255 / self.totalResolutionMS
