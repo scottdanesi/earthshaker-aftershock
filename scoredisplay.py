@@ -289,7 +289,7 @@ class AlphaScoreDisplay(game.ScoreDisplay):
             self.update_alpha_display()
             self.transition_posn[row] -=1
 
-            if self.transition_posn[row]>stop_posn:
+            if self.transition_posn[row]>=stop_posn:
                 self.delay(name='transition_loop'+str(row),delay=0.03,handler=lambda:self.set_transition_in(text,row,justify,seconds))
             else:
                 self.cancel_delayed('transition_loop'+str(row))
