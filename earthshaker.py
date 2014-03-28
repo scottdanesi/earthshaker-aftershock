@@ -70,6 +70,7 @@ settings_template_path = curr_file_path + "/config/settings_template.yaml"
 game_machine_yaml = curr_file_path + "/config/es.yaml"
 game_music_path = curr_file_path + "/assets/music/"
 game_sound_path = curr_file_path + "/assets/sound/"
+game_lampshows = curr_file_path + "/lamps/"
 
 ballsPerGame = 3 # this will eventually be called from the config file
 
@@ -131,6 +132,10 @@ class EarthshakerAftershock(game.BasicGame):
 		#### Setup Sound Controller ####
 		self.sound = procgame.sound.SoundController(self)
 		self.RegisterSound()
+
+		#### Setup Lamp Controller ####
+		self.lampctrl = procgame.lamps.LampController(self)
+		self.RegisterLampshows()
 
 		#### software version number ####
 		self.revision = "1.0.0"
@@ -214,6 +219,10 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_sound('player_4_vox', game_sound_path + 'vocal_player_4.wav')
 
 		self.sound.set_volume(10)
+
+	def RegisterLampshows(self):
+		self.lampctrl.register_show('attract1', game_lampshows + 'test.lampshow')
+		self.lampctrl.register_show('center_ramp_1', game_lampshows + 'center_ramp_complete.lampshow')
 
 	def create_player(self, name):
 		return Player(name)

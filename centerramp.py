@@ -108,8 +108,9 @@ class CenterRampMode(game.Mode):
 
 	def centerRampShotCompleted(self):
 		self.centerRampShotStarted = False
-		self.game.coils.californiaFault_CenterRampFlashers3.schedule(schedule=0x0000000F, cycle_seconds=1, now=True)
-		self.game.coils.ejectHole_CenterRampFlashers4.schedule(schedule=0x000000F0, cycle_seconds=1, now=True)
+		self.game.lampctrl.play_show('center_ramp_1', repeat=False, callback=self.game.update_lamps)
+		#self.game.coils.californiaFault_CenterRampFlashers3.schedule(schedule=0x0000000F, cycle_seconds=1, now=True)
+		#self.game.coils.ejectHole_CenterRampFlashers4.schedule(schedule=0x000000F0, cycle_seconds=1, now=True)
 		# Sound FX #
 		self.game.sound.play('centerRampComplete')
 		# Score it! #
