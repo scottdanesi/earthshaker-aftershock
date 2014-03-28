@@ -40,12 +40,18 @@ class Bonus(game.Mode):
 		# Disable the flippers
 		self.game.coils.flipperEnable.disable()
 		self.game.sound.stop_music()
+		self.game.utilities.disableGI()
+
+		#### Disable All Lamps ####
+		for lamp in self.game.lamps:
+			lamp.disable()
 
 	def mode_stopped(self):
 		# Enable the flippers
 		self.game.coils.flipperEnable.enable()
 		#self.game.utilties.setBackboxLED()
 		self.game.sound.stop_music()
+		self.game.utilities.enableGI()
 
 	def calculate(self,callback):
 		#self.game.sound.play_music('bonus', loops=1)
@@ -57,6 +63,7 @@ class Bonus(game.Mode):
 		self.game.utilities.displayText(priority=self.priority,topText=str(self.game.utilities.get_player_stats('miles'))+' MILES'.upper(),bottomText=locale.format("%d", self.game.utilities.get_player_stats('miles') * self.miles_value, True),justify='center',seconds=self.delay_time)
 		self.game.sound.play('bonus_features')
 		self.game.utilities.setBackboxLED(255,0,0,pulsetime=100)
+		self.game.utilities.acFlashSchedule(coilname='ballReleaseShooterLane_CenterRampFlashers1',schedule=0x0000000C, cycle_seconds=1, now=True)
 		self.delay(name='next_frame', event_type=None, delay=self.delay_time, handler=self.multiplier)
 
 	def multiplier(self):
@@ -69,6 +76,8 @@ class Bonus(game.Mode):
 		self.game.utilities.score(self.total_value) # this should upadte the player score in question
 		self.game.utilities.displayText(priority=self.priority,topText=locale.format("%d", self.game.utilities.currentPlayerScore(), True),justify='center',seconds=self.delay_time)
 		self.game.sound.play('bonus_total')
+		self.game.utilities.acFlashSchedule(coilname='ejectHole_CenterRampFlashers4',schedule=0x00CCCCCC, cycle_seconds=1, now=True)
+		self.game.utilities.acFlashSchedule(coilname='outholeKicker_CaptiveFlashers',schedule=0x00CCCCCC, cycle_seconds=1, now=True)
 		self.game.coils.backboxLightingB.schedule(schedule=0x00CCCCCC, cycle_seconds=1, now=True)
 		self.delay(name='next_frame', event_type=None, delay=self.delay_time, handler=self.finish)		
 
