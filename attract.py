@@ -37,6 +37,7 @@ class AttractMode(game.Mode):
 	def __init__(self, game, priority):
 			super(AttractMode, self).__init__(game, priority)
 			self.modeTickCounter = 0
+			self.attractTest = False
 
 	def mode_started(self):
 		#### Reset Quake Instituet ####
@@ -45,6 +46,7 @@ class AttractMode(game.Mode):
 
 		#### Start Attract Mode Lamps ####
 		self.startAttractLamps3()
+		#self.game.lampctrl.play_show('attract1', repeat=True)
 
 		#### Create and Set Display Content ####
 		self.setDisplayContent()
@@ -68,6 +70,8 @@ class AttractMode(game.Mode):
 		for lamp in self.game.lamps:
 			lamp.disable()
 
+		#self.game.lampctrl.stop_show()
+
 		#### Cancel Display Script ####
 		self.game.alpha_score_display.cancel_script()
 
@@ -81,6 +85,17 @@ class AttractMode(game.Mode):
 	def setDisplayContent(self):
 		#### Script List Variable Initialization ####
 		script=[]
+
+		if(self.attractTest == True):
+			script.append({'top':'TRANSITION 0','bottom':'TRANSITION 0','timer':2,'transition':0})
+			script.append({'top':'TRANSITION 1','bottom':'TRANSITION 1','timer':8,'transition':1})
+			script.append({'top':'TRANSITION 2','bottom':'TRANSITION 2','timer':2,'transition':2})
+			script.append({'top':'TRANSITION 3','bottom':'TRANSITION 3','timer':2,'transition':3})
+			script.append({'top':'TRANSITION 4','bottom':'TRANSITION 4','timer':2,'transition':4})
+			#Cancel any score display scripts that may be running
+			self.game.alpha_score_display.cancel_script()
+			self.game.alpha_score_display.set_script(script)
+			return
 
 		################################################
 		#### Earthshaker Title Animation Definition ####
