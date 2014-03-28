@@ -1,7 +1,22 @@
-# -------------------------
+# -------------------------------------------------------------------------------------
+# _______         _____  _     _ _______
+# |_____| |      |_____] |_____| |_____|
+# |     | |_____ |       |     | |     |
+#                                       
+# _______ _______  _____   ______ _______
+# |______ |       |     | |_____/ |______
+# ______| |_____  |_____| |    \_ |______
+#                                        
+# ______  _____ _______  _____         _______ __   __
+# |     \   |   |______ |_____] |      |_____|   \_/  
+# |_____/ __|__ ______| |       |_____ |     |    |   
+#
+# -------------------------------------------------------------------------------------
 # Score Display Mode for Alphanumeric Display Games
 #
-# Controls displays during game play and provides various transition effects for displaying text during modes.
+# Controls displays during game play and provides various transition effects for 
+# displaying text during modes.
+# 
 # Repeating script list included for attract usage
 #
 # Copyright (C) 2013 myPinballs, Orange Cloud Software Ltd
@@ -16,7 +31,19 @@
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
-# -------------------------
+# -------------------------------------------------------------------------------------
+#  _______  ______ _______ __   _ _______ _____ _______ _____  _____  __   _ _______
+#     |    |_____/ |_____| | \  | |______   |      |      |   |     | | \  | |______
+#     |    |    \_ |     | |  \_| ______| __|__    |    __|__ |_____| |  \_| ______|
+# 
+# -------------------------------------------------------------------------------------
+# Transition 0: Fixed top and bottom, centered
+# Transition 1: Slide in top and bottom, from right to left, left justified
+# Transition 2: Fixed top, slide in bottom from right to left, centered
+# Transition 3: Reveal out from center top and bottom, centered
+# Transition 4: Fixed top, flashing bottom, centered
+# -------------------------------------------------------------------------------------
+
 
 import procgame
 import locale
@@ -26,9 +53,9 @@ from procgame import *
 
 
 class AlphaScoreDisplay(game.ScoreDisplay):
-        
-        def __init__(self, game, priority, left_players_justify="right"):
-                super(AlphaScoreDisplay, self).__init__(game, priority)
+	
+	def __init__(self, game, priority, left_players_justify="right"):
+		super(AlphaScoreDisplay, self).__init__(game, priority)
 
                 self.log = logging.getLogger('whirlwind.alpha_display')
                 
@@ -90,16 +117,16 @@ class AlphaScoreDisplay(game.ScoreDisplay):
                 self.update_layer()
 
         def format_digit_score(self, score):
-        
-                if score == 0:
-                        return '00'
-                else:
-                        return locale.format("%d", score, True)
+	
+		if score == 0:
+			return '00'
+		else:
+			return locale.format("%d", score, True)
 
         def update_layer(self):
                 super(AlphaScoreDisplay, self).update_layer()
 
-                if self.game.ball >0:
+		if self.game.ball >0:
                     text = "BALL %d" % (self.game.ball)
                     if self.game.current_player_index<3: #move text if player 4
                         posn = 9
@@ -111,12 +138,12 @@ class AlphaScoreDisplay(game.ScoreDisplay):
                         #update the data
                         self.update_alpha_display()
 
-        def update_layer_1p(self):
+	def update_layer_1p(self):
                 super(AlphaScoreDisplay, self).update_layer_1p()
                 if self.game.current_player() == None:
-                        score = 0 # Small hack to make *something* show up on startup.
-                elif self.game.ball>0:
-                        score = self.format_digit_score(self.game.current_player().score)
+			score = 0 # Small hack to make *something* show up on startup.
+		elif self.game.ball>0:
+			score = self.format_digit_score(self.game.current_player().score)
                         posn = self.player_score_posn[0]+1
 
                         if not self.text_set:
@@ -127,8 +154,8 @@ class AlphaScoreDisplay(game.ScoreDisplay):
                         
         def update_layer_4p(self):
                 super(AlphaScoreDisplay, self).update_layer_4p()
-                for i in range(len(self.game.players[:4])): # Limit to first 4 players for now.
-                        score = self.game.players[i].score
+		for i in range(len(self.game.players[:4])): # Limit to first 4 players for now.
+			score = self.game.players[i].score
                         formatted_score = self.format_digit_score(score)
                         #adjust posn for scores bigger than 10 Mil on players 1 and 3
                         if score>=10000000 and (i==0 or i==2):
@@ -272,7 +299,7 @@ class AlphaScoreDisplay(game.ScoreDisplay):
             if justify=='left':
                 stop_posn = 0
             elif justify=='center':
-                stop_posn = 7-(size/2)
+                stop_posn = 8-(size/2)
             elif justify=='right':
                 stop_posn = 15-size
 
@@ -300,7 +327,15 @@ class AlphaScoreDisplay(game.ScoreDisplay):
 
         def set_transition_reveal(self,text,row,seconds=0):
             size = len(text)
-            reveal_text = text[(size/2)+1-self.transition_reveal_posn[row]:(size/2)+1+self.transition_reveal_posn[row]]
+            
+            #create curtain
+            curtain_text = '!"#$%&'
+            curtain=''
+            if self.transition_reveal_posn[row]<=(size/2):
+                for i in range(3):
+                    curtain += random.choice(curtain_text)
+
+            reveal_text = curtain+text[(size/2)+1-self.transition_reveal_posn[row]:(size/2)+1+self.transition_reveal_posn[row]]+curtain
             self.log.debug('%s %s',text,reveal_text)
 
             #work out end posn
@@ -337,7 +372,7 @@ class AlphaScoreDisplay(game.ScoreDisplay):
             
 
 
-        def update_alpha_display(self):
+	def update_alpha_display(self):
             #using gerry's builtin procgame method for now
             #write the data to the display
             self.game.alpha_display.display([''.join(self.top_text_data),''.join(self.bottom_text_data)])

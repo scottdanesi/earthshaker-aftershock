@@ -2,7 +2,7 @@ import pinproc
 
 class AlphanumericDisplay(object):
 	# Start at ASCII table offset 32: ' ' 
-	asciiSegments = [0x0000,  # ' ' Space
+	asciiSegments = [0x0000,  # ' '
                          0x016a,  # '!' Random Debris Character 1
                          0x3014,  # '"' Random Debris Character 2
                          0x5d80,  # '#' Random Debris Character 3
@@ -38,7 +38,7 @@ class AlphanumericDisplay(object):
                          0x0045,  # '?' Random Debris Character 10
                          0x4820,  # '@' Random Debris Character 11
 
-						 0x0877,  # 'A'
+                         0x0877,  # 'A'
                          0x2a4f,  # 'B'
                          0x0039,  # 'C'
                          0x220f,  # 'D'
@@ -72,32 +72,32 @@ class AlphanumericDisplay(object):
                          0x0008,  # '_'
                          0x2220,  # '`' Random Debris Character 16
 
-                         0x0c56,  # 'a' Broken Letter a!
-                         0x684e,  # 'b' Broken Letter b!
-                         0x081c,  # 'c' Broken Letter c!
-                         0x380e,  # 'd' Broken Letter d!
-                         0x1178,  # 'e' Broken Letter e!
-                         0x4831,  # 'f' Broken Letter f!
-                         0x083d,  # 'g' Broken Letter g
-                         0x0854,  # 'h' Broken Letter h!
-                         0x2209,  # 'i' Broken Letter i
-                         0x001e,  # 'j' Broken Letter j
-                         0x1070,  # 'k' Broken Letter k!
-                         0x0038,  # 'l' Broken Letter l
-                         0x0536,  # 'm' Broken Letter m
-                         0x1136,  # 'n' Broken Letter n
-                         0x085c,  # 'o' Broken Letter o!
-                         0x0873,  # 'p' Broken Letter p
-                         0x103f,  # 'q' Broken Letter q
-                         0x1c72,  # 'r' Broken Letter r!
-                         0x116c,  # 's' Broken Letter s!
-                         0x2120,  # 't' Broken Letter t!
-                         0x003e,  # 'u' Broken Letter u
-                         0x4430,  # 'v' Broken Letter v
-                         0x5036,  # 'w' Broken Letter w
-                         0x5500,  # 'x' Broken Letter x
-                         0x2500,  # 'y' Broken Letter y
-                         0x4409   # 'z' Broken Letter z
+                         0x0c56,  # 'a' Broken Letter a
+                         0x684e,  # 'b' Broken Letter b
+                         0x081c,  # 'c' Broken Letter c
+                         0x380e,  # 'd' Broken Letter d
+                         0x1178,  # 'e' Broken Letter e
+                         0x4831,  # 'f' Broken Letter f
+                         0x083d,  # 'g' Broken Letter g NOT CREATED YET
+                         0x0854,  # 'h' Broken Letter h
+                         0x2209,  # 'i' Broken Letter i NOT CREATED YET
+                         0x001e,  # 'j' Broken Letter j NOT CREATED YET
+                         0x1070,  # 'k' Broken Letter k
+                         0x0038,  # 'l' Broken Letter l NOT CREATED YET
+                         0x0536,  # 'm' Broken Letter m NOT CREATED YET
+                         0x1136,  # 'n' Broken Letter n NOT CREATED YET
+                         0x085c,  # 'o' Broken Letter o
+                         0x0873,  # 'p' Broken Letter p NOT CREATED YET
+                         0x103f,  # 'q' Broken Letter q NOT CREATED YET
+                         0x1c72,  # 'r' Broken Letter r
+                         0x116c,  # 's' Broken Letter s
+                         0x2120,  # 't' Broken Letter t
+                         0x003e,  # 'u' Broken Letter u NOT CREATED YET
+                         0x4430,  # 'v' Broken Letter v NOT CREATED YET
+                         0x5036,  # 'w' Broken Letter w NOT CREATED YET
+                         0x5500,  # 'x' Broken Letter x NOT CREATED YET
+                         0x2500,  # 'y' Broken Letter y NOT CREATED YET
+                         0x4409   # 'z' Broken Letter z NOT CREATED YET
                         ]
 
 	strobes = [8,9,10,11,12]
@@ -118,7 +118,7 @@ class AlphanumericDisplay(object):
 		# Make sure strings are at least 16 chars.
 		# Then convert each string to a list of chars.
 		for j in range(0,2):
-			#input_strings[j] = input_strings[j].upper() #Commented out for lower case characters
+			input_strings[j] = input_strings[j]
 			if len(input_strings[j]) < 16: input_strings[j] += ' '*(16-len(input_strings[j]))
 			strings += [list(input_strings[j])]
 
@@ -155,10 +155,11 @@ class AlphanumericDisplay(object):
 						strings[j].remove(comma_dot)
 						# Append a space to ensure there are enough chars.
 						strings[j].append(' ')
+                                #character is 16 bits long, characters are loaded in 2 lots of 8 bits, for each display (4 enable lines total)
+				commands += [pinproc.aux_command_output_custom(segs[j][i] & 0xff,0,self.strobes[j*2+1],False, 0)] #first 8 bits of characater data
+				commands += [pinproc.aux_command_output_custom((segs[j][i]>> 8) & 0xff,0,self.strobes[j*2+2],False, 0)] #second 8 bits of characater data
 
-				commands += [pinproc.aux_command_output_custom(segs[j][i] & 0xff,0,self.strobes[j*2+1],False, 0)]
-				commands += [pinproc.aux_command_output_custom((segs[j][i]>> 8) & 0xff,0,self.strobes[j*2+2],False, 0)]
-				char_on_time += [intensities[j][i] * self.full_intensity_delay]
+                                char_on_time += [intensities[j][i] * self.full_intensity_delay]
 				char_off_time += [self.inter_char_delay + (self.full_intensity_delay - char_on_time[j])]
 
 			if char_on_time[0] < char_on_time[1]:
