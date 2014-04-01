@@ -152,6 +152,12 @@ class Trough(procgame.game.Mode):
 		#if self.game.switches[self.outhole_switchname].is_active(seconds=1.0):
 		#self.game.switched_coils.drive(self.outhole_coilname)
 		self.game.utilities.acCoilPulse('outholeKicker_CaptiveFlashers')
+		if(self.game.utilities.get_player_stats('multiball_running') == True):
+			self.delay(delay=.5,handler=self.checkForEndOfMultiball)
+
+	def checkForEndOfMultiball(self):
+		if (self.num_balls() >= 2):
+			self.game.multiball_mode.stopMultiball()
 
 	# Switches will change states a lot as balls roll down the trough.
 	# So don't go through all of the logic every time.  Keep resetting a
