@@ -76,7 +76,6 @@ class Player(procgame.game.Player):
 
 			self.player_stats['fault_visits']=0
 			self.player_stats['inlanes_made']=0
-			self.player_stats['lock_lit']=False
 			self.player_stats['multiball_ready']=False
 			self.player_stats['multiball_started']=False
 			self.player_stats['million_lit']=False
