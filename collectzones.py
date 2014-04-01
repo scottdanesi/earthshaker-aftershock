@@ -58,9 +58,15 @@ class CollectZones(game.Mode):
 
 
 	def mode_started(self):
-		self.refreshAllZoneLists()
+		self.updateAvailableZoneList()
+		self.updateActiveZoneList()
+		self.updateCompletedZoneList()
 		if (len(self.activeZones) == 0):
 			self.setNewActiveZones()
+		self.checkForAllCompletedZones()
+		#if (len(self.activeZones) == 0):
+			#self.setNewActiveZones()
+		self.update_lamps()
 		return super(CollectZones, self).mode_started()
 
 	def mode_stopped(self):
@@ -170,6 +176,12 @@ class CollectZones(game.Mode):
 		self.game.utilities.set_player_stats('zones_visited',self.game.utilities.get_player_stats('zones_visited') + 1)
 		self.game.sound.play('zone_awarded')
 		self.game.utilities.shakerPulseLow()
+
+	def spotZone(self):
+		seed()
+		self.game.utilities.set_player_stats(choice(self.activeZones),1)
+		self.scoreZoneCollected()
+		self.refreshAllZoneLists()
 
 	def zoneNotAwarded(self):
 		self.game.utilities.score(250)
