@@ -33,7 +33,7 @@ class SoundController(object):
         self.set_volume(0.5)
         self.voice_end_time = 0
 
-    def play_music(self, key, loops=0, start_time=0.0):
+    def play_music(self, key, loops=0, start_time=0.0, music_volume=1):
         """Start playing music at the given *key*."""
         if not self.enabled: return
         if key in self.music:
@@ -41,6 +41,7 @@ class SoundController(object):
                 random.shuffle(self.music[key])
             self.load_music(key)
             mixer.music.play(loops,start_time)
+            mixer.music.set_volume(music_volume)
 
     def stop_music(self):
         """Stop the currently-playing music."""
@@ -72,7 +73,7 @@ class SoundController(object):
         else:
             self.logger.error("Sound registration error: file %s does not exist!", sound_file)
 
-    def register_music(self, key, music_file):
+    def register_music(self, key, music_file, new_music_volume=1):
         """ """
         if not self.enabled: return
         if os.path.isfile(music_file):
