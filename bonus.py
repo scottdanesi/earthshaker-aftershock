@@ -32,11 +32,18 @@ class Bonus(game.Mode):
 	"""docstring for Bonus"""
 	def __init__(self, game, priority):
 			super(Bonus, self).__init__(game, priority)
-			self.delay_time = 1.6
-			self.total_value = 0
+			# Settings Variables #
+			self.delay_time = 1.5
 			self.miles_value = 2000
 
+			# System Variables #
+			self.total_value = 0
+			
+
 	def mode_started(self):
+		# Cancel Drop Target Reset to not interrupt the bonus lampshows (flashers)
+		self.cancel_delayed('dropReset')
+
 		# Disable the flippers
 		self.game.coils.flipperEnable.disable()
 		self.game.sound.stop_music()
@@ -48,9 +55,8 @@ class Bonus(game.Mode):
 
 	def mode_stopped(self):
 		# Enable the flippers
-		self.game.coils.flipperEnable.enable()
-		#self.game.utilties.setBackboxLED()
-		self.game.sound.stop_music()
+		self.game.coils.flipperEnable.enable() # Can possibly remove this and let the "Ball Start" function handle it.
+		#self.game.sound.stop_music() # Only needed if using background Bonus music
 		self.game.utilities.enableGI()
 
 	def calculate(self,callback):
@@ -62,6 +68,7 @@ class Bonus(game.Mode):
 	def miles(self):
 		self.game.utilities.displayText(priority=self.priority,topText=str(self.game.utilities.get_player_stats('miles'))+' MILES'.upper(),bottomText=locale.format("%d", self.game.utilities.get_player_stats('miles') * self.miles_value, True),justify='center',seconds=self.delay_time)
 		self.game.sound.play('bonus_features')
+		#self.game.sound.play('bonus_music')
 		self.game.utilities.setBackboxLED(255,0,0,pulsetime=100)
 		self.game.utilities.acFlashSchedule(coilname='ballReleaseShooterLane_CenterRampFlashers1',schedule=0x0000000C, cycle_seconds=1, now=True)
 		self.delay(name='next_frame', event_type=None, delay=self.delay_time, handler=self.multiplier)
@@ -76,9 +83,10 @@ class Bonus(game.Mode):
 		self.game.utilities.score(self.total_value) # this should upadte the player score in question
 		self.game.utilities.displayText(priority=self.priority,topText=locale.format("%d", self.game.utilities.currentPlayerScore(), True),justify='center',seconds=self.delay_time)
 		self.game.sound.play('bonus_total')
-		self.game.utilities.acFlashSchedule(coilname='ejectHole_CenterRampFlashers4',schedule=0x00CCCCCC, cycle_seconds=1, now=True)
-		self.game.utilities.acFlashSchedule(coilname='outholeKicker_CaptiveFlashers',schedule=0x00CCCCCC, cycle_seconds=1, now=True)
-		self.game.coils.backboxLightingB.schedule(schedule=0x00CCCCCC, cycle_seconds=1, now=True)
+		#self.game.utilities.acFlashSchedule(coilname='ejectHole_CenterRampFlashers4',schedule=0x00CCCCCC, cycle_seconds=1, now=True)
+		#self.game.utilities.acFlashSchedule(coilname='outholeKicker_CaptiveFlashers',schedule=0x00CCCCCC, cycle_seconds=1, now=True)
+		#self.game.coils.backboxLightingB.schedule(schedule=0x00CCCCCC, cycle_seconds=1, now=True)
+		self.game.lampctrlflash.play_show('bonus_total', repeat=False)
 		self.delay(name='next_frame', event_type=None, delay=self.delay_time, handler=self.finish)		
 
 	def finish(self):
