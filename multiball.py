@@ -33,6 +33,11 @@ class Multiball(game.Mode):
 	def __init__(self, game, priority):
 			super(Multiball, self).__init__(game, priority)
 			self.ballsLocked = 0
+			self.ballLock1Lit = False
+			self.ballLock2Lit = False
+			self.ballLock3Lit = False
+			self.multiballStarting = False
+			self.multiballIntroLength = 11.287
 
 	def mode_started(self):
 		self.getUserStats()
@@ -47,12 +52,15 @@ class Multiball(game.Mode):
 		if (self.ballLock1Lit == True):
 			self.game.lamps.dropHoleLock.schedule(schedule=0xFF00FF00, cycle_seconds=0, now=True)
 			self.game.lamps.rightRampLock.schedule(schedule=0x00FF00FF, cycle_seconds=0, now=True)
+			print "Lock 1 is Lit"
 		elif (self.ballLock2Lit == True):
 			self.game.lamps.dropHoleLock.schedule(schedule=0xFF00FF00, cycle_seconds=0, now=True)
 			self.game.lamps.rightRampLock.schedule(schedule=0x00FF00FF, cycle_seconds=0, now=True)
+			print "Lock 2 is Lit"
 		elif (self.ballLock3Lit == True):
-			#self.game.lamps.dropHoleLock.schedule(schedule=0xFF00FF00, cycle_seconds=0, now=True)
+			self.game.lamps.dropHoleLock.schedule(schedule=0xFF00FF00, cycle_seconds=0, now=True)
 			self.game.lamps.rightRampLock.schedule(schedule=0x00FF00FF, cycle_seconds=0, now=True)
+			print "Lock 3 is Lit"
 			
 	def disableLockLamps(self):
 		self.game.lamps.rightRampLock.disable()
@@ -64,32 +72,75 @@ class Multiball(game.Mode):
 		self.ballLock2Lit = self.game.utilities.get_player_stats('lock2_lit')
 		self.ballLock3Lit = self.game.utilities.get_player_stats('lock3_lit')
 		self.ballsLocked = self.game.utilities.get_player_stats('balls_locked')
+		print "Lock 1: " + str(self.game.utilities.get_player_stats('lock1_lit'))
+		print "Lock 2: " + str(self.game.utilities.get_player_stats('lock2_lit'))
+		print "Lock 3: " + str(self.game.utilities.get_player_stats('lock3_lit'))
+		print "Balls Locked: " + str(self.game.utilities.get_player_stats('balls_locked'))
 
 	def liteLock(self,callback):
 		self.callback = callback
 		if (self.ballsLocked == 0):
-			self.ballLock1Lit = True
+			self.game.utilities.set_player_stats('lock1_lit',True)
+			print "Setting Ball 1 Lock to Lit"
+			self.getUserStats()
 		elif (self.ballsLocked == 1):
-			self.ballLock2Lit = True
+			self.game.utilities.set_player_stats('lock2_lit',True)
+			self.getUserStats()
 		elif (self.ballsLocked == 2):
-			self.ballLock3Lit = True
+			self.game.utilities.set_player_stats('lock3_lit',True)
+			self.getUserStats()
 		self.update_lamps()
 
 	def lockBall1(self):
-		self.ballsLocked = 1
-		self.ballLock1Lit = False
+		self.game.utilities.set_player_stats('balls_locked',1)
+		self.game.utilities.set_player_stats('lock1_lit',False)
+		self.getUserStats()
 		self.update_lamps()
 		self.callback()
 
 	def lockBall2(self):
-		self.ballsLocked = 2
-		self.ballLock2Lit = False
+		self.game.utilities.set_player_stats('balls_locked',2)
+		self.game.utilities.set_player_stats('lock2_lit',False)
+		self.getUserStats()
 		self.update_lamps()
 		self.callback()
 
 	def startMultiball(self):
+		self.multiballStarting = True
+		self.game.utilities.set_player_stats('multiball_running',True)
+		self.game.utilities.set_player_stats('balls_locked',0)
+		self.game.utilities.set_player_stats('lock3_lit',False)
+		self.resetMultiballStats()
+		self.getUserStats()
+		self.update_lamps()
+		self.multiballIntro()
+
+	def multiballIntro(self):
+		self.game.sound.stop_music()
+		self.game.sound.play_music('multiball_intro',loops=1,music_volume=.5)
+		self.resetMultiballStats()
+		self.delay(delay=self.multiballIntroLength,handler=self.multiballRun)
+
+	def multiballRun(self):
+		self.game.sound.play_music('multiball_loop',loops=-1,music_volume=.5)
+		self.game.utilities.acCoilPulse(coilname='bottomBallPopper_RightRampFlashers1',pulsetime=50)
+		self.game.trough.launch_balls(num=2)
+		self.multiballStarting = False
+
+	def stopMultiball(self):
+		self.game.utilities.set_player_stats('multiball_running',False)
+		self.game.sound.stop_music()
+		self.game.sound.play_music('main',loops=-1,music_volume=.5)
+		self.resetMultiballStats()
 		self.callback()
 
+	def resetMultiballStats(self):
+		self.game.utilities.set_player_stats('lock1_lit',False)
+		self.game.utilities.set_player_stats('lock2_lit',False)
+		self.game.utilities.set_player_stats('lock3_lit',False)
+		self.game.utilities.set_player_stats('balls_locked',0)
+		self.getUserStats()
+		
 	def sw_underPlayfieldDrop1_active(self, sw):
 		if (self.ballLock1Lit == True):
 			self.lockBall1()
@@ -99,5 +150,18 @@ class Multiball(game.Mode):
 			self.startMultiball()
 		else:
 			pass
+
+	def sw_ballPopperBottom_closed(self, sw):
+		if(self.multiballStarting == True):
+			return procgame.game.SwitchStop
+		else:
+			return procgame.game.SwitchContinue
+
+	def sw_outhole_closed_for_500ms(self, sw):
+		#if (self.game.trough.num_balls_in_play == 2):
+			#Last ball - Need to stop multiball
+			#self.stopMultiball()
+		return procgame.game.SwitchContinue
+
 
 
