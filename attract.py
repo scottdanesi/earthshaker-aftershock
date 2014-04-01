@@ -45,8 +45,8 @@ class AttractMode(game.Mode):
 		self.resetQuakeInstitute()
 
 		#### Start Attract Mode Lamps ####
-		self.startAttractLamps3()
-		#self.game.lampctrl.play_show('attract1', repeat=True)
+		#self.startAttractLamps3()
+		self.game.lampctrl.play_show('attract1', repeat=True)
 
 		#### Create and Set Display Content ####
 		self.setDisplayContent()
@@ -70,7 +70,7 @@ class AttractMode(game.Mode):
 		for lamp in self.game.lamps:
 			lamp.disable()
 
-		#self.game.lampctrl.stop_show()
+		self.game.lampctrl.stop_show()
 
 		#### Cancel Display Script ####
 		self.game.alpha_score_display.cancel_script()
