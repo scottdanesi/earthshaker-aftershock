@@ -66,7 +66,9 @@ class BaseGameMode(game.Mode):
 
 		self.start_ball()
 		self.game.utilities.updateBaseDisplay()
-		#self.game.sound.load_music('main')
+		self.game.sound.play('game_start_rev')
+		self.delay(delay=1.2,handler=self.game.sound.play,param='game_start')
+		#self.game.sound.play('game_start')
 		
 		print "Game Started"
 		
@@ -110,7 +112,7 @@ class BaseGameMode(game.Mode):
 		self.game.utilities.enableGI()
 
 		#### Start Shooter Lane Music ####
-		self.game.sound.play_music('shooter',loops=-1)
+		self.game.sound.play_music('shooter',loops=-1,music_volume=.5)
 		self.game.shooter_lane_status = 1
 
 		#### Debug Info ####
@@ -126,6 +128,7 @@ class BaseGameMode(game.Mode):
 	def end_ball(self):
 		#Remove Bonus
 		self.game.modes.remove(self.game.bonus_mode)
+
 		#update games played stats
 		self.game.game_data['Audits']['Balls Played'] += 1
 
@@ -212,7 +215,6 @@ class BaseGameMode(game.Mode):
 				#########################
 				#Start New Game
 				#########################
-				self.game.sound.play('game_start')
 				self.start_game()
 			else:
 				#missing balls
@@ -240,9 +242,10 @@ class BaseGameMode(game.Mode):
 		
 	def sw_outhole_closed_for_1s(self, sw):
 		### Ball handling ###
-		self.game.utilities.setBallInPlay(False) # Will need to use the trough mode for this
-		#self.game.utilities.acCoilPulse('outholeKicker_CaptiveFlashers')
-		self.delay('finishBall',delay=1,handler=self.finish_ball)
+		if self.game.trough.num_balls_in_play == 1: #Last ball in play
+			self.game.utilities.setBallInPlay(False) # Will need to use the trough mode for this
+			#self.game.utilities.acCoilPulse('outholeKicker_CaptiveFlashers')
+			self.delay('finishBall',delay=1,handler=self.finish_ball)
 		return procgame.game.SwitchStop
 
 	def sw_ejectHole5_closed_for_1s(self, sw):
@@ -256,12 +259,13 @@ class BaseGameMode(game.Mode):
 
 	def sw_ballPopperTop_closed_for_1s(self, sw):
 		self.game.coils.topBallPopper.pulse(50)
-		self.game.coils.quakeMotor.pulse(50)
+		#self.game.coils.quakeMotor.pulse(50)
 		self.game.utilities.score(250)
+		self.game.collect_mode.spotZone()
 		return procgame.game.SwitchStop
 
 	def sw_ballPopperTop_closed(self, sw):
-		self.game.coils.quakeMotor.pulse(50)
+		#self.game.coils.quakeMotor.pulse(50)
 		self.game.coils.quakeInstitute.enable()
 		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
@@ -333,6 +337,11 @@ class BaseGameMode(game.Mode):
 	def sw_centerRampEnd_active(self, sw):
 		self.game.utilities.setBallInPlay(True)
 		return procgame.game.SwitchStop
+
+	def sw_ballShooter_open(self, sw):
+		# This will play the car take off noise when the ball leaves the shooter lane
+		if (self.game.utilities.get_player_stats('ball_in_play') == False):
+			self.game.sound.play('game_start_takeoff')
 
 	#############################
 	## Zone Switches
