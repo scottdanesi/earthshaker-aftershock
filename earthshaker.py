@@ -135,6 +135,7 @@ class EarthshakerAftershock(game.BasicGame):
 
 		#### Setup Lamp Controller ####
 		self.lampctrl = procgame.lamps.LampController(self)
+		self.lampctrlflash = procgame.lamps.LampController(self)
 		self.RegisterLampshows()
 
 		#### software version number ####
@@ -170,8 +171,10 @@ class EarthshakerAftershock(game.BasicGame):
 		# Sound Settings:
 		#self.sound.music_volume_offset = 10 #This will be hardcoded at 10 since I have external volume controls I will be using
 		# Music Registration
-		self.sound.register_music('main', game_music_path + 'main1.wav')
-		self.sound.register_music('shooter', game_music_path + 'shooter.wav')
+		self.sound.register_music('main', game_music_path + 'music_001_main_loop.wav')
+		self.sound.register_music('shooter', game_music_path + 'music_001_shooter_loop.wav')
+		self.sound.register_music('multiball_intro', game_music_path + 'music_001_multiball_start.wav')
+		self.sound.register_music('multiball_loop', game_music_path + 'music_001_multiball_loop.wav')
 		#self.sound.register_music('main', game_music_path + 'music_001_main_loop.wav')
 		#self.sound.register_music('shooter', game_music_path + 'music_001_shooter_loop.wav')
 		#self.sound.register_music('main', game_music_path + 'music_002_main_loop.wav')
@@ -199,6 +202,7 @@ class EarthshakerAftershock(game.BasicGame):
 		# Bonus Sounds #
 		self.sound.register_sound('bonus_features', game_sound_path + 'bonus_feature.wav')
 		self.sound.register_sound('bonus_total', game_sound_path + 'bonus_total.wav')
+		self.sound.register_sound('bonus_music', game_music_path + 'music_001_bonus.wav',new_sound_volume=.5)
 		# Zone Sounds #
 		self.sound.register_sound('zone_na', game_sound_path + 'zone_na.wav')
 		self.sound.register_sound('zone_awarded', game_sound_path + 'zone_awarded.wav')
@@ -212,6 +216,9 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_sound('game_start', game_sound_path + 'vocal_game_start_2.wav')
 		self.sound.register_sound('game_start', game_sound_path + 'vocal_game_start_3.wav')
 		self.sound.register_sound('game_start', game_sound_path + 'vocal_game_start_4.wav')
+		# Game Start Car Sounds #
+		self.sound.register_sound('game_start_rev', game_sound_path + 'car_rev_1.wav')
+		self.sound.register_sound('game_start_takeoff', game_sound_path + 'car_takeoff_1.wav')
 		# Player Voice #
 		self.sound.register_sound('player_1_vox', game_sound_path + 'vocal_player_1.wav')
 		self.sound.register_sound('player_2_vox', game_sound_path + 'vocal_player_2.wav')
@@ -221,8 +228,9 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.set_volume(10)
 
 	def RegisterLampshows(self):
-		self.lampctrl.register_show('attract1', game_lampshows + 'test.lampshow')
+		self.lampctrl.register_show('attract1', game_lampshows + 'attract_random.lampshow')
 		self.lampctrl.register_show('center_ramp_1', game_lampshows + 'center_ramp_complete.lampshow')
+		self.lampctrlflash.register_show('bonus_total', game_lampshows + 'bonus_total.lampshow')
 
 	def create_player(self, name):
 		return Player(name)
