@@ -117,6 +117,9 @@ class UtilitiesMode(game.Mode):
 		for item in self.ACNameArray:
 			self.game.coils[item].disable()
 
+		### Stop any flashlamp lampshows
+		self.game.lampctrlflash.stop_show()
+
 		### Start the pulse process ###
 		self.cancel_delayed(name='acEnableDelay')
 		self.game.coils.acSelect.disable()
@@ -189,7 +192,7 @@ class UtilitiesMode(game.Mode):
 	def stopShooterLaneMusic(self):
 		if (self.game.shooter_lane_status == 1):
 			self.game.sound.stop_music()
-			self.game.sound.play_music('main',loops=-1)
+			self.game.sound.play_music('main',loops=-1,music_volume=.5)
 			self.game.shooter_lane_status = 0
 
 
