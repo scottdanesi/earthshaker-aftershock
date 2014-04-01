@@ -3,6 +3,7 @@
 /gamedesign/*
 /config/settings.yaml
 /config/game_data.yaml
+/lamps/LampshowTimeCalculator.xlsx
 #############
 ## Log File
 #############
