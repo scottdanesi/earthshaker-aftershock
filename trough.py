@@ -153,7 +153,7 @@ class Trough(procgame.game.Mode):
 		#self.game.switched_coils.drive(self.outhole_coilname)
 		self.game.utilities.acCoilPulse('outholeKicker_CaptiveFlashers')
 		if(self.game.utilities.get_player_stats('multiball_running') == True):
-			self.delay(delay=.5,handler=self.checkForEndOfMultiball)
+			self.delay(delay=1,handler=self.checkForEndOfMultiball)
 
 	def checkForEndOfMultiball(self):
 		if (self.num_balls() >= 2):
