@@ -347,7 +347,7 @@ PRLamps:
         number: L65
     rightRamp3Miles:
         number: L66
-    centerRamp100k:
+    centerRamp50k:
         number: L67
     centerRamp2Miles:
         number: L68

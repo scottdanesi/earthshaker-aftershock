@@ -45,7 +45,7 @@ lamp:jetRightLamp                               |
 lamp:rightRampJackpot                           | 
 lamp:rightRampLock                              | 
 lamp:rightRamp3Miles                            | 
-lamp:centerRamp100k                             | 
+lamp:centerRamp50k                              | 
 lamp:centerRamp2Miles                           | 
 lamp:leftRoadSign                               | 
 lamp:standupLeft1                               | 
