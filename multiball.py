@@ -44,8 +44,8 @@ class Multiball(game.Mode):
 		self.update_lamps()
 		return super(Multiball, self).mode_started()
 
-	def mode_stopped(self):
-		return super(Multiball, self).mode_stopped()
+	#def mode_stopped(self):
+		#self.game.update_lamps()
 
 	def update_lamps(self):
 		self.disableLockLamps()
@@ -108,9 +108,8 @@ class Multiball(game.Mode):
 	def startMultiball(self):
 		self.multiballStarting = True
 		self.game.utilities.set_player_stats('multiball_running',True)
-		self.game.utilities.set_player_stats('balls_locked',0)
-		self.game.utilities.set_player_stats('lock3_lit',False)
 		self.resetMultiballStats()
+		self.game.collect_mode.incrementActiveZoneLimit()
 		self.getUserStats()
 		self.update_lamps()
 		self.multiballIntro()
@@ -122,16 +121,18 @@ class Multiball(game.Mode):
 		self.delay(delay=self.multiballIntroLength,handler=self.multiballRun)
 
 	def multiballRun(self):
-		self.game.sound.play_music('multiball_loop',loops=-1,music_volume=.5)
+		self.game.sound.play_music('multiball_loop',loops=-1,music_volume=.6)
 		self.game.utilities.acCoilPulse(coilname='bottomBallPopper_RightRampFlashers1',pulsetime=50)
 		self.game.trough.launch_balls(num=2)
 		self.multiballStarting = False
+		self.game.update_lamps()
 
 	def stopMultiball(self):
 		self.game.utilities.set_player_stats('multiball_running',False)
 		self.game.sound.stop_music()
 		self.game.sound.play_music('main',loops=-1,music_volume=.5)
 		self.resetMultiballStats()
+		self.game.update_lamps()
 		self.callback()
 
 	def resetMultiballStats(self):
