@@ -224,6 +224,9 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_sound('player_2_vox', game_sound_path + 'vocal_player_2.wav')
 		self.sound.register_sound('player_3_vox', game_sound_path + 'vocal_player_3.wav')
 		self.sound.register_sound('player_4_vox', game_sound_path + 'vocal_player_4.wav')
+		# Multiball Sounds #
+		self.sound.register_sound('earthquake_1', game_sound_path + 'multiball_intro_earthquake_1.wav')
+		self.sound.register_sound('main_loop_tape_stop', game_sound_path + 'music_001_main_loop_stop.wav',new_sound_volume=.5)
 
 		self.sound.set_volume(10)
 
