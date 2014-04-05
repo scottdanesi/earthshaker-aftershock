@@ -1,6 +1,7 @@
 /assets/*
 /procgame/*
 /gamedesign/*
+/stdout/*
 /config/settings.yaml
 /config/game_data.yaml
 /lamps/LampshowTimeCalculator.xlsx
