@@ -34,15 +34,13 @@ class Bonus(game.Mode):
 			super(Bonus, self).__init__(game, priority)
 			# Settings Variables #
 			self.delay_time = 1.5
-			self.miles_value = 2000
+			self.miles_value = 3000
 
 			# System Variables #
 			self.total_value = 0
 			
 
 	def mode_started(self):
-		# Cancel Drop Target Reset to not interrupt the bonus lampshows (flashers)
-		self.cancel_delayed('dropReset')
 
 		# Disable the flippers
 		self.game.coils.flipperEnable.disable()
