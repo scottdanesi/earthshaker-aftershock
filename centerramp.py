@@ -50,7 +50,9 @@ class CenterRampMode(game.Mode):
 
 	def update_lamps(self):
 		### 2 Miles Lamp ###
-		if (self.enabled2Miles == True):
+		if (self.game.utilities.get_player_stats('multiball_running') == True):
+			self.game.lamps.centerRamp2Miles.schedule(schedule=0xCCCCCCCC, cycle_seconds=0, now=True)
+		elif (self.enabled2Miles == True):
 			self.game.lamps.centerRamp2Miles.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=True)
 		else:
 			self.game.lamps.centerRamp2Miles.disable()
@@ -116,7 +118,9 @@ class CenterRampMode(game.Mode):
 		# Score it! #
 		self.game.utilities.score(1000)
 		# Award Miles #
-		if (self.enabled2Miles == True):
+		if (self.game.utilities.get_player_stats('multiball_running') == True):
+			self.game.utilities.set_player_stats('miles',self.game.utilities.get_player_stats('miles') + 4)
+		elif (self.enabled2Miles == True):
 			self.game.utilities.set_player_stats('miles',self.game.utilities.get_player_stats('miles') + 2)
 		else:
 			self.game.utilities.set_player_stats('miles',self.game.utilities.get_player_stats('miles') + 1)
