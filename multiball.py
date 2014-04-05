@@ -48,6 +48,7 @@ class Multiball(game.Mode):
 		#self.game.update_lamps()
 
 	def update_lamps(self):
+		print "Update Lamps: Multiball"
 		self.disableLockLamps()
 		if (self.ballLock1Lit == True):
 			self.game.lamps.dropHoleLock.schedule(schedule=0xFF00FF00, cycle_seconds=0, now=True)
@@ -115,12 +116,19 @@ class Multiball(game.Mode):
 		self.multiballIntro()
 
 	def multiballIntro(self):
+		self.game.utilities.disableGI()
 		self.game.sound.stop_music()
+		# Sound FX #
+		self.game.sound.play('main_loop_tape_stop')
+		self.game.sound.play('earthquake_1')
 		self.game.sound.play_music('multiball_intro',loops=1,music_volume=.5)
+		self.game.coils.quakeMotor.schedule(schedule=0x08080808,cycle_seconds=-1,now=True)
 		self.resetMultiballStats()
 		self.delay(delay=self.multiballIntroLength,handler=self.multiballRun)
 
 	def multiballRun(self):
+		self.game.utilities.enableGI()
+		self.game.sound.play('centerRampComplete')
 		self.game.sound.play_music('multiball_loop',loops=-1,music_volume=.6)
 		self.game.utilities.acCoilPulse(coilname='bottomBallPopper_RightRampFlashers1',pulsetime=50)
 		self.game.trough.launch_balls(num=2)
@@ -133,6 +141,7 @@ class Multiball(game.Mode):
 		self.game.sound.play_music('main',loops=-1,music_volume=.5)
 		self.resetMultiballStats()
 		self.game.update_lamps()
+		self.game.coils.quakeMotor.disable()
 		self.callback()
 
 	def resetMultiballStats(self):

@@ -71,6 +71,7 @@ class CollectZones(game.Mode):
 		self.update_lamps()
 
 	def update_lamps(self):
+		print "Update Lamps: Collect Zones"
 		#Disable all zone lamps#
 		for item in self.allZoneLamps:
 			self.game.lamps[item].disable()

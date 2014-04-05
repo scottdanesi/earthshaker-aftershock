@@ -51,6 +51,7 @@ class BallSaver(game.Mode):
 		return super(BallSaver, self).mode_stopped()
 
 	def update_lamps(self):
+		print "Update Lamps: Ball Saver"
 		if (self.game.utilities.get_player_stats('ballsave_active') == True and self.ballSaveLampsActive == True):
 			self.startBallSaverLamps()
 		else:

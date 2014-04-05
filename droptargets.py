@@ -51,6 +51,7 @@ class DropTargets(game.Mode):
 		#self.game.utilities.set_player_stats('jackpot_level',1)
 
 	def update_lamps(self):
+		print "Update Lamps: Drop Targets"
 		self.jackpotLevel = self.game.utilities.get_player_stats('jackpot_level')
 		print 'Drop Targets Update Lamps Called'
 		for i in range(1,8):
