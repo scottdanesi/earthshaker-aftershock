@@ -45,8 +45,8 @@ class AttractMode(game.Mode):
 		self.resetQuakeInstitute()
 
 		#### Start Attract Mode Lamps ####
-		#self.startAttractLamps3()
-		self.game.lampctrl.play_show('attract1', repeat=True)
+		self.startAttractLamps3()
+		#self.game.lampctrl.play_show('attract1', repeat=True)
 
 		#### Create and Set Display Content ####
 		self.setDisplayContent()
