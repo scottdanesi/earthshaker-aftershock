@@ -49,15 +49,26 @@ class CenterRampMode(game.Mode):
 		pass
 
 	def update_lamps(self):
+		print "Update Lamps: Center Ramp"
 		### 2 Miles Lamp ###
-		if (self.game.utilities.get_player_stats('multiball_running') == True):
-			self.game.lamps.centerRamp2Miles.schedule(schedule=0xCCCCCCCC, cycle_seconds=0, now=True)
-		elif (self.enabled2Miles == True):
+		if (self.enabled2Miles == True):
 			self.game.lamps.centerRamp2Miles.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=True)
 		else:
 			self.game.lamps.centerRamp2Miles.disable()
 
-		### 50k Target Lamp ###
+		### Center 50k Target Lamp ###
+		if (self.game.utilities.get_player_stats('multiball_running') == True):
+			self.game.lamps.centerRamp50k.schedule(schedule=0xF0F0F0F0, cycle_seconds=0, now=True)
+		else:
+			self.game.lamps.centerRamp50k.disable()
+
+		### Earthquake View Lamp ###
+		if (self.game.utilities.get_player_stats('multiball_running') == True and self.game.utilities.get_player_stats('jackpot_lit') == False):
+			self.game.lamps.leftRoadSign.schedule(schedule=0xF0F0F0F0, cycle_seconds=0, now=True)
+		else:
+			self.game.lamps.leftRoadSign.disable()
+
+		### Right 50k Target Lamp ###
 		if (self.enabled50k == True):
 			self.game.lamps.standupRight50k.enable()
 		else:
@@ -109,18 +120,25 @@ class CenterRampMode(game.Mode):
 		self.update_lamps()
 
 	def centerRampShotCompleted(self):
-		self.centerRampShotStarted = False
 		self.game.lampctrlflash.play_show('center_ramp_1', repeat=False, callback=self.game.update_lamps)
 		#self.game.coils.californiaFault_CenterRampFlashers3.schedule(schedule=0x0000000F, cycle_seconds=1, now=True)
 		#self.game.coils.ejectHole_CenterRampFlashers4.schedule(schedule=0x000000F0, cycle_seconds=1, now=True)
+
 		# Sound FX #
 		self.game.sound.play('centerRampComplete')
+
+		# Light Jackpot? #
+		if (self.game.utilities.get_player_stats('multiball_running') == True and self.game.utilities.get_player_stats('jackpot_lit') == False):
+			self.game.utilities.set_player_stats('jackpot_lit',True)
+
 		# Score it! #
-		self.game.utilities.score(1000)
-		# Award Miles #
 		if (self.game.utilities.get_player_stats('multiball_running') == True):
-			self.game.utilities.set_player_stats('miles',self.game.utilities.get_player_stats('miles') + 4)
-		elif (self.enabled2Miles == True):
+			self.game.utilities.score(50000)
+		else:
+			self.game.utilities.score(1000)
+
+		# Award Miles #
+		if (self.enabled2Miles == True):
 			self.game.utilities.set_player_stats('miles',self.game.utilities.get_player_stats('miles') + 2)
 		else:
 			self.game.utilities.set_player_stats('miles',self.game.utilities.get_player_stats('miles') + 1)
@@ -132,7 +150,7 @@ class CenterRampMode(game.Mode):
 		self.game.utilities.set_player_stats('center_shots',self.game.utilities.get_player_stats('center_shots') + 1)
 		if (self.game.utilities.get_player_stats('center_shots') == self.centerRampShotsToLite50k):
 			self.enable50kTarget()
-		self.update_lamps()
+		#self.update_lamps()
 
 	def enable50kTarget(self):
 		self.enabled50k = True
@@ -141,14 +159,14 @@ class CenterRampMode(game.Mode):
 		self.enabled50k = False
 
 	def sw_centerRampEntry_active(self, sw):
-		self.cancel_delayed('centerRampShotStarted')
+		self.cancel_delayed('centerRampShotStarted') # Needed if the center shot was made by another ball
+		self.centerRampShotStarted = True # This may already be True, but just in case
 		self.game.coils.ballReleaseShooterLane_CenterRampFlashers1.disable()
 		self.game.coils.dropReset_CenterRampFlashers2.disable()
-		self.game.utilities.acFlashSchedule(coilname='ballReleaseShooterLane_CenterRampFlashers1',schedule=0x00000CCC, cycle_seconds=1, now=True)
-		self.game.utilities.acFlashSchedule(coilname='dropReset_CenterRampFlashers2',schedule=0x0000F000, cycle_seconds=1, now=True)
+		self.game.utilities.acFlashSchedule(coilname='ballReleaseShooterLane_CenterRampFlashers1',schedule=0x00000CCC, cycle_seconds=1, now=True) # This needs to be replaced with a lampshow for better AC Relay control 
+		self.game.utilities.acFlashSchedule(coilname='dropReset_CenterRampFlashers2',schedule=0x0000F000, cycle_seconds=1, now=True) # This needs to be replaced with a lampshow for better AC Relay control
 		# Sound FX #
 		self.game.sound.play('centerRampEnter')
-		self.centerRampShotStarted = True
 		self.delay(name='centerRampShotStarted',delay=self.centerRampShotStartedDelay,handler=self.resetCenterRampShotStarted)
 		return procgame.game.SwitchContinue
 
