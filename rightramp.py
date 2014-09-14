@@ -65,7 +65,7 @@ class RightRampMode(game.Mode):
 				self.game.utilities.score(50000)
 				# Sound FX #
 				self.game.sound.play('centerRampComplete')
-				self.game.coils.topBallPopper.pulse(50)
+				self.sendBallToLeftRamp()
 		else:
 			if (self.game.utilities.get_player_stats('lock1_lit') == True or self.game.utilities.get_player_stats('lock2_lit') == True or self.game.utilities.get_player_stats('lock3_lit') == True):
 				self.sendBallToShelter()
@@ -73,7 +73,7 @@ class RightRampMode(game.Mode):
 			else:
 				# Sound FX #
 				self.game.sound.play('centerRampComplete')
-				self.game.coils.topBallPopper.pulse(50)
+				self.sendBallToLeftRamp()
 				self.game.coils.quakeInstitute.enable()
 				self.game.collect_mode.spotZone()
 				self.game.utilities.score(250)
@@ -101,6 +101,10 @@ class RightRampMode(game.Mode):
 		self.openFault()
 		self.delay(delay=2,handler=self.closeFault)
 		self.delay(delay=.5,handler=self.game.coils.topBallPopper.pulse)
+
+	def sendBallToLeftRamp(self):
+		self.closeFault()
+		self.delay(delay=.2,handler=self.game.coils.topBallPopper.pulse)
 
 	def sw_ballPopperTop_closed(self, sw):
 		self.game.utilities.acFlashSchedule(coilname='bottomBallPopper_RightRampFlashers1',schedule=0x0000C00C, cycle_seconds=1, now=True) # This needs to be replaced with a lampshow for better AC Relay control 
