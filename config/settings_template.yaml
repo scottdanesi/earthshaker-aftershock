@@ -122,7 +122,7 @@ Highscore:
 Feature:
   'Jackpot Hold':
     options: [true,false]
-    default: true
+    default: false
   'Drop Target Time':
     options: [5,50]
     increments: 1

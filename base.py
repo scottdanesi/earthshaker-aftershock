@@ -80,14 +80,7 @@ class BaseGameMode(game.Mode):
 		self.game.save_game_data()
 
 		#### Queue Ball Modes ####
-		self.game.modes.add(self.game.skillshot_mode)
-		self.game.modes.add(self.game.centerramp_mode)
-		self.game.modes.add(self.game.tilt)
-		self.game.modes.add(self.game.ballsaver_mode)
-		self.game.modes.add(self.game.drops_mode)
-		self.game.modes.add(self.game.collect_mode)
-		self.game.modes.add(self.game.spinner_mode)
-		self.game.modes.add(self.game.multiball_mode)
+		self.loadBallModes()
 
 		#### Enable Flippers ####
 		self.game.coils.flipperEnable.enable()
@@ -119,6 +112,9 @@ class BaseGameMode(game.Mode):
 		print "Ball Started"
 
 	def finish_ball(self):
+		# Remove Drops mode because of delay issue #
+		self.game.modes.remove(self.game.drops_mode)
+
 		self.game.modes.add(self.game.bonus_mode)
 		if self.game.tiltStatus == 0:
 			self.game.bonus_mode.calculate(self.game.base_mode.end_ball)
@@ -147,13 +143,7 @@ class BaseGameMode(game.Mode):
 		self.game.utilities.log("Current Ball: " + str(self.game.ball),'info')
 
 		#### Remove Ball Modes ####
-		self.game.modes.remove(self.game.skillshot_mode)
-		self.game.modes.remove(self.game.centerramp_mode)
-		self.game.modes.remove(self.game.tilt)
-		self.game.modes.remove(self.game.drops_mode)
-		self.game.modes.remove(self.game.collect_mode)
-		self.game.modes.remove(self.game.spinner_mode)
-		self.game.modes.remove(self.game.multiball_mode)
+		self.unloadBallModes()
 
 		#self.game.sound.fadeout_music(time_ms=1000) #This is causing delay issues with the AC Relay
 		self.game.sound.stop_music()
@@ -199,12 +189,50 @@ class BaseGameMode(game.Mode):
 
 		self.game.reset()
 
+	def loadBallModes(self):
+		self.game.modes.add(self.game.skillshot_mode)
+		self.game.modes.add(self.game.centerramp_mode)
+		self.game.modes.add(self.game.rightramp_mode)
+		self.game.modes.add(self.game.tilt)
+		self.game.modes.add(self.game.ballsaver_mode)
+		self.game.modes.add(self.game.drops_mode)
+		self.game.modes.add(self.game.jackpot_mode)
+		self.game.modes.add(self.game.spinner_mode)
+		self.game.modes.add(self.game.multiball_mode)
+		self.game.modes.add(self.game.collect_mode)
+
+	def unloadBallModes(self):
+		self.game.modes.remove(self.game.skillshot_mode)
+		self.game.modes.remove(self.game.centerramp_mode)
+		self.game.modes.remove(self.game.rightramp_mode)
+		self.game.modes.remove(self.game.tilt)
+		self.game.modes.remove(self.game.ballsaver_mode)
+		self.game.modes.remove(self.game.drops_mode)
+		self.game.modes.remove(self.game.jackpot_mode)
+		self.game.modes.remove(self.game.spinner_mode)
+		self.game.modes.remove(self.game.multiball_mode)
+		self.game.modes.remove(self.game.collect_mode)
+
 	###############################################################
 	# BASE SWITCH HANDLING FUNCTIONS
 	###############################################################		
 	def sw_instituteDown_closed(self, sw):
 		self.game.coils.quakeInstitute.disable()
 		return procgame.game.SwitchStop
+
+	def sw_startButton_active_for_1000ms(self, sw):
+		#########################
+		#Force Stop Game
+		#########################
+		self.game.utilities.log('Force Stop Game','warning')
+
+		#### Remove Ball Modes ####
+		self.unloadBallModes()
+
+		#self.game.sound.fadeout_music(time_ms=1000) #This is causing delay issues with the AC Relay
+		self.game.sound.stop_music()
+
+		self.end_game()
 		
 	def sw_startButton_active_for_20ms(self, sw):
 		print 'Player: ' + str(self.game.players.index)
@@ -223,6 +251,7 @@ class BaseGameMode(game.Mode):
 				#self.game.alpha_score_display.set_text("PLEASE WAIT",1)
 		elif self.game.ball == 1 and len(self.game.players) < 4:
 			self.game.add_player()
+			print 'Player Added - Total Players = ' + str(len(self.game.players))
 			if (len(self.game.players) == 2):
 				self.game.sound.play('player_2_vox')
 				self.game.utilities.displayText(200,topText='PLAYER 2',bottomText='ADDED',seconds=1,justify='center')
@@ -254,19 +283,7 @@ class BaseGameMode(game.Mode):
 
 	def sw_ballPopperBottom_closed_for_1s(self, sw):
 		self.game.utilities.acCoilPulse(coilname='bottomBallPopper_RightRampFlashers1',pulsetime=50)
-		self.game.utilities.score(250)
-		return procgame.game.SwitchStop
-
-	def sw_ballPopperTop_closed_for_1s(self, sw):
-		self.game.coils.topBallPopper.pulse(50)
-		#self.game.coils.quakeMotor.pulse(50)
-		self.game.utilities.score(250)
-		self.game.collect_mode.spotZone()
-		return procgame.game.SwitchStop
-
-	def sw_ballPopperTop_closed(self, sw):
-		#self.game.coils.quakeMotor.pulse(50)
-		self.game.coils.quakeInstitute.enable()
+		self.delay(delay=.2,handler=self.game.sound.play,param='eject')
 		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 

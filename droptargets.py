@@ -33,70 +33,31 @@ class DropTargets(game.Mode):
 	def __init__(self, game, priority):
 			super(DropTargets, self).__init__(game, priority)
 			self.dropTargetHurryUpEnabled = False
-			self.jackpotMaxed = False
 
 			#### Load Mode Feature Defaults ####
-			self.jackpotHold = self.game.user_settings['Feature']['Jackpot Hold']
 			self.dropTargetHurryUpTime = self.game.user_settings['Feature']['Drop Target Time']
 
 	def mode_started(self):
-		self.cancel_delayed('dropReset')
-		if (self.jackpotHold == False):
-			self.game.utilities.set_player_stats('jackpot_level',1)
 		self.resetDrops()
-		self.update_lamps()
-
-	def mode_stopped(self):
-		self.cancel_delayed('dropReset')
-		#self.game.utilities.set_player_stats('jackpot_level',1)
-
-	def update_lamps(self):
-		print "Update Lamps: Drop Targets"
-		self.jackpotLevel = self.game.utilities.get_player_stats('jackpot_level')
-		print 'Drop Targets Update Lamps Called'
-		for i in range(1,8):
-			if (self.jackpotLevel == i):
-				self.jackpotLamp = 'jackpot' + str(i)
-				self.game.lamps[self.jackpotLamp].schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=True)
-			else:
-				self.jackpotLamp = 'jackpot' + str(i)
-				self.game.lamps[self.jackpotLamp].disable()
 
 	def resetDrops(self):
 		self.dropTargetHurryUpEnabled = False
 		if (self.game.switches.dropBankLeft.is_active() == True or self.game.switches.dropBankMid.is_active() == True or self.game.switches.dropBankRight.is_active() == True):
 			self.game.utilities.acCoilPulse('dropReset_CenterRampFlashers2')
 
-	def incrementJackpot(self):
-		if (self.game.utilities.get_player_stats('jackpot_level') < 7):
-			self.game.utilities.set_player_stats('jackpot_level',self.game.utilities.get_player_stats('jackpot_level') + 1)
-			self.game.utilities.displayText(self.priority,topText='JACKPOT',bottomText='INCREASED',justify='center',seconds=2)
-		if (self.game.utilities.get_player_stats('jackpot_level') == 7):
-			self.jackpotMaxed = True
-
 	def checkForCompletion(self):
 		if (self.game.switches.dropBankLeft.is_active() == True and self.game.switches.dropBankMid.is_active() == True and self.game.switches.dropBankRight.is_active() == True):
 			self.dropsCompleted()
 
 	def dropsCompleted(self):
-		self.cancel_delayed('dropReset')
-		self.incrementJackpot()
-		self.update_lamps()
-		if (self.jackpotMaxed == False):
+		self.game.jackpot_mode.incrementJackpot()
+		self.game.jackpot_mode.update_lamps()
+		if (self.game.jackpot_mode.jackpotMaxed == False):
 			self.resetDrops()
 
 	def dropsSwitchHandler(self):
 		self.game.sound.play('drop')
-		if self.jackpotMaxed == False:
-			if (self.dropTargetHurryUpEnabled == False):
-				self.dropTargetHurryUpEnabled = True
-				print 'Drop Target Hurry Time: ' + str(self.dropTargetHurryUpTime)
-				self.delay(name='dropReset',delay=self.dropTargetHurryUpTime,handler=self.resetDrops)
-			else:
-				self.checkForCompletion()
-		else:
-			#Leave drop targets down as the jackpot is maxed
-			self.cancel_delayed('dropReset')
+		self.checkForCompletion()
 
 	def sw_dropBankLeft_closed(self, sw):
 		self.dropsSwitchHandler()

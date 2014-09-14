@@ -31,6 +31,7 @@ import pinproc
 import locale
 import logging
 import math
+from random import *
 
 import player
 from player import *
@@ -42,6 +43,7 @@ class UtilitiesMode(game.Mode):
 			#### Set Global Variables ####
 			##############################
 			self.currentDisplayPriority = 0	
+			self.randomLampPulseCount = 0
 			self.ACCoilInProgress = False
 			self.ACNameArray = []
 			self.ACNameArray.append('outholeKicker_CaptiveFlashers')
@@ -171,6 +173,14 @@ class UtilitiesMode(game.Mode):
 			self.game.alpha_score_display.set_text(self.p.name.upper() + "  BALL "+str(self.game.ball),1,justify='right')
 			print self.p.name
 			print "Ball " + str(self.game.ball)
+
+	def validateCurrentPlayer(self):
+		### This function is to verify that the player has initiated fully ###
+		self.p = self.game.current_player()
+		if (self.p.name.upper() == 'PLAYER 1' or self.p.name.upper() == 'PLAYER 2' or self.p.name.upper() == 'PLAYER 3' or self.p.name.upper() == 'PLAYER 4'):
+			return True
+		else:
+			return False
 	
 	######################
 	#### GI Functions ####
@@ -184,6 +194,20 @@ class UtilitiesMode(game.Mode):
 		self.game.coils.giUpper.disable()
 		self.game.coils.giLower.disable()
 		self.game.coils.giBackbox.disable()
+
+	def randomLampPulse(self, numPulses):
+		randomInt = randint(1,64)
+		i = 1
+		for lamp in self.game.lamps:
+			if randomInt == i:
+				lamp.pulse(200)
+			i += 1
+		self.randomLampPulseCount += 1
+		if (self.randomLampPulseCount <= numPulses):
+			self.delay(delay=.1,handler=self.randomLampPulse,param=numPulses)
+		else:
+			self.randomLampPulseCount = 0
+			
 
 
 	###################################

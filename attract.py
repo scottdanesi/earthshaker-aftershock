@@ -46,7 +46,7 @@ class AttractMode(game.Mode):
 
 		#### Start Attract Mode Lamps ####
 		self.startAttractLamps3()
-		#self.game.lampctrl.play_show('attract1', repeat=True)
+		#self.game.lampctrl.play_show('multiball_intro_1', repeat=True)
 
 		#### Create and Set Display Content ####
 		self.setDisplayContent()

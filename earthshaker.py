@@ -46,6 +46,7 @@ from skillshot import *
 from utilities import *
 from tilt import *
 from centerramp import *
+from rightramp import *
 from player import *
 from ballsaver import *
 from bonus import *
@@ -54,6 +55,7 @@ from collectzones import *
 from spinner import *
 from multiball import *
 from trough import *
+from jackpot import *
 
 # Used to put commas in the score.
 locale.setlocale(locale.LC_ALL, "")
@@ -146,10 +148,12 @@ class EarthshakerAftershock(game.BasicGame):
 		self.trough = Trough(self,2000)
 		self.base_mode = BaseGameMode(self,2)
 		self.attract_mode = AttractMode(self,5)
-		self.centerramp_mode = CenterRampMode(self,8)
+		self.centerramp_mode = CenterRampMode(self,7)
+		self.rightramp_mode = RightRampMode(self,8)
 		self.drops_mode = DropTargets(self,9)
 		self.collect_mode = CollectZones(self,10)
 		self.spinner_mode = Spinner(self,11)
+		self.jackpot_mode = Jackpot(self,12)
 		self.skillshot_mode = SkillshotMode(self,100)
 		self.ballsaver_mode = BallSaver(self,199)
 		self.tilt = Tilt(self,200)
@@ -188,6 +192,7 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_sound('skillshotAwarded', game_sound_path + 'skillshotAwarded.wav')
 		self.sound.register_sound('centerRampEnter', game_sound_path + 'centerRampEntry.wav')
 		self.sound.register_sound('centerRampComplete', game_sound_path + 'centerRampComplete.wav')
+		self.sound.register_sound('rightRampComplete', game_sound_path + 'sweep1.wav',new_sound_volume=.1) #Very loud sample
 		# Tilt Sounds #
 		self.sound.register_sound('tilt_fx', game_sound_path + 'tilt_stern.wav')
 		self.sound.register_sound('tilt_vox', game_sound_path + 'vocal_tilt_killed_a_guy.wav')
@@ -205,9 +210,12 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_sound('bonus_music', game_music_path + 'music_001_bonus.wav',new_sound_volume=.5)
 		# Zone Sounds #
 		self.sound.register_sound('zone_na', game_sound_path + 'zone_na.wav')
-		self.sound.register_sound('zone_awarded', game_sound_path + 'zone_awarded.wav')
+		#self.sound.register_sound('zone_awarded', game_sound_path + 'zone_awarded.wav')
+		self.sound.register_sound('zone_awarded', game_sound_path + 'earthquake1.wav',new_sound_volume=.8)
 		# Drop Sounds #
 		self.sound.register_sound('drop', game_sound_path + 'drop_1.wav')
+		# Eject Sounds #
+		self.sound.register_sound('eject', game_sound_path + 'eject4.wav')
 		# Outlane Sounds #
 		self.sound.register_sound('outlane', game_sound_path + 'outlane1.wav')
 		self.sound.register_sound('inlane', game_sound_path + 'zone_na2.wav')
@@ -227,6 +235,15 @@ class EarthshakerAftershock(game.BasicGame):
 		# Multiball Sounds #
 		self.sound.register_sound('earthquake_1', game_sound_path + 'multiball_intro_earthquake_1.wav')
 		self.sound.register_sound('main_loop_tape_stop', game_sound_path + 'music_001_main_loop_stop.wav',new_sound_volume=.5)
+		self.sound.register_sound('short_out_1', game_sound_path + 'short_out_1.wav')
+		self.sound.register_sound('short_out_2', game_sound_path + 'short_out_2.wav')
+		# Ball Lock Vocals #
+		self.sound.register_sound('ball_lock_1', game_sound_path + 'vocal_lock_ball_1.wav')
+		self.sound.register_sound('ball_lock_2', game_sound_path + 'vocal_lock_ball_2.wav')
+		# Jackpot Vocals #
+		self.sound.register_sound('jackpot', game_sound_path + 'vocal_lionman.wav')
+		self.sound.register_sound('jackpot_increase', game_sound_path + 'vocal_jackpot_increase.wav')
+		self.sound.register_sound('jackpot_lit', game_sound_path + 'vocal_jackpot_lit.wav')
 
 		self.sound.set_volume(10)
 
@@ -234,6 +251,7 @@ class EarthshakerAftershock(game.BasicGame):
 		self.lampctrl.register_show('attract1', game_lampshows + 'attract_random.lampshow')
 		self.lampctrl.register_show('center_ramp_1', game_lampshows + 'center_ramp_complete.lampshow')
 		self.lampctrlflash.register_show('bonus_total', game_lampshows + 'bonus_total.lampshow')
+		self.lampctrlflash.register_show('multiball_intro_1', game_lampshows + 'multiball_intro.lampshow')
 
 	def create_player(self, name):
 		return Player(name)

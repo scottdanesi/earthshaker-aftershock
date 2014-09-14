@@ -55,13 +55,13 @@ class Player(procgame.game.Player):
 			self.player_stats['jackpot_level']=1
 			self.player_stats['total_jackpots_collected']=0
 			self.player_stats['last_multiball_jackpots_collected']=0
+			self.player_stats['jackpot_lit']=False
 
 			### Multiball Stats ######################################
 			self.player_stats['lock1_lit']=False
 			self.player_stats['lock2_lit']=False
 			self.player_stats['lock3_lit']=False
 			self.player_stats['multiball_running']=False
-			self.player_stats['jackpot_lit']=False
 			self.player_stats['balls_locked']=0
 
 			### Right Ramp Stats #####################################

@@ -58,8 +58,10 @@ class CollectZones(game.Mode):
 
 
 	def mode_started(self):
+		self.game.utilities.log('CollectZone Mode - Mode Started','info')
 		self.refreshPlayerInfo()
 		if (len(self.activeZones) == 0 and self.game.multiball_mode.ballLock1Lit == False and self.game.multiball_mode.ballLock2Lit == False and self.game.multiball_mode.ballLock3Lit == False):
+			self.game.utilities.log('CollectZone Mode - Startup Setting New Active Zones','info')
 			self.setNewActiveZones()
 		#self.checkForAllCompletedZones()
 		#if (len(self.activeZones) == 0):
@@ -68,10 +70,12 @@ class CollectZones(game.Mode):
 		return super(CollectZones, self).mode_started()
 
 	def mode_stopped(self):
+		self.game.utilities.log('CollectZone Mode - Mode Stopped','info')
 		self.update_lamps()
 
 	def update_lamps(self):
 		print "Update Lamps: Collect Zones"
+		self.game.utilities.log('CollectZone Mode - Update Lamps','info')
 		#Disable all zone lamps#
 		for item in self.allZoneLamps:
 			self.game.lamps[item].disable()
@@ -119,10 +123,12 @@ class CollectZones(game.Mode):
 				self.game.lamps.captiveArrow9.enable()
 
 	def resetPlayerZones(self):
+		self.game.utilities.log('CollectZone Mode - Reset Player Zones','info')
 		for item in self.allZones:
 			self.game.utilities.set_player_stats(item,-1)
 
 	def refreshPlayerInfo(self):
+		self.game.utilities.log('CollectZone Mode - Refesh Player Zones','info')
 		self.activeZoneLimit = self.game.utilities.get_player_stats('active_zone_limit')
 		#self.activeZoneLimit = self.game.user_settings['Feature']['Active Zone Limit']
 		self.updateAvailableZoneList()
@@ -130,11 +136,13 @@ class CollectZones(game.Mode):
 		self.updateCompletedZoneList()
 
 	def incrementActiveZoneLimit(self):
+		self.game.utilities.log('CollectZone Mode - Increment Active Zone Limit','info')
 		if(self.game.utilities.get_player_stats('active_zone_limit') < 9):
 			self.game.utilities.set_player_stats('active_zone_limit', self.game.utilities.get_player_stats('active_zone_limit') + 1)
 			self.refreshPlayerInfo()
 
 	def refreshAllZoneLists(self):
+		self.game.utilities.log('CollectZone Mode - Refresh All Zones','info')
 		self.updateAvailableZoneList()
 		self.updateActiveZoneList()
 		self.updateCompletedZoneList()
@@ -144,31 +152,37 @@ class CollectZones(game.Mode):
 		self.update_lamps()
 
 	def checkForAllCompletedZones(self):
+		self.game.utilities.log('CollectZone Mode - Check for All Zones Completed','info')
 		if (len(self.activeZones) == 0):
+			self.game.utilities.log('CollectZone Mode - All Zones Completed','info')
 			#All active zones completed
 			#self.incrementActiveZoneLimit() # This will be called fromt he multiball mode
 			self.game.multiball_mode.liteLock(self.game.collect_mode.setNewActiveZones)
 			pass
 
 	def updateAvailableZoneList(self):
+		self.game.utilities.log('CollectZone Mode - Update Player Available Zone List','info')
 		self.availableZones = []
 		for item in self.allZones:
 			if (self.game.utilities.get_player_stats(item) == -1):
 				self.availableZones.append(item)
 
 	def updateActiveZoneList(self):
+		self.game.utilities.log('CollectZone Mode - Update Player Active Zone List','info')
 		self.activeZones = []
 		for item in self.allZones:
 			if (self.game.utilities.get_player_stats(item) == 0):
 				self.activeZones.append(item)
 
 	def updateCompletedZoneList(self):
+		self.game.utilities.log('CollectZone Mode - Update Player Completed Zone List','info')
 		self.completedZones = []
 		for item in self.allZones:
 			if (self.game.utilities.get_player_stats(item) == 1):
 				self.completedZones.append(item)
 
 	def setNewActiveZones(self):
+		self.game.utilities.log('CollectZone Mode - Set New Active Zones','info')
 		self.activeZones = []
 		seed()
 		if (len(self.availableZones) < self.activeZoneLimit):
@@ -186,12 +200,14 @@ class CollectZones(game.Mode):
 		self.update_lamps()
 
 	def scoreZoneCollected(self):
+		self.game.utilities.log('CollectZone Mode - Score Collected Zone','info')
 		self.game.utilities.score(2500)
 		self.game.utilities.set_player_stats('zones_visited',self.game.utilities.get_player_stats('zones_visited') + 1)
 		self.game.sound.play('zone_awarded')
 		self.game.utilities.shakerPulseLow()
 
 	def spotZone(self):
+		self.game.utilities.log('CollectZone Mode - Spot Zone','info')
 		if (len(self.activeZones) > 0):
 			seed()
 			self.game.utilities.set_player_stats(choice(self.activeZones),1)

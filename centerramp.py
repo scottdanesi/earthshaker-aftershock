@@ -129,7 +129,8 @@ class CenterRampMode(game.Mode):
 
 		# Light Jackpot? #
 		if (self.game.utilities.get_player_stats('multiball_running') == True and self.game.utilities.get_player_stats('jackpot_lit') == False):
-			self.game.utilities.set_player_stats('jackpot_lit',True)
+			#self.game.utilities.set_player_stats('jackpot_lit',True)
+			self.game.jackpot_mode.lightJackpot()
 
 		# Score it! #
 		if (self.game.utilities.get_player_stats('multiball_running') == True):
@@ -171,7 +172,7 @@ class CenterRampMode(game.Mode):
 		return procgame.game.SwitchContinue
 
 	def sw_centerRampMiddle_active(self, sw):
-		if (self.centerRampShotStarted == True):
+		if (self.game.utilities.get_player_stats('ball_in_play') == True):
 			self.centerRampShotCompleted()
 		return procgame.game.SwitchContinue
 

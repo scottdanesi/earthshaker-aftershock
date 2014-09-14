@@ -62,6 +62,14 @@ class Multiball(game.Mode):
 			self.game.lamps.dropHoleLock.schedule(schedule=0xFF00FF00, cycle_seconds=0, now=True)
 			self.game.lamps.rightRampLock.schedule(schedule=0x00FF00FF, cycle_seconds=0, now=True)
 			print "Lock 3 is Lit"
+
+		# Update Jackpot Flasher #
+		if (self.game.utilities.get_player_stats('jackpot_lit') == True):
+			self.game.coils.jackpotFlasher.schedule(schedule=0x000C000C, cycle_seconds=0, now=True)
+			self.game.lamps.rightRampJackpot.enable()
+		else:
+			self.game.coils.jackpotFlasher.disable()
+			self.game.lamps.rightRampJackpot.disable()
 			
 	def disableLockLamps(self):
 		self.game.lamps.rightRampLock.disable()
@@ -93,6 +101,7 @@ class Multiball(game.Mode):
 		self.update_lamps()
 
 	def lockBall1(self):
+		self.game.sound.play('ball_lock_1')
 		self.game.utilities.set_player_stats('balls_locked',1)
 		self.game.utilities.set_player_stats('lock1_lit',False)
 		self.getUserStats()
@@ -100,6 +109,7 @@ class Multiball(game.Mode):
 		self.callback()
 
 	def lockBall2(self):
+		self.game.sound.play('ball_lock_2')
 		self.game.utilities.set_player_stats('balls_locked',2)
 		self.game.utilities.set_player_stats('lock2_lit',False)
 		self.getUserStats()
@@ -116,18 +126,30 @@ class Multiball(game.Mode):
 		self.multiballIntro()
 
 	def multiballIntro(self):
+		self.cancel_delayed('dropReset')
 		self.game.utilities.disableGI()
 		self.game.sound.stop_music()
+		self.game.lampctrlflash.play_show('multiball_intro_1', repeat=False)
+		self.game.utilities.randomLampPulse(100)
 		# Sound FX #
-		self.game.sound.play('main_loop_tape_stop')
 		self.game.sound.play('earthquake_1')
 		self.game.sound.play_music('multiball_intro',loops=1,music_volume=.5)
-		self.game.coils.quakeMotor.schedule(schedule=0x08080808,cycle_seconds=-1,now=True)
+		#Short Out Noises
+		self.delay(delay=2,handler=self.game.sound.play,param='short_out_2')
+		self.delay(delay=3,handler=self.game.sound.play,param='short_out_1')
+		self.delay(delay=4.5,handler=self.game.sound.play,param='short_out_1')
+		self.delay(delay=6,handler=self.game.sound.play,param='short_out_2')
+		self.delay(delay=8,handler=self.game.sound.play,param='short_out_1')
+		self.delay(delay=9,handler=self.game.sound.play,param='short_out_2')
+		self.delay(delay=10,handler=self.game.sound.play,param='short_out_1')
+		
+		#self.game.coils.quakeMotor.schedule(schedule=0x08080808,cycle_seconds=-1,now=True)
 		self.resetMultiballStats()
 		self.delay(delay=self.multiballIntroLength,handler=self.multiballRun)
 
 	def multiballRun(self):
 		self.game.utilities.enableGI()
+		self.game.coils.quakeMotor.patter(on_time=15,off_time=100)
 		self.game.sound.play('centerRampComplete')
 		self.game.sound.play_music('multiball_loop',loops=-1,music_volume=.6)
 		self.game.utilities.acCoilPulse(coilname='bottomBallPopper_RightRampFlashers1',pulsetime=50)
@@ -137,6 +159,7 @@ class Multiball(game.Mode):
 
 	def stopMultiball(self):
 		self.game.utilities.set_player_stats('multiball_running',False)
+		self.game.utilities.set_player_stats('jackpot_lit',False)
 		self.game.sound.stop_music()
 		self.game.sound.play_music('main',loops=-1,music_volume=.5)
 		self.resetMultiballStats()
