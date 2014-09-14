@@ -55,6 +55,8 @@ class Jackpot(game.Mode):
 		print "Update Lamps: Jackpot"
 		self.jackpotLevel = self.game.utilities.get_player_stats('jackpot_level')
 		print 'Jackpot Update Lamps Called'
+
+		# Update Jackpot Value #
 		for i in range(1,8):
 			if (self.jackpotLevel == i):
 				self.jackpotLamp = 'jackpot' + str(i)
@@ -62,6 +64,14 @@ class Jackpot(game.Mode):
 			else:
 				self.jackpotLamp = 'jackpot' + str(i)
 				self.game.lamps[self.jackpotLamp].disable()
+
+		# Update Jackpot Flasher #
+		if (self.game.utilities.get_player_stats('jackpot_lit') == True):
+			self.game.coils.jackpotFlasher.schedule(schedule=0x000C000C, cycle_seconds=0, now=True)
+			self.game.lamps.rightRampJackpot.enable()
+		else:
+			self.game.coils.jackpotFlasher.disable()
+			self.game.lamps.rightRampJackpot.disable()
 
 	def incrementJackpot(self):
 		if (self.game.utilities.get_player_stats('jackpot_level') < 7):

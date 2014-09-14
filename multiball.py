@@ -63,13 +63,7 @@ class Multiball(game.Mode):
 			self.game.lamps.rightRampLock.schedule(schedule=0x00FF00FF, cycle_seconds=0, now=True)
 			print "Lock 3 is Lit"
 
-		# Update Jackpot Flasher #
-		if (self.game.utilities.get_player_stats('jackpot_lit') == True):
-			self.game.coils.jackpotFlasher.schedule(schedule=0x000C000C, cycle_seconds=0, now=True)
-			self.game.lamps.rightRampJackpot.enable()
-		else:
-			self.game.coils.jackpotFlasher.disable()
-			self.game.lamps.rightRampJackpot.disable()
+		
 			
 	def disableLockLamps(self):
 		self.game.lamps.rightRampLock.disable()
