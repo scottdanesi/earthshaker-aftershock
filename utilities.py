@@ -255,12 +255,21 @@ class UtilitiesMode(game.Mode):
 	##########################
 	def shakerPulseLow(self):
 		self.game.coils.quakeMotor.pulsed_patter(on_time=5,off_time=25,run_time=255)
+		if (self.game.utilities.get_player_stats('multiball_running') == True):
+			self.delay(delay=.255,handler=self.enableMultiballQuake)
 
 	def shakerPulseMedium(self):
 		self.game.coils.quakeMotor.pulsed_patter(on_time=15,off_time=15,run_time=255)
+		if (self.game.utilities.get_player_stats('multiball_running') == True):
+			self.delay(delay=.255,handler=self.enableMultiballQuake)
 
 	def shakerPulseHigh(self):
 		self.game.coils.quakeMotor.pulse(255)
+		if (self.game.utilities.get_player_stats('multiball_running') == True):
+			self.delay(delay=.255,handler=self.enableMultiballQuake)
+
+	def enableMultiballQuake(self):
+		self.game.coils.quakeMotor.patter(on_time=15,off_time=100)
 
 	###############################
 	#### Backbox LED Functions ####

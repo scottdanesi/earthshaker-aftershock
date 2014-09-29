@@ -69,6 +69,8 @@ class BaseGameMode(game.Mode):
 		self.game.sound.play('game_start_rev')
 		self.delay(delay=1.2,handler=self.game.sound.play,param='game_start')
 		#self.game.sound.play('game_start')
+
+		self.game.rightramp_mode.resetFault()
 		
 		print "Game Started"
 		
@@ -170,6 +172,8 @@ class BaseGameMode(game.Mode):
 
 	def end_game(self):
 		self.game.utilities.log('Game Ended','info')
+
+		self.game.rightramp_mode.closeFault()
 
 		#### Disable Flippers ####
 		self.game.coils.flipperEnable.disable()

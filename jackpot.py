@@ -102,6 +102,8 @@ class Jackpot(game.Mode):
 
 	def awardJackpot(self):
 		self.game.sound.play('jackpot')
+		self.game.utilities.shakerPulseHigh()
+		self.game.lampctrlflash.play_show('jackpot', repeat=False, callback=self.game.update_lamps)
 		if (self.jackpotLevel == 1):
 			self.game.utilities.score(500000)
 		elif (self.jackpotLevel == 2):

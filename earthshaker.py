@@ -205,8 +205,8 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_sound('ball_saved', game_sound_path + 'vocal_ballsaver_1.wav')
 		self.sound.register_sound('ball_saved', game_sound_path + 'vocal_ballsaver_2.wav')
 		# Bonus Sounds #
-		self.sound.register_sound('bonus_features', game_sound_path + 'bonus_feature.wav')
-		self.sound.register_sound('bonus_total', game_sound_path + 'bonus_total.wav')
+		self.sound.register_sound('bonus_features', game_sound_path + 'bonus_feature_v8.wav')
+		self.sound.register_sound('bonus_total', game_sound_path + 'bonus_total_v5.wav')
 		self.sound.register_sound('bonus_music', game_music_path + 'music_001_bonus.wav',new_sound_volume=.5)
 		# Zone Sounds #
 		self.sound.register_sound('zone_na', game_sound_path + 'zone_na.wav')
@@ -252,6 +252,9 @@ class EarthshakerAftershock(game.BasicGame):
 		self.lampctrl.register_show('center_ramp_1', game_lampshows + 'center_ramp_complete.lampshow')
 		self.lampctrlflash.register_show('bonus_total', game_lampshows + 'bonus_total.lampshow')
 		self.lampctrlflash.register_show('multiball_intro_1', game_lampshows + 'multiball_intro.lampshow')
+		self.lampctrl.register_show('right_ramp_1', game_lampshows + 'right_ramp_complete.lampshow')
+		self.lampctrl.register_show('right_ramp_eject', game_lampshows + 'right_ramp_eject.lampshow')
+		self.lampctrl.register_show('jackpot', game_lampshows + 'jackpot.lampshow')
 
 	def create_player(self, name):
 		return Player(name)

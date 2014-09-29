@@ -143,7 +143,8 @@ class Multiball(game.Mode):
 
 	def multiballRun(self):
 		self.game.utilities.enableGI()
-		self.game.coils.quakeMotor.patter(on_time=15,off_time=100)
+		#self.game.coils.quakeMotor.patter(on_time=15,off_time=100)
+		self.game.utilities.enableMultiballQuake()
 		self.game.sound.play('centerRampComplete')
 		self.game.sound.play_music('multiball_loop',loops=-1,music_volume=.6)
 		self.game.utilities.acCoilPulse(coilname='bottomBallPopper_RightRampFlashers1',pulsetime=50)
