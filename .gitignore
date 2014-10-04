@@ -2,9 +2,11 @@
 /procgame/*
 /gamedesign/*
 /stdout/*
+/DP Suite/*
 /config/settings.yaml
 /config/game_data.yaml
 /lamps/LampshowTimeCalculator.xlsx
+/lamps/fix.bat
 #############
 ## Log File
 #############
