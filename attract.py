@@ -38,15 +38,23 @@ class AttractMode(game.Mode):
 			super(AttractMode, self).__init__(game, priority)
 			self.modeTickCounter = 0
 			self.attractTest = False
+			self.attractLampshowKey = 0
+			self.attractLampshows = 12
 
 	def mode_started(self):
 		#### Reset Quake Instituet ####
 		#### Be sure it is in the upright position ####
 		self.resetQuakeInstitute()
+		
+		#### Set Diagnostic LED ####
+		self.game.utilities.setDiagLED(0)
+
+		self.game.coils.acSelect.enable()
 
 		#### Start Attract Mode Lamps ####
-		self.startAttractLamps3()
-		#self.game.lampctrl.play_show('multiball_intro_1', repeat=True)
+		#self.startAttractLamps3()
+		#self.game.lampctrl.play_show('attract1', repeat=True)
+		self.changeAttractLampshow()
 
 		#### Create and Set Display Content ####
 		self.setDisplayContent()
@@ -70,7 +78,9 @@ class AttractMode(game.Mode):
 		for lamp in self.game.lamps:
 			lamp.disable()
 
+		self.cancel_delayed('lampshows')
 		self.game.lampctrl.stop_show()
+		self.game.lampctrlflash.stop_show()
 
 		#### Cancel Display Script ####
 		self.game.alpha_score_display.cancel_script()
@@ -81,6 +91,16 @@ class AttractMode(game.Mode):
 
 		#### Disable Backbox Lighting ####
 		self.game.utilities.setBackboxLED()
+
+	def changeAttractLampshow(self):
+		if (self.attractLampshowKey < self.attractLampshows):
+			self.attractLampshowKey += 1
+		else:
+			self.attractLampshowKey = 1
+		self.game.lampctrlflash.stop_show()
+		self.game.lampctrlflash.play_show('attract' + str(self.attractLampshowKey), repeat=True)
+		self.delay(name='lampshows',delay=2,handler=self.changeAttractLampshow)
+
 			
 	def setDisplayContent(self):
 		#### Script List Variable Initialization ####
@@ -194,6 +214,11 @@ class AttractMode(game.Mode):
 		animEarthshaker2.append({'top':'U               ','bottom':'               Z','timer':.05,'transition':0})
 		animEarthshaker2.append({'top':'                ','bottom':'                ','timer':.5,'transition':0})
 
+		###################
+		#### Game Over Text
+		###################
+		script.append({'top':'GAME OVER','bottom':'PLAY AGAIN','timer':4,'transition':0})
+		
 		########################################################
 		#### Title Screen Animation ############################
 		#### Adds the animation defined above to the script list
@@ -281,10 +306,17 @@ class AttractMode(game.Mode):
 		###################
 		#### Special Thanks
 		###################
-		script.append({'top':'SPECIAL THANKS','bottom':'MYPINBALLS','timer':2,'transition':2})
-		script.append({'top':'SPECIAL THANKS','bottom':'MARK SUNNUCKS','timer':2,'transition':2})
-		script.append({'top':'SPECIAL THANKS','bottom':'EP THE GEEK','timer':2,'transition':2})
-		script.append({'top':'SPECIAL THANKS','bottom':'MULTIMORPHIC','timer':2,'transition':2})
+		script.append({'top':'SPECIAL THANKS','bottom':'MULTIMORPHIC','timer':1.5,'transition':2})
+		script.append({'top':'SPECIAL THANKS','bottom':'MARK SUNNUCKS','timer':1.5,'transition':2})
+		script.append({'top':'SPECIAL THANKS','bottom':'MYPINBALLS','timer':1.5,'transition':2})
+		script.append({'top':'SPECIAL THANKS','bottom':'KOEN HELTZEL','timer':1.5,'transition':2})
+		script.append({'top':'SPECIAL THANKS','bottom':'EP THE GEEK','timer':1.5,'transition':2})
+
+		#####################
+		#### Powered By P-ROC
+		#####################
+		script.append({'top':'PROUDLY POWERED','bottom':'BY P-ROC','timer':4,'transition':2})
+		
 		
 		#############################
 		#### Start New Display Script
