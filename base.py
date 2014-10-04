@@ -50,6 +50,8 @@ class BaseGameMode(game.Mode):
 	def start_game(self):
 		self.game.utilities.log('Start Game','info')
 
+		self.game.sound.stop_music()
+
 		#Reset Prior Game Scores
 		self.game.game_data['LastGameScores']['LastPlayer1Score'] = ' '
 		self.game.game_data['LastGameScores']['LastPlayer2Score'] = ' '
@@ -80,6 +82,9 @@ class BaseGameMode(game.Mode):
 		#### Update Audits ####
 		self.game.game_data['Audits']['Balls Played'] += 1
 		self.game.save_game_data()
+		
+		#### Set Diagnostic LED ####
+		self.game.utilities.setDiagLED(self.game.current_player_index + 1)
 
 		#### Queue Ball Modes ####
 		self.loadBallModes()
@@ -183,13 +188,16 @@ class BaseGameMode(game.Mode):
 
 		#### Disable AC Relay ####
 		self.cancel_delayed(name='acEnableDelay')
-		self.game.coils.acSelect.disable()
+		#self.game.coils.acSelect.disable()
 
 		#### Update Gmaes Played Stats ####
 		self.game.game_data['Audits']['Games Played'] += 1
 
 		#### Save Game Audit Data ####
 		self.game.save_game_data()
+
+		#self.game.modes.add(self.game.attract_mode)
+		self.game.sound.play_music('game_over',loops=1,music_volume=1)
 
 		self.game.reset()
 
@@ -204,6 +212,7 @@ class BaseGameMode(game.Mode):
 		self.game.modes.add(self.game.spinner_mode)
 		self.game.modes.add(self.game.multiball_mode)
 		self.game.modes.add(self.game.collect_mode)
+		self.game.modes.add(self.game.shelter_mode)
 
 	def unloadBallModes(self):
 		self.game.modes.remove(self.game.skillshot_mode)
@@ -216,13 +225,14 @@ class BaseGameMode(game.Mode):
 		self.game.modes.remove(self.game.spinner_mode)
 		self.game.modes.remove(self.game.multiball_mode)
 		self.game.modes.remove(self.game.collect_mode)
+		self.game.modes.remove(self.game.shelter_mode)
 
 	###############################################################
 	# BASE SWITCH HANDLING FUNCTIONS
 	###############################################################		
-	def sw_instituteDown_closed(self, sw):
-		self.game.coils.quakeInstitute.disable()
-		return procgame.game.SwitchStop
+	#def sw_instituteDown_closed(self, sw):
+		#self.game.coils.quakeInstitute.disable()
+		#return procgame.game.SwitchStop
 
 	def sw_startButton_active_for_1000ms(self, sw):
 		#########################
@@ -283,12 +293,6 @@ class BaseGameMode(game.Mode):
 
 	def sw_ejectHole5_closed_for_1s(self, sw):
 		self.game.utilities.acCoilPulse(coilname='ejectHole_CenterRampFlashers4',pulsetime=50)
-		return procgame.game.SwitchStop
-
-	def sw_ballPopperBottom_closed_for_1s(self, sw):
-		self.game.utilities.acCoilPulse(coilname='bottomBallPopper_RightRampFlashers1',pulsetime=50)
-		self.delay(delay=.2,handler=self.game.sound.play,param='eject')
-		self.game.utilities.score(250)
 		return procgame.game.SwitchStop
 
 	def sw_jetLeft_active(self, sw):

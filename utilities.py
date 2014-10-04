@@ -89,6 +89,7 @@ class UtilitiesMode(game.Mode):
 			self.game.coils.topBallPopper.pulse(50) #Does not need AC Relay logic
 		if self.game.switches.ballShooter.is_active()==True:
 			self.game.coils.autoLauncher.pulse(100) #Does not need AC Relay logic
+		#self.game.coils.quakeInstitute.enable()
 
 	def launch_ball(self):
 		if self.game.switches.ballShooter.is_active()==True:
@@ -249,6 +250,26 @@ class UtilitiesMode(game.Mode):
 			return self.p.score
 		else:
 			return 0
+			
+	def setDiagLED(self, player_num):
+		if (player_num == 1):
+			### Player 1 ###
+			self.game.coils.diagLED.schedule(schedule=0x0000000F, cycle_seconds=0, now=False)
+		elif (player_num == 2):
+			### Player 2 ###
+			self.game.coils.diagLED.schedule(schedule=0x00000F0F, cycle_seconds=0, now=False)
+		elif (player_num == 3):
+			### Player 2 ###
+			self.game.coils.diagLED.schedule(schedule=0x000F0F0F, cycle_seconds=0, now=False)
+		elif (player_num == 4):
+			### Player 2 ###
+			self.game.coils.diagLED.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=False)
+		elif (player_num == 0):
+			### Player 2 ###
+			self.game.coils.diagLED.schedule(schedule=0x33333333, cycle_seconds=0, now=False)
+		elif (player_num == -1):
+			### Player 2 ###
+			self.game.coils.diagLED.disable
 
 	##########################
 	#### Shaker Functions ####

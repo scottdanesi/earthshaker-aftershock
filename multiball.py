@@ -169,21 +169,21 @@ class Multiball(game.Mode):
 		self.game.utilities.set_player_stats('balls_locked',0)
 		self.getUserStats()
 		
-	def sw_underPlayfieldDrop1_active(self, sw):
-		if (self.ballLock1Lit == True):
-			self.lockBall1()
-		elif (self.ballLock2Lit == True):
-			self.lockBall2()
-		elif (self.ballLock3Lit == True):
-			self.startMultiball()
-		else:
-			pass
+	#def sw_underPlayfieldDrop1_active(self, sw):
+		#if (self.ballLock1Lit == True):
+			#self.lockBall1()
+		#elif (self.ballLock2Lit == True):
+			#self.lockBall2()
+		#elif (self.ballLock3Lit == True):
+			#self.startMultiball()
+		#else:
+			#pass
 
-	def sw_ballPopperBottom_closed(self, sw):
-		if(self.multiballStarting == True):
-			return procgame.game.SwitchStop
-		else:
-			return procgame.game.SwitchContinue
+	#def sw_ballPopperBottom_closed(self, sw):
+		#if(self.multiballStarting == True):
+			#return procgame.game.SwitchStop
+		#else:
+			#return procgame.game.SwitchContinue
 
 	def sw_outhole_closed_for_500ms(self, sw):
 		#if (self.game.trough.num_balls_in_play == 2):

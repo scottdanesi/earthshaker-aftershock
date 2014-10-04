@@ -85,6 +85,8 @@ class SkillshotMode(game.Mode):
 
 	def superSkillshotAwarded(self):
 		self.game.sound.play_voice('skillshotAwarded')
+		self.game.sound.play_voice('complete_shot')
+		self.game.lampctrlflash.play_show('super_skillshot', repeat=False, callback=self.game.update_lamps)
 		self.game.utilities.displayText(100,'SUPER SKILLSHOT',locale.format("%d", self.superSkillshotValue * self.game.utilities.get_player_stats('skillshot_x'), grouping=True) + ' POINTS',seconds=self.skillshotDisplayTime,justify='center')
 		self.game.utilities.score(self.superSkillshotValue * self.game.utilities.get_player_stats('skillshot_x'))
 		self.game.utilities.set_player_stats('skillshot_x',self.game.utilities.get_player_stats('skillshot_x') + 1)
@@ -110,6 +112,7 @@ class SkillshotMode(game.Mode):
 	def sw_onRamp50k_active(self, sw):
 		self.game.utilities.displayText(100,'SKILLSHOT',locale.format("%d", 50000 * self.game.utilities.get_player_stats('skillshot_x'), grouping=True) + ' POINTS',seconds=self.skillshotDisplayTime,justify='center')
 		self.game.utilities.score(50000 * self.game.utilities.get_player_stats('skillshot_x'))
+		self.game.lampctrlflash.play_show('skillshot', repeat=False, callback=self.game.update_lamps)
 		# Spot a Random Zone
 		self.game.collect_mode.spotZone()
 		self.skillshotAwarded()
@@ -118,6 +121,7 @@ class SkillshotMode(game.Mode):
 	def sw_onRamp25k_active(self, sw):
 		self.game.utilities.displayText(100,'SKILLSHOT',locale.format("%d", 25000 * self.game.utilities.get_player_stats('skillshot_x'), grouping=True) + ' POINTS',seconds=self.skillshotDisplayTime,justify='center')
 		self.game.utilities.score(25000 * self.game.utilities.get_player_stats('skillshot_x'))
+		self.game.lampctrlflash.play_show('skillshot', repeat=False, callback=self.game.update_lamps)
 		# Spot a Random Zone
 		self.game.collect_mode.spotZone()
 		self.skillshotAwarded()
@@ -126,6 +130,7 @@ class SkillshotMode(game.Mode):
 	def sw_onRamp100k_active(self, sw):
 		self.game.utilities.displayText(100,'SKILLSHOT',locale.format("%d", 100000 * self.game.utilities.get_player_stats('skillshot_x'), grouping=True) + ' POINTS',seconds=self.skillshotDisplayTime,justify='center')
 		self.game.utilities.score(100000 * self.game.utilities.get_player_stats('skillshot_x'))
+		self.game.lampctrlflash.play_show('skillshot', repeat=False, callback=self.game.update_lamps)
 		# Spot a Random Zone
 		self.game.collect_mode.spotZone()
 		self.skillshotAwarded()

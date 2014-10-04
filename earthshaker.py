@@ -56,6 +56,7 @@ from spinner import *
 from multiball import *
 from trough import *
 from jackpot import *
+from shelter import *
 
 # Used to put commas in the score.
 locale.setlocale(locale.LC_ALL, "")
@@ -145,7 +146,7 @@ class EarthshakerAftershock(game.BasicGame):
 
 		#### Mode Definitions ####
 		self.utilities = UtilitiesMode(self,0)
-		self.trough = Trough(self,2000)
+		
 		self.base_mode = BaseGameMode(self,2)
 		self.attract_mode = AttractMode(self,5)
 		self.centerramp_mode = CenterRampMode(self,7)
@@ -154,11 +155,14 @@ class EarthshakerAftershock(game.BasicGame):
 		self.collect_mode = CollectZones(self,10)
 		self.spinner_mode = Spinner(self,11)
 		self.jackpot_mode = Jackpot(self,12)
+		self.shelter_mode = Shelter(self,99)
 		self.skillshot_mode = SkillshotMode(self,100)
+		self.multiball_mode = Multiball(self,101)
 		self.ballsaver_mode = BallSaver(self,199)
 		self.tilt = Tilt(self,200)
 		self.bonus_mode = Bonus(self,1000)
-		self.multiball_mode = Multiball(self,101)
+		self.trough = Trough(self,2000)
+		
 		
 		#### Initial Mode Queue ####
 		self.modes.add(self.utilities)
@@ -179,6 +183,7 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_music('shooter', game_music_path + 'music_001_shooter_loop.wav')
 		self.sound.register_music('multiball_intro', game_music_path + 'music_001_multiball_start.wav')
 		self.sound.register_music('multiball_loop', game_music_path + 'music_001_multiball_loop.wav')
+		self.sound.register_music('game_over', game_music_path + 'music_001_game_over.wav')
 		#self.sound.register_music('main', game_music_path + 'music_001_main_loop.wav')
 		#self.sound.register_music('shooter', game_music_path + 'music_001_shooter_loop.wav')
 		#self.sound.register_music('main', game_music_path + 'music_002_main_loop.wav')
@@ -241,20 +246,41 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_sound('ball_lock_1', game_sound_path + 'vocal_lock_ball_1.wav')
 		self.sound.register_sound('ball_lock_2', game_sound_path + 'vocal_lock_ball_2.wav')
 		# Jackpot Vocals #
+		self.sound.register_sound('jackpot', game_sound_path + 'vocal_jackpot_1.wav')
+		self.sound.register_sound('jackpot', game_sound_path + 'vocal_jackpot_2.wav')
 		self.sound.register_sound('jackpot', game_sound_path + 'vocal_lionman.wav')
 		self.sound.register_sound('jackpot_increase', game_sound_path + 'vocal_jackpot_increase.wav')
 		self.sound.register_sound('jackpot_lit', game_sound_path + 'vocal_jackpot_lit.wav')
+		# Complete Shot Vocals #
+		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_encourage_greatshot.wav')
+		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_encourage_niceshot.wav')
 
 		self.sound.set_volume(10)
 
 	def RegisterLampshows(self):
-		self.lampctrl.register_show('attract1', game_lampshows + 'attract_random.lampshow')
-		self.lampctrl.register_show('center_ramp_1', game_lampshows + 'center_ramp_complete.lampshow')
-		self.lampctrlflash.register_show('bonus_total', game_lampshows + 'bonus_total.lampshow')
+		self.lampctrl.register_show('attract1', game_lampshows + 'attract_grow.lampshow')
+		self.lampctrl.register_show('attract2', game_lampshows + 'attract_grow.lampshow')
+		self.lampctrl.register_show('attract3', game_lampshows + 'attract_horizontal_sweep.lampshow')
+		self.lampctrl.register_show('attract4', game_lampshows + 'attract_horizontal_sweep.lampshow')
+		self.lampctrl.register_show('attract5', game_lampshows + 'attract_vertical_sweep.lampshow')
+		self.lampctrl.register_show('attract6', game_lampshows + 'attract_vertical_sweep.lampshow')
+		self.lampctrl.register_show('attract7', game_lampshows + 'attract_radar_ccw.lampshow')
+		self.lampctrl.register_show('attract8', game_lampshows + 'attract_radar_ccw.lampshow')
+		self.lampctrl.register_show('attract9', game_lampshows + 'attract_radar_cw.lampshow')
+		self.lampctrl.register_show('attract10', game_lampshows + 'attract_radar_cw.lampshow')
+		self.lampctrl.register_show('attract11', game_lampshows + 'attract_sweep_horizontalsparkle.lampshow')
+		self.lampctrl.register_show('attract12', game_lampshows + 'attract_sweep_horizontalsparkle.lampshow')
+		self.lampctrl.register_show('center_ramp_1', game_lampshows + 'centerramp_complete_a.lampshow')
+		self.lampctrlflash.register_show('bonus_feat_left', game_lampshows + 'bonus_feature_left.lampshow')
+		self.lampctrlflash.register_show('bonus_feat_right', game_lampshows + 'bonus_feature_right.lampshow')
+		self.lampctrlflash.register_show('bonus_total', game_lampshows + 'bonus_total_a.lampshow')
 		self.lampctrlflash.register_show('multiball_intro_1', game_lampshows + 'multiball_intro.lampshow')
-		self.lampctrl.register_show('right_ramp_1', game_lampshows + 'right_ramp_complete.lampshow')
+		self.lampctrl.register_show('right_ramp_1', game_lampshows + 'rightramp_complete_a.lampshow')
 		self.lampctrl.register_show('right_ramp_eject', game_lampshows + 'right_ramp_eject.lampshow')
 		self.lampctrl.register_show('jackpot', game_lampshows + 'jackpot.lampshow')
+		self.lampctrl.register_show('skillshot', game_lampshows + 'skillshot_standard_awarded.lampshow')
+		self.lampctrl.register_show('super_skillshot', game_lampshows + 'skillshot_super_awarded.lampshow')
+		self.lampctrl.register_show('zone_collected', game_lampshows + 'zones_zonecollected_a.lampshow')
 
 	def create_player(self, name):
 		return Player(name)

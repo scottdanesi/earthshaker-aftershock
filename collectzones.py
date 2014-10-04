@@ -225,7 +225,10 @@ class CollectZones(game.Mode):
 	def sw_leftStandup1_closed(self, sw):
 		if ('zone1_status' in self.activeZones):
 			self.game.utilities.set_player_stats('zone1_status',1)
-			self.game.utilities.acFlashSchedule(coilname='californiaFault_CenterRampFlashers3',schedule=0x000000CC, cycle_seconds=1, now=True)
+			self.game.lampctrl.play_show('zone_collected', repeat=False)
+			self.delay(delay=.25,handler=self.game.lampctrl.stop_show)
+			self.delay(delay=.3,handler=self.game.update_lamps)
+			#self.game.utilities.acFlashSchedule(coilname='californiaFault_CenterRampFlashers3',schedule=0x000000CC, cycle_seconds=1, now=True)
 			self.scoreZoneCollected()
 			self.refreshAllZoneLists()
 		else:
@@ -236,7 +239,10 @@ class CollectZones(game.Mode):
 	def sw_rightStandupHigh2_closed(self, sw):
 		if ('zone2_status' in self.activeZones):
 			self.game.utilities.set_player_stats('zone2_status',1)
-			self.game.utilities.acFlashSchedule(coilname='outholeKicker_CaptiveFlashers',schedule=0x000000CC, cycle_seconds=1, now=True)
+			self.game.lampctrl.play_show('zone_collected', repeat=False)
+			self.delay(delay=.25,handler=self.game.lampctrl.stop_show)
+			self.delay(delay=.3,handler=self.game.update_lamps)
+			#self.game.utilities.acFlashSchedule(coilname='outholeKicker_CaptiveFlashers',schedule=0x000000CC, cycle_seconds=1, now=True)
 			self.scoreZoneCollected()
 			self.refreshAllZoneLists()
 		else:
@@ -247,7 +253,10 @@ class CollectZones(game.Mode):
 	def sw_rightStandupLow3_closed(self, sw):
 		if ('zone3_status' in self.activeZones):
 			self.game.utilities.set_player_stats('zone3_status',1)
-			self.game.utilities.acFlashSchedule(coilname='outholeKicker_CaptiveFlashers',schedule=0x000000CC, cycle_seconds=1, now=True)
+			self.game.lampctrl.play_show('zone_collected', repeat=False)
+			self.delay(delay=.25,handler=self.game.lampctrl.stop_show)
+			self.delay(delay=.3,handler=self.game.update_lamps)
+			#self.game.utilities.acFlashSchedule(coilname='outholeKicker_CaptiveFlashers',schedule=0x000000CC, cycle_seconds=1, now=True)
 			self.scoreZoneCollected()
 			self.refreshAllZoneLists()
 		else:
@@ -258,7 +267,10 @@ class CollectZones(game.Mode):
 	def sw_centerStandup4_closed(self, sw):
 		if ('zone4_status' in self.activeZones):
 			self.game.utilities.set_player_stats('zone4_status',1)
-			self.game.utilities.acFlashSchedule(coilname='ballReleaseShooterLane_CenterRampFlashers1',schedule=0x000000CC, cycle_seconds=1, now=True)
+			self.game.lampctrl.play_show('zone_collected', repeat=False)
+			self.delay(delay=.25,handler=self.game.lampctrl.stop_show)
+			self.delay(delay=.3,handler=self.game.update_lamps)
+			#self.game.utilities.acFlashSchedule(coilname='ballReleaseShooterLane_CenterRampFlashers1',schedule=0x000000CC, cycle_seconds=1, now=True)
 			self.scoreZoneCollected()
 			self.refreshAllZoneLists()
 		else:
@@ -269,7 +281,10 @@ class CollectZones(game.Mode):
 	def sw_ejectHole5_closed_for_100ms(self, sw):
 		if ('zone5_status' in self.activeZones):
 			self.game.utilities.set_player_stats('zone5_status',1)
-			self.game.utilities.acFlashSchedule(coilname='californiaFault_CenterRampFlashers3',schedule=0x000000CC, cycle_seconds=1, now=True)
+			self.game.lampctrl.play_show('zone_collected', repeat=False)
+			self.delay(delay=.25,handler=self.game.lampctrl.stop_show)
+			self.delay(delay=.3,handler=self.game.update_lamps)
+			#self.game.utilities.acFlashSchedule(coilname='californiaFault_CenterRampFlashers3',schedule=0x000000CC, cycle_seconds=1, now=True)
 			self.scoreZoneCollected()
 			self.refreshAllZoneLists()
 		else:
@@ -280,9 +295,12 @@ class CollectZones(game.Mode):
 	def sw_rightLoop6_closed(self, sw):
 		if ('zone6_status' in self.activeZones):
 			self.game.utilities.set_player_stats('zone6_status',1)
-			self.game.utilities.acFlashSchedule(coilname='bottomBallPopper_RightRampFlashers1',schedule=0x0000000E, cycle_seconds=1, now=True)
-			self.game.utilities.acFlashSchedule(coilname='knocker_RightRampFlashers2',schedule=0x000000E0, cycle_seconds=1, now=True)
-			self.game.utilities.acFlashSchedule(coilname='unused_RightRampFlashers3',schedule=0x00000E00, cycle_seconds=1, now=True)
+			self.game.lampctrl.play_show('zone_collected', repeat=False)
+			self.delay(delay=.25,handler=self.game.lampctrl.stop_show)
+			self.delay(delay=.3,handler=self.game.update_lamps)
+			#self.game.utilities.acFlashSchedule(coilname='bottomBallPopper_RightRampFlashers1',schedule=0x0000000E, cycle_seconds=1, now=True)
+			#self.game.utilities.acFlashSchedule(coilname='knocker_RightRampFlashers2',schedule=0x000000E0, cycle_seconds=1, now=True)
+			#self.game.utilities.acFlashSchedule(coilname='unused_RightRampFlashers3',schedule=0x00000E00, cycle_seconds=1, now=True)
 			self.scoreZoneCollected()
 			self.refreshAllZoneLists()
 		else:
@@ -293,6 +311,9 @@ class CollectZones(game.Mode):
 	def sw_rightInsideReturn7_closed(self, sw):
 		if ('zone7_status' in self.activeZones):
 			self.game.utilities.set_player_stats('zone7_status',1)
+			self.game.lampctrl.play_show('zone_collected', repeat=False)
+			self.delay(delay=.25,handler=self.game.lampctrl.stop_show)
+			self.delay(delay=.3,handler=self.game.update_lamps)
 			self.scoreZoneCollected()
 			self.refreshAllZoneLists()
 		else:
@@ -303,7 +324,10 @@ class CollectZones(game.Mode):
 	def sw_leftReturnLane8_closed(self, sw):
 		if ('zone8_status' in self.activeZones):
 			self.game.utilities.set_player_stats('zone8_status',1)
-			self.game.utilities.acFlashSchedule(coilname='ejectHole_CenterRampFlashers4',schedule=0x000000CC, cycle_seconds=1, now=True)
+			self.game.lampctrl.play_show('zone_collected', repeat=False)
+			self.delay(delay=.25,handler=self.game.lampctrl.stop_show)
+			self.delay(delay=.3,handler=self.game.update_lamps)
+			#self.game.utilities.acFlashSchedule(coilname='ejectHole_CenterRampFlashers4',schedule=0x000000CC, cycle_seconds=1, now=True)
 			self.scoreZoneCollected()
 			self.refreshAllZoneLists()
 		else:
@@ -314,7 +338,11 @@ class CollectZones(game.Mode):
 	def sw_captiveBall9_closed(self, sw):
 		if ('zone9_status' in self.activeZones):
 			self.game.utilities.set_player_stats('zone9_status',1)
-			self.game.utilities.acFlashSchedule(coilname='outholeKicker_CaptiveFlashers',schedule=0x000000CC, cycle_seconds=1, now=True)
+			if (self.game.utilities.get_player_stats('skillshot_active') == False):
+				self.game.lampctrl.play_show('zone_collected', repeat=False)
+				self.delay(delay=.25,handler=self.game.lampctrl.stop_show)
+				self.delay(delay=.3,handler=self.game.update_lamps)
+			#self.game.utilities.acFlashSchedule(coilname='outholeKicker_CaptiveFlashers',schedule=0x000000CC, cycle_seconds=1, now=True)
 			self.scoreZoneCollected()
 			self.refreshAllZoneLists()
 		else:
