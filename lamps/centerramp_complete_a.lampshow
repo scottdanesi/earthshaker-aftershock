@@ -1,0 +1,114 @@
+###################################################################################
+# Lightshow: centerramp_complete_a
+# Type: simple
+# Length: 32 frames / 1 seconds
+###################################################################################
+# Markers:                                       |        8      16      24      32
+# Frames:                                        | 12345678123456781234567812345678
+###################################################################################
+# Driver group: Flashers
+###################################################################################
+coil:outholeKicker_CaptiveFlashers              |                  ..             
+coil:ballReleaseShooterLane_CenterRampFlashers1 |                           ..    
+coil:dropReset_CenterRampFlashers2              | .                             ..
+coil:californiaFault_CenterRampFlashers3        |   ...                           
+coil:ejectHole_CenterRampFlashers4              |         ...                     
+coil:bottomBallPopper_RightRampFlashers1        |                        ..       
+coil:knocker_RightRampFlashers2                 |                        ...      
+coil:unused_RightRampFlashers3                  |                         ..      
+coil:jackpotFlasher                             |             ..                  
+coil:onRampJetBumperFlashers                    |  ..                             
+###################################################################################
+# Driver group: Jackpot
+###################################################################################
+lamp:jackpot1                                   |                              .. 
+lamp:jackpot2                                   |                             ..  
+lamp:jackpot3                                   |                             ..  
+lamp:jackpot4                                   |                            ..   
+lamp:jackpot5                                   |                           ...   
+lamp:jackpot6                                   |                           ..    
+lamp:jackpot7                                   |                           ..    
+###################################################################################
+# Driver group: Captive
+###################################################################################
+lamp:captive25k                                 |             ..                  
+lamp:captive50k                                 |              ..                 
+lamp:captive100k                                |              ..                 
+lamp:captive150k                                |              ...                
+lamp:captive250k                                |               ..                
+lamp:captiveArrow9                              |                ..               
+###################################################################################
+# Driver group: Topleft
+###################################################################################
+lamp:spinner                                    | .                            ...
+lamp:jetCenter                                  |  ..                             
+###################################################################################
+# Driver group: Bonus
+###################################################################################
+lamp:bonus2x                                    |            ..                   
+lamp:bonus3x                                    |            ..                   
+lamp:bonus4x                                    |             ..                  
+lamp:bonus5x                                    |             ..                  
+lamp:bonus6xExtraBall                           |              ..                 
+lamp:bonus6xSpecial                             |             ..                  
+lamp:shootAgain                                 |             ..                  
+###################################################################################
+# Driver group: Lowerleft
+###################################################################################
+lamp:inlaneLeft8                                |           ..                    
+lamp:outlaneLeft                                |          ..                     
+###################################################################################
+# Driver group: Building
+###################################################################################
+lamp:building7                                  |                             ..  
+lamp:building8                                  |                            ...  
+lamp:building9                                  |                            ..   
+lamp:building4                                  |                             ..  
+lamp:building5                                  |                             ..  
+lamp:building6                                  |                            ..   
+lamp:building1                                  |                             ..  
+lamp:building2                                  |                             ..  
+lamp:building3                                  |                            ..   
+###################################################################################
+# Driver group: Lowerright
+###################################################################################
+lamp:standupRightHigh2                          |                ..               
+lamp:standupRightLow3                           |                ..               
+lamp:standupRight50k                            |                ..               
+lamp:inlaneRight7                               |               ..                
+lamp:inlaneRightSpinner                         |                ..               
+lamp:outlaneRight                               |                ..               
+###################################################################################
+# Driver group: Miles
+###################################################################################
+lamp:miles1                                     |            ..                   
+lamp:miles2                                     |            ..                   
+lamp:miles3                                     |            ..                   
+lamp:miles4                                     |           ..                    
+lamp:miles5                                     |           ..                    
+lamp:miles10                                    |          ...                    
+lamp:miles20                                    |          ...                    
+lamp:miles30                                    |           ..                    
+###################################################################################
+# Driver group: Jets
+###################################################################################
+lamp:jetTopLamp                                 | ..                             .
+lamp:jetLeftLamp                                |   ..                            
+lamp:jetRightLamp                               | ..                             .
+###################################################################################
+# Driver group: Center
+###################################################################################
+lamp:rightRampJackpot                           |              ..                 
+lamp:rightRampLock                              |                  ..             
+lamp:rightRamp3Miles                            |                   ..            
+lamp:centerRamp50k                              |                    ..           
+lamp:centerRamp2Miles                           |                        ..       
+lamp:leftRoadSign                               |                          ..     
+lamp:standupLeft1                               |          ..                     
+lamp:ejectLock                                  |          ..                     
+lamp:ejectTop5                                  |        ..                       
+lamp:standupCenter4                             |                       ..        
+lamp:dropHoleExtraBall                          |                       ..        
+lamp:dropHoleLock                               |                        ..       
+lamp:underFaultLoop6                            |                      ..         
+lamp:rightRoadSign                              |                      ..         
