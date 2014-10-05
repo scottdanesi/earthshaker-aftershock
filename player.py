@@ -84,3 +84,14 @@ class Player(procgame.game.Player):
 			self.player_stats['zone7_status']=-1
 			self.player_stats['zone8_status']=-1
 			self.player_stats['zone9_status']=-1
+
+			### Mode Status Stats ####################################
+			self.player_stats['mode1_status']=-1
+			self.player_stats['mode2_status']=-1
+			self.player_stats['mode3_status']=-1
+			self.player_stats['mode4_status']=-1
+			self.player_stats['mode5_status']=-1
+			self.player_stats['mode6_status']=-1
+			self.player_stats['mode7_status']=-1
+			self.player_stats['mode8_status']=-1
+			self.player_stats['mode9_status']=-1
