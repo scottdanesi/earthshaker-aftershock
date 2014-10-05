@@ -64,7 +64,7 @@ class CenterRampMode(game.Mode):
 
 		### Earthquake View Lamp ###
 		if (self.game.utilities.get_player_stats('multiball_running') == True and self.game.utilities.get_player_stats('jackpot_lit') == False):
-			self.game.lamps.leftRoadSign.schedule(schedule=0xF0F0F0F0, cycle_seconds=0, now=True)
+			self.game.lamps.leftRoadSign.schedule(schedule=0xF0F0F0F0, cycle_seconds=0, now=False)
 		else:
 			self.game.lamps.leftRoadSign.disable()
 
