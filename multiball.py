@@ -44,8 +44,8 @@ class Multiball(game.Mode):
 		self.update_lamps()
 		return super(Multiball, self).mode_started()
 
-	#def mode_stopped(self):
-		#self.game.update_lamps()
+	def mode_stopped(self):
+		pass
 
 	def update_lamps(self):
 		print "Update Lamps: Multiball"
@@ -158,6 +158,7 @@ class Multiball(game.Mode):
 		self.game.sound.stop_music()
 		self.game.sound.play_music('main',loops=-1,music_volume=.5)
 		self.resetMultiballStats()
+		self.game.bonusmultiplier_mode.incrementBonusMultiplier()
 		self.game.update_lamps()
 		self.game.coils.quakeMotor.disable()
 		self.callback()

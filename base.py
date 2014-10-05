@@ -213,6 +213,7 @@ class BaseGameMode(game.Mode):
 		self.game.modes.add(self.game.multiball_mode)
 		self.game.modes.add(self.game.collect_mode)
 		self.game.modes.add(self.game.shelter_mode)
+		self.game.modes.add(self.game.bonusmultiplier_mode)
 
 	def unloadBallModes(self):
 		self.game.modes.remove(self.game.skillshot_mode)
@@ -226,6 +227,7 @@ class BaseGameMode(game.Mode):
 		self.game.modes.remove(self.game.multiball_mode)
 		self.game.modes.remove(self.game.collect_mode)
 		self.game.modes.remove(self.game.shelter_mode)
+		self.game.modes.remove(self.game.bonusmultiplier_mode)
 
 		### Clear Mini Modes ###
 		self.game.modes.remove(self.game.mode_1)

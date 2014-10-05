@@ -214,7 +214,7 @@ class Shelter(game.Mode):
 				self.delay(delay=.15,handler=self.game.lamps.building7.pulse,param=100)
 				self.delay(delay=.3,handler=self.game.lamps.building7.pulse,param=100)
 			elif (self.newSelectedMode == 'mode8_status'):
-				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='MODE 8',seconds=4.0,justify='center')
+				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='BONUS X',seconds=4.0,justify='center')
 				self.game.lamps.building8.pulse(100)
 				self.game.modes.remove(self.game.mode_8)
 				self.game.modes.add(self.game.mode_8)
@@ -278,7 +278,7 @@ class Shelter(game.Mode):
 				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='MODE 7',seconds=.3,justify='center')
 			elif (self.displayMode == 'mode8_status'):
 				self.game.lamps.building8.pulse(100)
-				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='MODE 8',seconds=.3,justify='center')
+				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='BONUS X',seconds=.3,justify='center')
 			elif (self.displayMode == 'mode9_status'):
 				self.game.lamps.building9.pulse(100)
 				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='MODE 9',seconds=.3,justify='center')

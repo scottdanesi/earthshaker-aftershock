@@ -57,6 +57,7 @@ from multiball import *
 from trough import *
 from jackpot import *
 from shelter import *
+from bonusmultiplier import *
 
 #### Mini Modes ####
 from mode_1 import *
@@ -166,6 +167,7 @@ class EarthshakerAftershock(game.BasicGame):
 		self.collect_mode = CollectZones(self,10)
 		self.spinner_mode = Spinner(self,11)
 		self.jackpot_mode = Jackpot(self,12)
+		self.bonusmultiplier_mode = BonusMultiplier(self,98)
 		self.shelter_mode = Shelter(self,99)
 		self.skillshot_mode = SkillshotMode(self,100)
 		self.multiball_mode = Multiball(self,101)

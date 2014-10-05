@@ -35,7 +35,7 @@ class Mode8(game.Mode):
 			
 	def mode_started(self):
 		self.game.utilities.set_player_stats('mode8_status',1)
-		self.game.utilities.score(25000)
+		self.game.bonusmultiplier_mode.incrementBonusMultiplier()
 		self.game.shelter_mode.refreshPlayerInfo()
 		self.game.update_lamps()
 		self.game.modes.remove(self)
