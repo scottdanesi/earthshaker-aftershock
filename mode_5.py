@@ -28,30 +28,17 @@ from procgame import *
 import locale
 import logging
 
-class Mode6Spinner(game.Mode):
+class Mode5(game.Mode):
 	"""docstring for Bonus"""
 	def __init__(self, game, priority):
-			super(Mode6Spinner, self).__init__(game, priority)
+			super(Mode5, self).__init__(game, priority)
 			
 	def mode_started(self):
-		self.game.utilities.set_player_stats('mode6_status',0)
-		self.game.update_lamps()
+		self.game.utilities.set_player_stats('mode5_status',0)
+		self.game.utilities.score(200000)
+		self.game.modes.remove(self)
 
 	def mode_stopped(self):
-		self.game.utilities.set_player_stats('mode6_status',1)
-
-	def update_lamps(self):
-		print "Update Lamps: Mode 6 Spinner"
-		self.game.lamps.inlaneRightSpinner.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=False)
-		self.game.lamps.spinner.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=False)		
-
-	def sw_spinner_active(self, sw):
-		self.game.utilities.score(6000)
-		self.game.utilities.acFlashPulse(coilname='dropReset_CenterRampFlashers2',pulsetime=40)
-		self.game.sound.play('super_spinner')
-		return procgame.game.SwitchStop
-
-	def sw_rightOutsideReturn_active(self, sw):
-		return procgame.game.SwitchStop
-
-
+		self.game.utilities.set_player_stats('mode5_status',1)
+		self.game.shelter_mode.refreshPlayerInfo()
+		self.game.update_lamps()

@@ -165,55 +165,72 @@ class Shelter(game.Mode):
 
 			### Small Lampshow for newly Selected Mode ###
 			if (self.newSelectedMode == 'mode1_status'):
-				self.game.utilities.displayText(199,topText='MODE SELECTION',bottomText='MODE 1',seconds=4.0,justify='center')
+				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='25K POINTS',seconds=4.0,justify='center')
 				self.game.lamps.building1.pulse(100)
+				self.game.modes.remove(self.game.mode_1)
+				self.game.modes.add(self.game.mode_1)
 				self.delay(delay=.15,handler=self.game.lamps.building1.pulse,param=100)
 				self.delay(delay=.3,handler=self.game.lamps.building1.pulse,param=100)
 			elif (self.newSelectedMode == 'mode2_status'):
-				self.game.utilities.displayText(199,topText='MODE SELECTION',bottomText='MODE 2',seconds=4.0,justify='center')
+				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='50K POINTS',seconds=4.0,justify='center')
 				self.game.lamps.building2.pulse(100)
+				self.game.modes.remove(self.game.mode_2)
+				self.game.modes.add(self.game.mode_2)
 				self.delay(delay=.15,handler=self.game.lamps.building2.pulse,param=100)
 				self.delay(delay=.3,handler=self.game.lamps.building2.pulse,param=100)
 			elif (self.newSelectedMode == 'mode3_status'):
-				self.game.utilities.displayText(199,topText='MODE SELECTION',bottomText='MODE 3',seconds=4.0,justify='center')
+				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='100K POINTS',seconds=4.0,justify='center')
 				self.game.lamps.building3.pulse(100)
+				self.game.modes.remove(self.game.mode_3)
+				self.game.modes.add(self.game.mode_3)
 				self.delay(delay=.15,handler=self.game.lamps.building3.pulse,param=100)
 				self.delay(delay=.3,handler=self.game.lamps.building3.pulse,param=100)
 			elif (self.newSelectedMode == 'mode4_status'):
-				self.game.utilities.displayText(199,topText='MODE SELECTION',bottomText='MODE 4',seconds=4.0,justify='center')
+				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='CENTER RAMP 50K',seconds=4.0,justify='center')
 				self.game.lamps.building4.pulse(100)
+				self.game.modes.remove(self.game.mode_4)
+				self.game.modes.add(self.game.mode_4)
 				self.delay(delay=.15,handler=self.game.lamps.building4.pulse,param=100)
 				self.delay(delay=.3,handler=self.game.lamps.building4.pulse,param=100)
 			elif (self.newSelectedMode == 'mode5_status'):
-				self.game.utilities.displayText(199,topText='MODE SELECTION',bottomText='MODE 5',seconds=4.0,justify='center')
+				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='200K POINTS',seconds=4.0,justify='center')
 				self.game.lamps.building5.pulse(100)
+				self.game.modes.remove(self.game.mode_5)
+				self.game.modes.add(self.game.mode_5)
 				self.delay(delay=.15,handler=self.game.lamps.building5.pulse,param=100)
 				self.delay(delay=.3,handler=self.game.lamps.building5.pulse,param=100)
 			elif (self.newSelectedMode == 'mode6_status'):
-				self.game.utilities.displayText(199,topText='MODE SELECTION',bottomText='6K SPINNER',seconds=4.0,justify='center')
+				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='6K SPINNER',seconds=4.0,justify='center')
 				self.game.lamps.building6.pulse(100)
-				self.game.modes.add(self.game.mode_6_spinner)
+				self.game.modes.remove(self.game.mode_6)
+				self.game.modes.add(self.game.mode_6)
 				self.delay(delay=.15,handler=self.game.lamps.building6.pulse,param=100)
 				self.delay(delay=.3,handler=self.game.lamps.building6.pulse,param=100)
 			elif (self.newSelectedMode == 'mode7_status'):
-				self.game.utilities.displayText(199,topText='MODE SELECTION',bottomText='MODE 7',seconds=4.0,justify='center')
+				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='MODE 7',seconds=4.0,justify='center')
 				self.game.lamps.building7.pulse(100)
+				self.game.modes.remove(self.game.mode_7)
+				self.game.modes.add(self.game.mode_7)
 				self.delay(delay=.15,handler=self.game.lamps.building7.pulse,param=100)
 				self.delay(delay=.3,handler=self.game.lamps.building7.pulse,param=100)
 			elif (self.newSelectedMode == 'mode8_status'):
-				self.game.utilities.displayText(199,topText='MODE SELECTION',bottomText='MODE 8',seconds=4.0,justify='center')
+				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='MODE 8',seconds=4.0,justify='center')
 				self.game.lamps.building8.pulse(100)
+				self.game.modes.remove(self.game.mode_8)
+				self.game.modes.add(self.game.mode_8)
 				self.delay(delay=.15,handler=self.game.lamps.building8.pulse,param=100)
 				self.delay(delay=.3,handler=self.game.lamps.building8.pulse,param=100)
 			elif (self.newSelectedMode == 'mode9_status'):
-				self.game.utilities.displayText(199,topText='MODE SELECTION',bottomText='MODE 9',seconds=4.0,justify='center')
+				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='MODE 9',seconds=4.0,justify='center')
 				self.game.lamps.building9.pulse(100)
+				self.game.modes.remove(self.game.mode_9)
+				self.game.modes.add(self.game.mode_9)
 				self.delay(delay=.15,handler=self.game.lamps.building9.pulse,param=100)
 				self.delay(delay=.3,handler=self.game.lamps.building9.pulse,param=100)
 
-			self.game.sound.play('mode_select')
-			self.delay(delay=.15,handler=self.game.sound.play,param='mode_select')
-			self.delay(delay=.3,handler=self.game.sound.play,param='mode_select')
+			self.game.sound.play('mode_selected')
+			#self.delay(delay=.15,handler=self.game.sound.play,param='mode_select')
+			#self.delay(delay=.3,handler=self.game.sound.play,param='mode_select')
 			
 			self.delay(delay=.4,handler=self.update_lamps)
 			self.delay(delay=.4,handler=self.setModeSelectorActive,param=False)
@@ -240,59 +257,59 @@ class Shelter(game.Mode):
 			self.displayMode = choice(self.availableModes)
 			if (self.displayMode == 'mode1_status'):
 				self.game.lamps.building1.pulse(100)
-				self.game.utilities.displayText(199,topText='MODE SELECTION',bottomText='MODE 1',seconds=.3,justify='center')
+				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='25K POINTS',seconds=.3,justify='center')
 			elif (self.displayMode == 'mode2_status'):
 				self.game.lamps.building2.pulse(100)
-				self.game.utilities.displayText(199,topText='MODE SELECTION',bottomText='MODE 2',seconds=.3,justify='center')
+				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='50K POINTS',seconds=.3,justify='center')
 			elif (self.displayMode == 'mode3_status'):
 				self.game.lamps.building3.pulse(100)
-				self.game.utilities.displayText(199,topText='MODE SELECTION',bottomText='MODE 3',seconds=.3,justify='center')
+				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='100K POINTS',seconds=.3,justify='center')
 			elif (self.displayMode == 'mode4_status'):
 				self.game.lamps.building4.pulse(100)
-				self.game.utilities.displayText(199,topText='MODE SELECTION',bottomText='MODE 4',seconds=.3,justify='center')
+				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='CENTER RAMP 50K',seconds=.3,justify='center')
 			elif (self.displayMode == 'mode5_status'):
 				self.game.lamps.building5.pulse(100)
-				self.game.utilities.displayText(199,topText='MODE SELECTION',bottomText='MODE 5',seconds=.3,justify='center')
+				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='200K POINTS',seconds=.3,justify='center')
 			elif (self.displayMode == 'mode6_status'):
 				self.game.lamps.building6.pulse(100)
-				self.game.utilities.displayText(199,topText='MODE SELECTION',bottomText='6K SPINNER',seconds=.3,justify='center')
+				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='6K SPINNER',seconds=.3,justify='center')
 			elif (self.displayMode == 'mode7_status'):
 				self.game.lamps.building7.pulse(100)
-				self.game.utilities.displayText(199,topText='MODE SELECTION',bottomText='MODE 7',seconds=.3,justify='center')
+				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='MODE 7',seconds=.3,justify='center')
 			elif (self.displayMode == 'mode8_status'):
 				self.game.lamps.building8.pulse(100)
-				self.game.utilities.displayText(199,topText='MODE SELECTION',bottomText='MODE 8',seconds=.3,justify='center')
+				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='MODE 8',seconds=.3,justify='center')
 			elif (self.displayMode == 'mode9_status'):
 				self.game.lamps.building9.pulse(100)
-				self.game.utilities.displayText(199,topText='MODE SELECTION',bottomText='MODE 9',seconds=.3,justify='center')
+				self.game.utilities.displayText(199,topText='AWARD SELECTION',bottomText='MODE 9',seconds=.3,justify='center')
 			self.game.sound.play('mode_select')
 		else:
 			pass
 
 	def modeSelector(self):
-		if (len(self.availableModes) <> 0):
-			### Mode Select Lampshow ###
-			if (self.game.utilities.get_player_stats('multiball_running') == False): # Do not disable GI when Multiball is running #
-				self.game.utilities.disableGI()
-			self.disableBuldingLamps()
-			### Loop through Random Modes x10 ###
-			for i in range(0, 9):
-				self.delayedTime = i / 5.0
-				if (self.delayedTime == 0):
-					self.randomModeDisplayer()
-				else:
-					self.delay(delay=self.delayedTime,handler=self.randomModeDisplayer)
-			### Select New Active Mode ###
-			self.delay(delay=self.delayedTime+.20,handler=self.setNewActiveMode)
-			### Launch Ball Back Into Play ###
-			self.delay(delay=self.delayedTime+1,handler=self.ejectBall)
-			### Update Lamps ###
-			self.delay(delay=self.delayedTime+1,handler=self.game.utilities.enableGI)
-			self.delay(delay=self.delayedTime+1,handler=self.update_lamps)
-		else:
-			pass
-		
 
+		if (len(self.availableModes) == 0):
+			self.resetPlayerModes()
+			self.refreshPlayerInfo()
+
+		### Mode Select Lampshow ###
+		if (self.game.utilities.get_player_stats('multiball_running') == False): # Do not disable GI when Multiball is running #
+			self.game.utilities.disableGI()
+		self.disableBuldingLamps()
+		### Loop through Random Modes x10 ###
+		for i in range(0, 9):
+			self.delayedTime = i / 5.0
+			if (self.delayedTime == 0):
+				self.randomModeDisplayer()
+			else:
+				self.delay(delay=self.delayedTime,handler=self.randomModeDisplayer)
+		### Select New Active Mode ###
+		self.delay(delay=self.delayedTime+.20,handler=self.setNewActiveMode)
+		### Launch Ball Back Into Play ###
+		self.delay(delay=self.delayedTime+1,handler=self.ejectBall)
+		### Update Lamps ###
+		self.delay(delay=self.delayedTime+1,handler=self.game.utilities.enableGI)
+		self.delay(delay=self.delayedTime+1,handler=self.update_lamps)
 
 	def ballEnteredShelter(self):
 		### Scan for Active Ball Locks ###

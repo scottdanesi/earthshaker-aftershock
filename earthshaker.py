@@ -59,7 +59,15 @@ from jackpot import *
 from shelter import *
 
 #### Mini Modes ####
-from mode_6_spinner import *
+from mode_1 import *
+from mode_2 import *
+from mode_3 import *
+from mode_4 import *
+from mode_5 import *
+from mode_6 import *
+from mode_7 import *
+from mode_8 import *
+from mode_9 import *
 
 # Used to put commas in the score.
 locale.setlocale(locale.LC_ALL, "")
@@ -167,7 +175,15 @@ class EarthshakerAftershock(game.BasicGame):
 		self.trough = Trough(self,2000)
 
 		#### Mini Mode Definitions ####
-		self.mode_6_spinner = Mode6Spinner(self,30)
+		self.mode_1 = Mode1(self,30)
+		self.mode_2 = Mode2(self,31)
+		self.mode_3 = Mode3(self,32)
+		self.mode_4 = Mode4(self,33)
+		self.mode_5 = Mode5(self,34)
+		self.mode_6 = Mode6(self,35)
+		self.mode_7 = Mode7(self,36)
+		self.mode_8 = Mode8(self,37)
+		self.mode_9 = Mode9(self,38)
 		
 		
 		#### Initial Mode Queue ####
@@ -262,6 +278,7 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_encourage_niceshot.wav')
 		# Shelter Sounds #
 		self.sound.register_sound('mode_select', game_sound_path + 'mode_select_beep2.wav')
+		self.sound.register_sound('mode_selected', game_sound_path + 'mode_select_beep_selected.wav')
 
 		self.sound.set_volume(10)
 
