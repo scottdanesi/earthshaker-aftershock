@@ -214,10 +214,10 @@ class AttractMode(game.Mode):
 		animEarthshaker2.append({'top':'U               ','bottom':'               Z','timer':.05,'transition':0})
 		animEarthshaker2.append({'top':'                ','bottom':'                ','timer':.5,'transition':0})
 
-		###################
-		#### Game Over Text
-		###################
-		script.append({'top':'GAME OVER','bottom':'PLAY AGAIN','timer':4,'transition':0})
+		##############
+		#### Game Over
+		##############
+		script.append({'top':'GAME OVER','bottom':'PRESS START','timer':5,'transition':0})
 		
 		########################################################
 		#### Title Screen Animation ############################
@@ -263,11 +263,6 @@ class AttractMode(game.Mode):
 
 		# Append Prev Game Scores to Script
 		script.append({'top':self.topScoresText,'bottom':self.bottomScoresText,'timer':7,'transition':0})
-
-		##############
-		#### Game Over
-		##############
-		script.append({'top':'GAME OVER','bottom':'PRESS START','timer':5,'transition':0})
 
 		################
 		#### High Scores
