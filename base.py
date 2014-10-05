@@ -227,6 +227,9 @@ class BaseGameMode(game.Mode):
 		self.game.modes.remove(self.game.collect_mode)
 		self.game.modes.remove(self.game.shelter_mode)
 
+		### Clear Mini Modes ###
+		self.game.modes.remove(self.game.mode_6_spinner)
+
 	###############################################################
 	# BASE SWITCH HANDLING FUNCTIONS
 	###############################################################		
