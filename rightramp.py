@@ -45,7 +45,11 @@ class RightRampMode(game.Mode):
 		self.disableRightRampLamps()
 
 	def update_lamps(self):
-		
+		### Earthquake View Lamp ###
+		if (self.game.utilities.get_player_stats('multiball_running') == True and self.game.utilities.get_player_stats('jackpot_lit') == False):
+			self.game.lamps.rightRoadSign.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=False)
+		else:
+			self.game.lamps.rightRoadSign.disable()
 		print "Update Lamps: Right Ramp"
 
 	def disableRightRampLamps(self):
