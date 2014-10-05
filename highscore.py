@@ -30,7 +30,17 @@ import pinproc
 class HighScore(game.Mode):
 	def __init__(self, game, priority):
 			super(HighScore, self).__init__(game, priority)
+			self.CurrentGrandChamp = 0
+			self.CurrentHighScore1 = 0
+			self.CurrentHighScore2 = 0
+			self.CurrentHighScore3 = 0
+			self.CurrentHighScore4 = 0
+			self.CurrentMileChamp = 0
 
+			self.player1Score = 0
+			self.player2Score = 0
+			self.player3Score = 0
+			self.player4Score = 0
 
 	############################
 	#### Standard Functions ####
@@ -40,6 +50,37 @@ class HighScore(game.Mode):
 
 	def update_lamps(self):
 		pass
+
+	def retrieveCurrentHighScores(self):
+		for category in self.game.highscore_categories:
+			for index, score in enumerate(category.scores):
+				name = str(score.inits)
+
+				#### Classic High Score Data ####
+				if category.game_data_key == 'ClassicHighScoreData':
+					if index == 0:
+						#### GRAND CHAMPION ####
+						self.CurrentGrandChamp = score
+					elif index == 1:
+						self.CurrentHighScore1 = score
+					elif index == 2:
+						self.CurrentHighScore2 = score
+					elif index == 3:
+						self.CurrentHighScore3 = score
+					elif index == 4:
+						self.CurrentHighScore4 = score
+
+				#### Mileage Champion ####
+				elif category.game_data_key == 'MilesChampion':
+					if index == 0:
+						#### MILEAGE CHAMP ####
+						self.CurrentMileChamp = score
+
+	def retrieveCurrentScores(self):
+		self.player1Score = self.game.game_data['LastGameScores']['LastPlayer1Score']
+		self.player2Score = self.game.game_data['LastGameScores']['LastPlayer2Score']
+		self.player3Score = self.game.game_data['LastGameScores']['LastPlayer3Score']
+		self.player4Score = self.game.game_data['LastGameScores']['LastPlayer4Score']
 
 	def checkScores(self,callback):
 		pass
