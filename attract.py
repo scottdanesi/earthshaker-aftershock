@@ -421,11 +421,10 @@ class AttractMode(game.Mode):
 
 	def sw_outhole_active_for_1s(self, sw):
 		#This will eventually be moved to the Trough mode
-		self.game.coils.acSelect.disable()
-		self.game.coils.flipperEnable.disable()
-		self.game.coils.outholeKicker_CaptiveFlashers.pulse(50)
-		self.game.alpha_score_display.set_text("GAME OVER",0)
-		self.game.alpha_score_display.set_text("PRESS START",1)
+		#self.game.coils.flipperEnable.disable()
+		#self.game.utilities.acCoilPulse('outholeKicker_CaptiveFlashers')
+		#self.game.alpha_score_display.set_text("GAME OVER",0)
+		#self.game.alpha_score_display.set_text("PRESS START",1)
 		return procgame.game.SwitchStop
 	
 	#######################################################################
