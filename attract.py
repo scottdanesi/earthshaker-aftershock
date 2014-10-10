@@ -238,6 +238,26 @@ class AttractMode(game.Mode):
 		self.player3Score = self.game.game_data['LastGameScores']['LastPlayer3Score']
 		self.player4Score = self.game.game_data['LastGameScores']['LastPlayer4Score']
 
+		try:
+			self.player1Score = locale.format("%d", int(float(self.player1Score)), True)
+		except ValueError:
+			pass
+
+		try:
+			self.player2Score = locale.format("%d", int(float(self.player2Score)), True)
+		except ValueError:
+			pass
+
+		try:
+			self.player3Score = locale.format("%d", int(float(self.player3Score)), True)
+		except ValueError:
+			pass
+
+		try:
+			self.player4Score = locale.format("%d", int(float(self.player4Score)), True)
+		except ValueError:
+			pass
+
 		#######################################################################
 		#### Set Top and Bottom Text for Previous Game Scores #################
 		#### This section will create a string of 16 characters for the top 
