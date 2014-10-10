@@ -70,7 +70,7 @@ class CenterRampMode(game.Mode):
 
 		### Right 50k Target Lamp ###
 		if (self.enabled50k == True):
-			self.game.lamps.standupRight50k.enable()
+			self.game.lamps.standupRight50k.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=True)
 		else:
 			self.game.lamps.standupRight50k.disable()
 
@@ -149,15 +149,18 @@ class CenterRampMode(game.Mode):
 		self.enabled2Miles = True
 		self.delay(name='reset2MilesAward',delay=self.centerRamp2MilesTimer,handler=self.reset2MilesAward)
 		self.game.utilities.set_player_stats('center_shots',self.game.utilities.get_player_stats('center_shots') + 1)
-		if (self.game.utilities.get_player_stats('center_shots') == self.centerRampShotsToLite50k):
-			self.enable50kTarget()
+		
+		self.enable50kTarget()
+		self.delay(name='50kTarget',delay=4,handler=self.disable50kTarget)
 		#self.update_lamps()
 
 	def enable50kTarget(self):
 		self.enabled50k = True
+		self.update_lamps()
 
 	def disable50kTarget(self):
 		self.enabled50k = False
+		self.update_lamps()
 
 	def sw_centerRampEntry_active(self, sw):
 		self.cancel_delayed('centerRampShotStarted') # Needed if the center shot was made by another ball
@@ -186,8 +189,9 @@ class CenterRampMode(game.Mode):
 		if (self.enabled50k == True):
 			self.game.utilities.score(50000)
 			self.game.utilities.acFlashSchedule(coilname='outholeKicker_CaptiveFlashers',schedule=0x0000000F, cycle_seconds=1, now=True)
+			self.game.utilities.shakerPulseMedium()
+			self.game.sound.play('complete_shot')
 			self.disable50kTarget()
-			self.update_lamps()
 		return procgame.game.SwitchContinue
 
 
