@@ -59,6 +59,9 @@ class RightRampMode(game.Mode):
 	def rightRampShotCompleted(self):
 		self.game.lampctrlflash.play_show('right_ramp_1', repeat=False, callback=self.game.update_lamps)
 
+		if self.game.utilities.get_player_stats('jackpot_lit') == False:
+			self.game.sound.play_voice('complete_shot')
+
 		# Handle it! #
 		if (self.game.utilities.get_player_stats('multiball_running') == True):
 			if (self.game.utilities.get_player_stats('jackpot_lit') == True):

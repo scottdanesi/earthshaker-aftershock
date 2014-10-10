@@ -84,7 +84,7 @@ class SkillshotMode(game.Mode):
 		self.game.modes.remove(self)
 
 	def superSkillshotAwarded(self):
-		self.game.sound.play_voice('skillshotAwarded')
+		self.game.sound.play('skillshotAwarded')
 		self.game.sound.play_voice('complete_shot')
 		self.game.lampctrlflash.play_show('super_skillshot', repeat=False, callback=self.game.update_lamps)
 		self.game.utilities.displayText(100,'SUPER SKILLSHOT',locale.format("%d", self.superSkillshotValue * self.game.utilities.get_player_stats('skillshot_x'), grouping=True) + ' POINTS',seconds=self.skillshotDisplayTime,justify='center')
