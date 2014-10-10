@@ -77,26 +77,22 @@ class Spinner(game.Mode):
 		self.update_lamps()
 
 	def sw_spinner_active(self, sw):
-		if self.superSpinnerEnabled == True:
-			self.game.utilities.score(3000)
-			self.game.utilities.acFlashPulse(coilname='dropReset_CenterRampFlashers2',pulsetime=40)
-			self.game.sound.play('super_spinner')
-		else:
-			self.game.utilities.score(300)
-			self.game.lamps.spinner.pulse(50)
-			self.game.sound.play('spinner')
-			self.superSpinnerCheck()
+		self.game.utilities.score(300)
+		self.game.lamps.spinner.pulse(50)
+		self.game.sound.play('spinner')
+		self.superSpinnerCheck()
 		self.totalSpinnerCount += 1
 		self.qualifyingSpinnerCount += 1
 		return procgame.game.SwitchStop
 
 	def sw_rightOutsideReturn_active(self, sw):
 		if (self.superSpinnerLit == True):
-			self.superSpinnerEnabled = True
+			self.game.modes.remove(self.game.mode_6)
+			self.game.modes.add(self.game.mode_6)
 			self.superSpinnerLit = False
 			if (self.superSpinnerTime <> -1):
 				self.delay(name='superSpinnerReset',delay=self.superSpinnerTime,handler=self.resetSuperSpinner)
-			self.update_lamps()
+			self.game.update_lamps()
 			self.game.sound.play('super_spinner_lit')
 		else:
 			self.game.sound.play('inlane')
