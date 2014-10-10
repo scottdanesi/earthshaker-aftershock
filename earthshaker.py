@@ -309,7 +309,7 @@ class EarthshakerAftershock(game.BasicGame):
 		self.lampctrlflash.register_show('multiball_intro_1', game_lampshows + 'multiball_intro.lampshow')
 		self.lampctrl.register_show('right_ramp_1', game_lampshows + 'rightramp_complete_a.lampshow')
 		self.lampctrl.register_show('right_ramp_eject', game_lampshows + 'right_ramp_eject.lampshow')
-		self.lampctrl.register_show('jackpot', game_lampshows + 'jackpot.lampshow')
+		self.lampctrl.register_show('jackpot', game_lampshows + 'jackpot_awarded_a.lampshow')
 		self.lampctrl.register_show('skillshot', game_lampshows + 'skillshot_standard_awarded.lampshow')
 		self.lampctrl.register_show('super_skillshot', game_lampshows + 'skillshot_super_awarded.lampshow')
 		self.lampctrl.register_show('zone_collected', game_lampshows + 'zones_zonecollected_a.lampshow')
