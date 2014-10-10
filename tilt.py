@@ -48,11 +48,26 @@ class Tilt(game.Mode):
 		#### Remove Ball Modes ####
 		self.game.modes.remove(self.game.skillshot_mode)
 		self.game.modes.remove(self.game.centerramp_mode)
+		self.game.modes.remove(self.game.rightramp_mode)
 		self.game.modes.remove(self.game.ballsaver_mode)
 		self.game.modes.remove(self.game.drops_mode)
-		self.game.modes.remove(self.game.collect_mode)
+		self.game.modes.remove(self.game.jackpot_mode)
 		self.game.modes.remove(self.game.spinner_mode)
 		self.game.modes.remove(self.game.multiball_mode)
+		self.game.modes.remove(self.game.collect_mode)
+		self.game.modes.remove(self.game.shelter_mode)
+		self.game.modes.remove(self.game.bonusmultiplier_mode)
+
+		### Clear Mini Modes ###
+		self.game.modes.remove(self.game.mode_1)
+		self.game.modes.remove(self.game.mode_2)
+		self.game.modes.remove(self.game.mode_3)
+		self.game.modes.remove(self.game.mode_4)
+		self.game.modes.remove(self.game.mode_5)
+		self.game.modes.remove(self.game.mode_6)
+		self.game.modes.remove(self.game.mode_7)
+		self.game.modes.remove(self.game.mode_8)
+		self.game.modes.remove(self.game.mode_9)
 
 	def playTiltSounds(self):
 		self.game.sound.play('tilt_fx')
