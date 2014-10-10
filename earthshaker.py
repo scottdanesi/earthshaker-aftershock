@@ -215,9 +215,10 @@ class EarthshakerAftershock(game.BasicGame):
 		# Sound FX Registration
 		self.sound.register_sound('spinner', game_sound_path + 'spinner2.wav')
 		self.sound.register_sound('super_spinner', game_sound_path + 'spinner3.wav')
-		self.sound.register_sound('super_spinner_lit', game_sound_path + 'dirty_kick.wav')
+		self.sound.register_sound('super_spinner_lit', game_sound_path + 'spinner_super_enable.wav')
 		self.sound.register_sound('sling', game_sound_path + 'sling2.wav')
 		self.sound.register_sound('jet', game_sound_path + 'jet_a.wav')
+		self.sound.register_sound('jet_super', game_sound_path + 'jet_c.wav')
 		self.sound.register_sound('skillshotAwarded', game_sound_path + 'skillshotAwarded.wav')
 		self.sound.register_sound('centerRampEnter', game_sound_path + 'centerRampEntry.wav')
 		self.sound.register_sound('centerRampComplete', game_sound_path + 'centerRampComplete.wav')
@@ -278,9 +279,13 @@ class EarthshakerAftershock(game.BasicGame):
 		# Complete Shot Vocals #
 		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_encourage_greatshot.wav')
 		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_encourage_niceshot.wav')
+		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_lionman.wav')
+		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_bitchin.wav')
 		# Shelter Sounds #
 		self.sound.register_sound('mode_select', game_sound_path + 'mode_select_beep2.wav')
 		self.sound.register_sound('mode_selected', game_sound_path + 'mode_select_beep_selected.wav')
+		# Shelter Sounds #
+		self.sound.register_sound('captive_carnival', game_sound_path + 'captive_carnival_beep.wav')
 
 		self.sound.set_volume(10)
 
