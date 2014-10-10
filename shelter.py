@@ -298,6 +298,9 @@ class Shelter(game.Mode):
 		### Mode Select Lampshow ###
 		if (self.game.utilities.get_player_stats('multiball_running') == False): # Do not disable GI when Multiball is running #
 			self.game.utilities.disableGI()
+			self.game.lamps.jetLeftLamp.disable()
+			self.game.lamps.jetRightLamp.disable()
+			self.game.lamps.jetTopLamp.disable()
 		self.disableBuldingLamps()
 		### Loop through Random Modes x10 ###
 		for i in range(0, 9):
