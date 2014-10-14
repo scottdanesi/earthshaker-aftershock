@@ -32,7 +32,7 @@ PRPinmame:
     #   0 or 1 - set to 1 if your machine has 2 lines of 16 character alphanumeric displays.
     #   This will adapt the code to properly handle the various display types in Sys11 machines (and a couple of WPC)
    
-    keyboard: off
+    keyboard: on
     autoPatterDetection: off
     s11CreditDisplay: 0
     s11BallDisplay: 0
