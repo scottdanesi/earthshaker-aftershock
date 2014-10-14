@@ -218,17 +218,6 @@ class AttractMode(game.Mode):
 		#### Game Over
 		##############
 		script.append({'top':'GAME OVER','bottom':'PRESS START','timer':5,'transition':0})
-		
-		########################################################
-		#### Title Screen Animation ############################
-		#### Adds the animation defined above to the script list
-		########################################################
-		script=script + animEarthshaker
-
-		########################
-		#### About Game Software
-		########################
-		script.append({'top':'SOFTWARE BY','bottom':'SCOTT DANESI','timer':5,'transition':3})
 
 		#########################
 		#### Previous Game Scores
@@ -283,32 +272,68 @@ class AttractMode(game.Mode):
 
 		# Append Prev Game Scores to Script
 		script.append({'top':self.topScoresText,'bottom':self.bottomScoresText,'timer':7,'transition':0})
+		
+		########################################################
+		#### Title Screen Animation ############################
+		#### Adds the animation defined above to the script list
+		########################################################
+		script=script + animEarthshaker
+
+		########################
+		#### About Game Software
+		########################
+		script.append({'top':'SOFTWARE BY','bottom':'SCOTT DANESI','timer':5,'transition':3})
 
 		################
 		#### High Scores
 		################
-		for category in self.game.highscore_categories:
-			for index, score in enumerate(category.scores):
-				score_str = locale.format("%d", score.score, True)
-				ranking = str(index)
-				name = str(score.inits)
-				data={'score':score_str, 'ranking':ranking}
+		#for category in self.game.highscore_categories:
+			#for index, score in enumerate(category.scores):
+				#score_str = locale.format("%d", score.score, True)
+				#ranking = str(index)
+				#name = str(score.inits)
+				#data={'score':score_str, 'ranking':ranking}
 
 				#### Classic High Score Data ####
-				if category.game_data_key == 'ClassicHighScoreData':
-					if index == 0:
-						text1 = 'GRAND CHAMPION'
-						text2 = name + ' ' + score_str
-					else:
-						text1 = 'HIGH SCORE ' + ranking
-						text2 = name + ' ' + score_str
+				#if category.game_data_key == 'ClassicHighScoreData':
+					#if index == 0:
+						#text1 = 'GRAND CHAMPION'
+						#text2 = name + ' ' + score_str
+					#else:
+						#text1 = 'HIGH SCORE ' + ranking
+						#text2 = name + ' ' + score_str
 				#### Mileage Champion ####
-				elif category.game_data_key == 'MilesChampion':
-					if index == 0:
-						text1 = 'MILEAGE CHAMP'
-						text2 = name + ' ' + score_str + ' MILES'
+				#elif category.game_data_key == 'MilesChampion':
+					#if index == 0:
+						#text1 = 'MILEAGE CHAMP'
+						#text2 = name + ' ' + score_str + ' MILES'
 
-				script.append({'top':text1,'bottom':text2,'timer':5,'transition':1})
+				#script.append({'top':text1,'bottom':text2,'timer':5,'transition':1})
+
+		self.grandChampScore = locale.format("%d", self.game.game_data['GrandChamp']['GrandChampScore'], True)
+		self.grandChampInits = self.game.game_data['GrandChamp']['GrandChampInits']
+
+		self.highScore1Score = locale.format("%d", self.game.game_data['HighScore1']['HighScore1Score'], True)
+		self.highScore1Inits = self.game.game_data['HighScore1']['HighScore1Inits']
+
+		self.highScore2Score = locale.format("%d", self.game.game_data['HighScore2']['HighScore2Score'], True)
+		self.highScore2Inits = self.game.game_data['HighScore2']['HighScore2Inits']
+
+		self.highScore3Score = locale.format("%d", self.game.game_data['HighScore3']['HighScore3Score'], True)
+		self.highScore3Inits = self.game.game_data['HighScore3']['HighScore3Inits']
+
+		self.highScore4Score = locale.format("%d", self.game.game_data['HighScore4']['HighScore4Score'], True)
+		self.highScore4Inits = self.game.game_data['HighScore4']['HighScore4Inits']
+
+		self.milesChampMiles = locale.format("%d", self.game.game_data['MilesChamp']['MilesChampMiles'], True)
+		self.milesChampInits = self.game.game_data['MilesChamp']['MilesChampInits']
+
+		script.append({'top':'GRAND CHAMPION','bottom':self.grandChampInits + ' ' + self.grandChampScore,'timer':5,'transition':1})
+		script.append({'top':'HIGH SCORE 1','bottom':self.highScore1Inits + ' ' + self.highScore1Score,'timer':5,'transition':1})
+		script.append({'top':'HIGH SCORE 2','bottom':self.highScore2Inits + ' ' + self.highScore2Score,'timer':5,'transition':1})
+		script.append({'top':'HIGH SCORE 3','bottom':self.highScore3Inits + ' ' + self.highScore3Score,'timer':5,'transition':1})
+		script.append({'top':'HIGH SCORE 4','bottom':self.highScore4Inits + ' ' + self.highScore4Score,'timer':5,'transition':1})
+		script.append({'top':'MILEAGE CHAMP','bottom':self.milesChampInits + ' ' + self.milesChampMiles + ' MILES','timer':5,'transition':1})
 
 		#####################################################
 		#### Previous Game Scores #2 ########################
