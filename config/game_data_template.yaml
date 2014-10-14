@@ -49,3 +49,21 @@ LastGameScores:
   LastPlayer2Score: 400
   LastPlayer3Score: 0
   LastPlayer4Score: 0
+GrandChamp:
+  GrandChampScore: 5000000
+  GrandChampInits: M_S
+HighScore1:
+  HighScore1Score: 4000000
+  HighScore1Inits: JIM
+HighScore2:
+  HighScore2Score: 3000000
+  HighScore2Inits: KHE
+HighScore3:
+  HighScore3Score: 2000000
+  HighScore3Inits: DRB
+HighScore4:
+  HighScore4Score: 1000000
+  HighScore4Inits: SSD
+MilesChamp:
+  MilesChampMiles: 30
+  MilesChampInits: SRD
