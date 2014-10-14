@@ -57,6 +57,7 @@ from multiball import *
 from trough import *
 from jackpot import *
 from shelter import *
+from highscore import *
 from bonusmultiplier import *
 
 #### Mini Modes ####
@@ -174,6 +175,7 @@ class EarthshakerAftershock(game.BasicGame):
 		self.ballsaver_mode = BallSaver(self,199)
 		self.tilt = Tilt(self,200)
 		self.bonus_mode = Bonus(self,1000)
+		self.highscore_mode = HighScore(self,1001)
 		self.trough = Trough(self,2000)
 
 		#### Mini Mode Definitions ####
@@ -232,8 +234,8 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_sound('warning_vox', game_sound_path + 'vocal_warning_hey.wav')
 		self.sound.register_sound('warning_vox', game_sound_path + 'vocal_warning_watch_it.wav')
 		# BallSaver Sounds #
-		self.sound.register_sound('ball_saved', game_sound_path + 'vocal_ballsaver_1.wav')
 		self.sound.register_sound('ball_saved', game_sound_path + 'vocal_ballsaver_2.wav')
+		self.sound.register_sound('ball_saved', game_sound_path + 'vocal_ballsaver_3.wav')
 		# Bonus Sounds #
 		self.sound.register_sound('bonus_features', game_sound_path + 'bonus_feature_v8.wav')
 		self.sound.register_sound('bonus_total', game_sound_path + 'bonus_total_v5.wav')
@@ -246,6 +248,7 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_sound('drop', game_sound_path + 'drop_1.wav')
 		# Eject Sounds #
 		self.sound.register_sound('eject', game_sound_path + 'eject4.wav')
+		self.sound.register_sound('ejectsaucer', game_sound_path + 'eject5.wav')
 		# Outlane Sounds #
 		self.sound.register_sound('outlane', game_sound_path + 'outlane1.wav')
 		self.sound.register_sound('inlane', game_sound_path + 'zone_na2.wav')
@@ -262,6 +265,10 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_sound('player_2_vox', game_sound_path + 'vocal_player_2.wav')
 		self.sound.register_sound('player_3_vox', game_sound_path + 'vocal_player_3.wav')
 		self.sound.register_sound('player_4_vox', game_sound_path + 'vocal_player_4.wav')
+		self.sound.register_sound('player_1_up_vox', game_sound_path + 'vocal_player_1_up.wav')
+		self.sound.register_sound('player_2_up_vox', game_sound_path + 'vocal_player_2_up.wav')
+		self.sound.register_sound('player_3_up_vox', game_sound_path + 'vocal_player_3_up.wav')
+		self.sound.register_sound('player_4_up_vox', game_sound_path + 'vocal_player_4_up.wav')
 		# Multiball Sounds #
 		self.sound.register_sound('earthquake_1', game_sound_path + 'multiball_intro_earthquake_1.wav')
 		self.sound.register_sound('main_loop_tape_stop', game_sound_path + 'music_001_main_loop_stop.wav',new_sound_volume=.5)
@@ -279,13 +286,19 @@ class EarthshakerAftershock(game.BasicGame):
 		# Complete Shot Vocals #
 		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_encourage_greatshot.wav')
 		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_encourage_niceshot.wav')
-		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_lionman.wav')
+		#self.sound.register_sound('complete_shot', game_sound_path + 'vocal_lionman.wav')
 		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_bitchin.wav')
+		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_nice.wav')
+		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_awesome.wav')
+		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_awesome_shot.wav')
+		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_keep_it_up.wav')
 		# Shelter Sounds #
 		self.sound.register_sound('mode_select', game_sound_path + 'mode_select_beep2.wav')
 		self.sound.register_sound('mode_selected', game_sound_path + 'mode_select_beep_selected.wav')
 		# Shelter Sounds #
 		self.sound.register_sound('captive_carnival', game_sound_path + 'captive_carnival_beep.wav')
+		# Skillshot Sounds #
+		self.sound.register_sound('shoot_captive_ball', game_sound_path + 'vocal_shoot_captive_ball.wav')
 
 		self.sound.set_volume(10)
 
