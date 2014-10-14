@@ -40,6 +40,7 @@ class Mode9(game.Mode):
 		self.game.shelter_mode.refreshPlayerInfo()
 		self.game.update_lamps()
 		self.incrementCaptiveLevel()
+		self.delay(delay=20,handler=self.game.modes.remove,param=self)
 		
 
 	def mode_stopped(self):
@@ -50,6 +51,7 @@ class Mode9(game.Mode):
 		self.game.lamps.captive150k.disable()
 		self.game.lamps.captive250k.disable()
 		self.game.utilities.set_player_stats('mode9_status',1)
+		self.cancel_delayed('increment')
 
 
 	def update_lamps(self):
@@ -100,9 +102,8 @@ class Mode9(game.Mode):
 		self.delay(delay=.1,handler=self.game.sound.play,param='captive_carnival')
 		self.delay(delay=.2,handler=self.game.sound.play,param='captive_carnival')
 		self.delay(delay=.4,handler=self.game.sound.play_voice,param='complete_shot')
-
-		#self.delay(delay=2,handler=self.update_lamps)
-		self.delay(delay=2,handler=self.game.modes.remove,param=self)
+		self.delay(name='increment',delay=.6,handler=self.incrementCaptiveLevel)
+		
 
 	def sw_captiveBall9_closed(self, sw):
 		self.awardCaptiveValue()
