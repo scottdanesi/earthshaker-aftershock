@@ -54,6 +54,14 @@ class UtilitiesMode(game.Mode):
 			self.ACNameArray.append('bottomBallPopper_RightRampFlashers1')
 			self.ACNameArray.append('knocker_RightRampFlashers2')
 
+			self.displayWithInfoFlag = False
+
+	def mode_started(self):
+		self.baseDisplayTicker()
+
+	def mode_stopped(self):
+		self.cancel_delayed('displayTicker')
+
 
 	#######################
 	#### Log Functions ####
@@ -150,6 +158,7 @@ class UtilitiesMode(game.Mode):
 	###########################
 	#### Display Functions ####
 	###########################
+
 	def displayText(self,priority,topText=' ',bottomText=' ',seconds=2,justify='left',topBlinkRate=0,bottomBlinkRate=0):
 		# This function will be used as a very basic display prioritizing helper
 		# Check if anything with a higher priority is running
@@ -158,7 +167,8 @@ class UtilitiesMode(game.Mode):
 			self.game.alpha_score_display.cancel_script()
 			self.game.alpha_score_display.set_text(topText,0,justify)
 			self.game.alpha_score_display.set_text(bottomText,1,justify)
-			self.delay(name='resetDisplayPriority',event_type=None,delay=seconds,handler=self.resetDisplayPriority)
+			if seconds > 0:
+				self.delay(name='resetDisplayPriority',event_type=None,delay=seconds,handler=self.resetDisplayPriority)
 			self.currentDisplayPriority = priority
 
 	def resetDisplayPriority(self):
@@ -168,12 +178,90 @@ class UtilitiesMode(game.Mode):
 	def updateBaseDisplay(self):
 		print "Update Base Display Called"
 		if (self.currentDisplayPriority == 0 and self.game.tiltStatus == 0 and self.game.ball <> 0):
-			self.p = self.game.current_player()
-			self.game.alpha_score_display.cancel_script()
-			self.game.alpha_score_display.set_text(locale.format("%d", self.p.score, grouping=True),0,justify='left')
+
+			self.player1Score = ''
+			self.player2Score = ''
+			self.player3Score = ''
+			self.player4Score = ''
+
+			self.player1ScoreFormatted = ''
+			self.player2ScoreFormatted = ''
+			self.player3ScoreFormatted = ''
+			self.player4ScoreFormatted = ''
+
+			self.currentNumPlayers = len(self.game.players)
+			if (self.currentNumPlayers > 0):
+				self.player1Score = self.game.players[0].score
+			if (self.currentNumPlayers > 1):
+				self.player2Score = self.game.players[1].score
+			if (self.currentNumPlayers > 2):
+				self.player3Score = self.game.players[2].score
+			if (self.currentNumPlayers > 3):
+				self.player4Score = self.game.players[3].score
+
+			if (self.player1Score <> ''):
+				self.player1ScoreFormatted = str(locale.format("%d", self.player1Score, grouping=True))
+			if (self.player2Score <> ''):
+				self.player2ScoreFormatted = str(locale.format("%d", self.player2Score, grouping=True))
+			if (self.player3Score <> ''):
+				self.player3ScoreFormatted = str(locale.format("%d", self.player3Score, grouping=True))
+			if (self.player4Score <> ''):
+				self.player4ScoreFormatted = str(locale.format("%d", self.player4Score, grouping=True))
+			
+			if (self.displayWithInfoFlag):
+				self.displayWithInfo()
+			else:
+				self.displayWithPlayers()
+
+	def displayWithInfo(self):
+		self.p = self.game.current_player()
+
+		#Top Line#
+		if(self.p.name.upper() == 'PLAYER 1'):
+			self.topScoresText = self.player1ScoreFormatted
+			self.game.alpha_score_display.set_text(self.topScoresText,0,justify='left')
+		elif(self.p.name.upper() == 'PLAYER 2'):
+			self.topScoresText = self.player2ScoreFormatted
+			self.game.alpha_score_display.set_text(self.topScoresText,0,justify='right')
+		else:
+			self.game.alpha_score_display.set_text(self.p.name.upper() + "  BALL "+str(self.game.ball),0,justify='right')
+
+		#Bottom Line#
+		if(self.p.name.upper() == 'PLAYER 3'):
+			self.bottomScoresText = self.player3ScoreFormatted
+			self.game.alpha_score_display.set_text(self.bottomScoresText,1,justify='left')
+		elif(self.p.name.upper() == 'PLAYER 4'):
+			self.bottomScoresText = self.player4ScoreFormatted
+			self.game.alpha_score_display.set_text(self.bottomScoresText,1,justify='right')
+		else:
 			self.game.alpha_score_display.set_text(self.p.name.upper() + "  BALL "+str(self.game.ball),1,justify='right')
-			print self.p.name
-			print "Ball " + str(self.game.ball)
+
+	def displayWithPlayers(self):
+
+		self.scoreSpaceCount = 16 - (len(str(self.player1Score)) + len(str(self.player2Score)))
+		if self.scoreSpaceCount < 0: # Just in case scores get very large (over 8 characters each)
+			self.scoreSpaceCount = 0
+		self.topScoresText = self.player1ScoreFormatted
+		for i in range (0,self.scoreSpaceCount): # Puts a space between the scores for i places
+			self.topScoresText += ' ' 
+		self.topScoresText += self.player2ScoreFormatted # Add the score to the end
+
+		# Set Bottom Text
+		self.scoreSpaceCount = 16 - (len(str(self.player3Score)) + len(str(self.player4Score)))
+		if self.scoreSpaceCount < 0: # Just in case scores get very large (over 8 characters each)
+			self.scoreSpaceCount = 0
+		self.bottomScoresText = self.player3ScoreFormatted
+		for i in range (0,self.scoreSpaceCount):
+			self.bottomScoresText += ' '
+		self.bottomScoresText += self.player4ScoreFormatted
+
+		self.game.alpha_score_display.set_text(self.topScoresText,0,justify='left')
+		self.game.alpha_score_display.set_text(self.bottomScoresText,1,justify='left')
+	
+	def baseDisplayTicker(self):
+		self.displayWithInfoFlag = not self.displayWithInfoFlag
+		self.delay(name='displayTicker',delay=3,handler=self.baseDisplayTicker)
+		self.updateBaseDisplay()
 
 	def validateCurrentPlayer(self):
 		### This function is to verify that the player has initiated fully ###
