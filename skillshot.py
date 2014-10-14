@@ -38,6 +38,7 @@ class SkillshotMode(game.Mode):
 			####################
 			self.superSkillshotValue = 250000
 			self.skillshotDisplayTime = 2
+			self.superSkillshotSeconds = 3
 
 	def mode_started(self):
 		self.game.utilities.set_player_stats('skillshot_active',True)
@@ -154,4 +155,9 @@ class SkillshotMode(game.Mode):
 
 	def sw_captiveBall9_closed(self, sw):
 		self.superSkillshotAwarded()
+		return procgame.game.SwitchContinue
+
+	def sw_centerRampEnd_active(self, sw):
+		self.game.sound.play_voice('shoot_captive_ball')
+		self.delay(name='endSuperSkillshot',delay=self.superSkillshotSeconds,handler=self.superSkillshotMissed)
 		return procgame.game.SwitchContinue
