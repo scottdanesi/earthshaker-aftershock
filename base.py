@@ -128,6 +128,7 @@ class BaseGameMode(game.Mode):
 		self.game.modes.remove(self.game.drops_mode)
 
 		self.game.modes.add(self.game.bonus_mode)
+		
 		if self.game.tiltStatus == 0:
 			self.game.bonus_mode.calculate(self.game.base_mode.end_ball)
 		else:
@@ -136,6 +137,7 @@ class BaseGameMode(game.Mode):
 	def end_ball(self):
 		#Remove Bonus
 		self.game.modes.remove(self.game.bonus_mode)
+		
 
 		#update games played stats
 		self.game.game_data['Audits']['Balls Played'] += 1
@@ -166,7 +168,8 @@ class BaseGameMode(game.Mode):
 			if self.game.ball == self.game.balls_per_game:
 				#Last Ball Drained
 				print "Last ball drained, ending game"
-				self.end_game()
+				#self.end_game()
+				self.finish_game()
 			else:
 				#Increment Current Ball
 				#print "Increment current ball and set player back to 1"
@@ -179,9 +182,15 @@ class BaseGameMode(game.Mode):
 			self.game.current_player_index += 1
 			self.start_ball()
 
+	def finish_game(self):
+		#self.game.modes.add(self.game.highscore_mode)
+		#self.game.highscore_mode.checkScores(self.game.base_mode.end_game)
+		self.end_game()
 
 	def end_game(self):
 		self.game.utilities.log('Game Ended','info')
+
+		self.game.modes.remove(self.game.highscore_mode)
 
 		self.game.rightramp_mode.closeFault()
 
@@ -245,6 +254,12 @@ class BaseGameMode(game.Mode):
 		self.game.modes.remove(self.game.mode_8)
 		self.game.modes.remove(self.game.mode_9)
 
+	def ejectZone5(self):
+		self.game.utilities.acFlashPulse('californiaFault_CenterRampFlashers3')
+		self.delay(delay=.2,handler=self.game.utilities.acFlashPulse,param='californiaFault_CenterRampFlashers3')
+		self.delay(delay=.4,handler=self.game.utilities.acCoilPulse,param='ejectHole_CenterRampFlashers4')
+		self.delay(delay=.6,handler=self.game.sound.play,param='ejectsaucer')
+
 	###############################################################
 	# BASE SWITCH HANDLING FUNCTIONS
 	###############################################################		
@@ -285,13 +300,13 @@ class BaseGameMode(game.Mode):
 			self.game.add_player()
 			print 'Player Added - Total Players = ' + str(len(self.game.players))
 			if (len(self.game.players) == 2):
-				self.game.sound.play('player_2_vox')
+				self.game.sound.play_voice('player_2_vox')
 				self.game.utilities.displayText(200,topText='PLAYER 2',bottomText='ADDED',seconds=1,justify='center')
 			elif (len(self.game.players) == 3):
-				self.game.sound.play('player_3_vox')
+				self.game.sound.play_voice('player_3_vox')
 				self.game.utilities.displayText(200,topText='PLAYER 3',bottomText='ADDED',seconds=1,justify='center')
 			elif (len(self.game.players) == 4):
-				self.game.sound.play('player_4_vox')
+				self.game.sound.play_voice('player_4_vox')
 				self.game.utilities.displayText(200,topText='PLAYER 4',bottomText='ADDED',seconds=1,justify='center')
 		else:
 			pass		
@@ -309,8 +324,8 @@ class BaseGameMode(game.Mode):
 			self.delay('finishBall',delay=1,handler=self.finish_ball)
 		return procgame.game.SwitchStop
 
-	def sw_ejectHole5_closed_for_1s(self, sw):
-		self.game.utilities.acCoilPulse(coilname='ejectHole_CenterRampFlashers4',pulsetime=50)
+	def sw_ejectHole5_closed_for_200ms(self, sw):
+		self.ejectZone5()
 		return procgame.game.SwitchStop
 
 	def sw_jetLeft_active(self, sw):
