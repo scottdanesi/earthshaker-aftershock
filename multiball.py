@@ -39,6 +39,17 @@ class Multiball(game.Mode):
 			self.multiballStarting = False
 			self.multiballIntroLength = 11.287
 
+			### Active Multiball Variables ###
+			self.zone1Staus = -1
+			self.zone2Staus = -1
+			self.zone3Staus = -1
+			self.zone4Staus = -1
+			self.zone5Staus = -1
+			self.zone6Staus = -1
+			self.zone7Staus = -1
+			self.zone8Staus = -1
+			self.zone9Staus = -1
+
 	def mode_started(self):
 		self.getUserStats()
 		self.update_lamps()
@@ -53,6 +64,7 @@ class Multiball(game.Mode):
 		if (self.ballLock1Lit == True):
 			self.game.lamps.dropHoleLock.schedule(schedule=0xFF00FF00, cycle_seconds=0, now=True)
 			self.game.lamps.rightRampLock.schedule(schedule=0x00FF00FF, cycle_seconds=0, now=True)
+			self.game.lamps.ejectLock.schedule(schedule=0x0FF00FF0, cycle_seconds=0, now=True)
 			print "Lock 1 is Lit"
 		elif (self.ballLock2Lit == True):
 			self.game.lamps.dropHoleLock.schedule(schedule=0xFF00FF00, cycle_seconds=0, now=True)
@@ -63,8 +75,66 @@ class Multiball(game.Mode):
 			self.game.lamps.rightRampLock.schedule(schedule=0x00FF00FF, cycle_seconds=0, now=True)
 			print "Lock 3 is Lit"
 
-		
-			
+		if (self.game.utilities.get_player_stats('multiball_running') == True):
+			self.refreshMultiballZones()
+
+			if (self.zone1Staus == -1):
+				self.game.lamps.standupLeft1.disable()
+			if (self.zone2Staus == -1):
+				self.game.lamps.standupRightHigh2.disable()
+			if (self.zone3Staus == -1):
+				self.game.lamps.standupRightLow3.disable()
+			if (self.zone4Staus == -1):
+				self.game.lamps.standupCenter4.disable()
+			if (self.zone5Staus == -1):
+				self.game.lamps.ejectTop5.disable()
+			if (self.zone6Staus == -1):
+				self.game.lamps.underFaultLoop6.disable()
+			if (self.zone7Staus == -1):
+				self.game.lamps.inlaneRight7.disable()
+			if (self.zone8Staus == -1):
+				self.game.lamps.inlaneLeft8.disable()
+			if (self.zone9Staus == -1):
+				self.game.lamps.captiveArrow9.disable()
+
+			if (self.zone1Staus == 0):
+				self.game.lamps.standupLeft1.schedule(schedule=0xCCCCCCCC, cycle_seconds=0, now=True)
+			if (self.zone2Staus == 0):
+				self.game.lamps.standupRightHigh2.schedule(schedule=0xCCCCCCCC, cycle_seconds=0, now=True)
+			if (self.zone3Staus == 0):
+				self.game.lamps.standupRightLow3.schedule(schedule=0xCCCCCCCC, cycle_seconds=0, now=True)
+			if (self.zone4Staus == 0):
+				self.game.lamps.standupCenter4.schedule(schedule=0xCCCCCCCC, cycle_seconds=0, now=True)
+			if (self.zone5Staus == 0):
+				self.game.lamps.ejectTop5.schedule(schedule=0xCCCCCCCC, cycle_seconds=0, now=True)
+			if (self.zone6Staus == 0):
+				self.game.lamps.underFaultLoop6.schedule(schedule=0xCCCCCCCC, cycle_seconds=0, now=True)
+			if (self.zone7Staus == 0):
+				self.game.lamps.inlaneRight7.schedule(schedule=0xCCCCCCCC, cycle_seconds=0, now=True)
+			if (self.zone8Staus == 0):
+				self.game.lamps.inlaneLeft8.schedule(schedule=0xCCCCCCCC, cycle_seconds=0, now=True)
+			if (self.zone9Staus == 0):
+				self.game.lamps.captiveArrow9.schedule(schedule=0xCCCCCCCC, cycle_seconds=0, now=True)
+
+			if (self.zone1Staus == 1):
+				self.game.lamps.standupLeft1.enable()
+			if (self.zone2Staus == 1):
+				self.game.lamps.standupRightHigh2.enable()
+			if (self.zone3Staus == 1):
+				self.game.lamps.standupRightLow3.enable()
+			if (self.zone4Staus == 1):
+				self.game.lamps.standupCenter4.enable()
+			if (self.zone5Staus == 1):
+				self.game.lamps.ejectTop5.enable()
+			if (self.zone6Staus == 1):
+				self.game.lamps.underFaultLoop6.enable()
+			if (self.zone7Staus == 1):
+				self.game.lamps.inlaneRight7.enable()
+			if (self.zone8Staus == 1):
+				self.game.lamps.inlaneLeft8.enable()
+			if (self.zone9Staus == 1):
+				self.game.lamps.captiveArrow9.enable()
+
 	def disableLockLamps(self):
 		self.game.lamps.rightRampLock.disable()
 		self.game.lamps.ejectLock.disable()
@@ -169,28 +239,142 @@ class Multiball(game.Mode):
 		self.game.utilities.set_player_stats('lock3_lit',False)
 		self.game.utilities.set_player_stats('balls_locked',0)
 		self.getUserStats()
-		
-	#def sw_underPlayfieldDrop1_active(self, sw):
-		#if (self.ballLock1Lit == True):
-			#self.lockBall1()
-		#elif (self.ballLock2Lit == True):
-			#self.lockBall2()
-		#elif (self.ballLock3Lit == True):
-			#self.startMultiball()
-		#else:
-			#pass
 
-	#def sw_ballPopperBottom_closed(self, sw):
-		#if(self.multiballStarting == True):
-			#return procgame.game.SwitchStop
-		#else:
-			#return procgame.game.SwitchContinue
+	def resetMultiballZones(self):
+		self.zone1Staus = self.game.utilities.set_player_stats('super_jackpot_zone1_status',0)
+		self.zone2Staus = self.game.utilities.set_player_stats('super_jackpot_zone2_status',-1)
+		self.zone3Staus = self.game.utilities.set_player_stats('super_jackpot_zone3_status',-1)
+		self.zone4Staus = self.game.utilities.set_player_stats('super_jackpot_zone4_status',-1)
+		self.zone5Staus = self.game.utilities.set_player_stats('super_jackpot_zone5_status',-1)
+		self.zone6Staus = self.game.utilities.set_player_stats('super_jackpot_zone6_status',-1)
+		self.zone7Staus = self.game.utilities.set_player_stats('super_jackpot_zone7_status',-1)
+		self.zone8Staus = self.game.utilities.set_player_stats('super_jackpot_zone8_status',-1)
+		self.zone9Staus = self.game.utilities.set_player_stats('super_jackpot_zone9_status',-1)
+
+	def refreshMultiballZones(self):
+		self.zone1Staus = self.game.utilities.get_player_stats('super_jackpot_zone1_status')
+		self.zone2Staus = self.game.utilities.get_player_stats('super_jackpot_zone2_status')
+		self.zone3Staus = self.game.utilities.get_player_stats('super_jackpot_zone3_status')
+		self.zone4Staus = self.game.utilities.get_player_stats('super_jackpot_zone4_status')
+		self.zone5Staus = self.game.utilities.get_player_stats('super_jackpot_zone5_status')
+		self.zone6Staus = self.game.utilities.get_player_stats('super_jackpot_zone6_status')
+		self.zone7Staus = self.game.utilities.get_player_stats('super_jackpot_zone7_status')
+		self.zone8Staus = self.game.utilities.get_player_stats('super_jackpot_zone8_status')
+		self.zone9Staus = self.game.utilities.get_player_stats('super_jackpot_zone9_status')
+
+	def incrementMultiballZones(self):
+		if (self.zone1Staus == 0):
+			self.game.utilities.set_player_stats('super_jackpot_zone1_status',1)
+			self.game.utilities.set_player_stats('super_jackpot_zone2_status',0)
+		elif (self.zone2Staus == 0):
+			self.game.utilities.set_player_stats('super_jackpot_zone2_status',1)
+			self.game.utilities.set_player_stats('super_jackpot_zone3_status',0)
+		elif (self.zone3Staus == 0):
+			self.game.utilities.set_player_stats('super_jackpot_zone3_status',1)
+			self.game.utilities.set_player_stats('super_jackpot_zone4_status',0)
+		elif (self.zone4Staus == 0):
+			self.game.utilities.set_player_stats('super_jackpot_zone4_status',1)
+			self.game.utilities.set_player_stats('super_jackpot_zone5_status',0)
+		elif (self.zone5Staus == 0):
+			self.game.utilities.set_player_stats('super_jackpot_zone5_status',1)
+			self.game.utilities.set_player_stats('super_jackpot_zone6_status',0)
+		elif (self.zone6Staus == 0):
+			self.game.utilities.set_player_stats('super_jackpot_zone6_status',1)
+			self.game.utilities.set_player_stats('super_jackpot_zone7_status',0)
+		elif (self.zone7Staus == 0):
+			self.game.utilities.set_player_stats('super_jackpot_zone7_status',1)
+			self.game.utilities.set_player_stats('super_jackpot_zone8_status',0)
+		elif (self.zone8Staus == 0):
+			self.game.utilities.set_player_stats('super_jackpot_zone8_status',1)
+			self.game.utilities.set_player_stats('super_jackpot_zone9_status',0)
+			### Light Super Jackpot ###
+			self.game.utilities.set_player_stats('super_jackpot_lit',True)
+		elif (self.zone9Staus == 0):
+			self.game.utilities.set_player_stats('super_jackpot_zone9_status',1)
+			
+
+		self.game.update_lamps()
 
 	def sw_outhole_closed_for_500ms(self, sw):
 		#if (self.game.trough.num_balls_in_play == 2):
 			#Last ball - Need to stop multiball
 			#self.stopMultiball()
 		return procgame.game.SwitchContinue
+
+	def sw_leftStandup1_closed(self, sw):
+		if (self.game.utilities.get_player_stats('multiball_running') == True):
+			if (self.zone1Staus == 0):
+				self.incrementMultiballZones()
+			return procgame.game.SwitchStop
+		else:
+			return procgame.game.SwitchContinue
+
+	def sw_rightStandupHigh2_closed(self, sw):
+		if (self.game.utilities.get_player_stats('multiball_running') == True):
+			if (self.zone2Staus == 0):
+				self.incrementMultiballZones()
+			return procgame.game.SwitchStop
+		else:
+			return procgame.game.SwitchContinue
+
+	def sw_rightStandupLow3_closed(self, sw):
+		if (self.game.utilities.get_player_stats('multiball_running') == True):
+			if (self.zone3Staus == 0):
+				self.incrementMultiballZones()
+			return procgame.game.SwitchStop
+		else:
+			return procgame.game.SwitchContinue
+
+	def sw_centerStandup4_closed(self, sw):
+		if (self.game.utilities.get_player_stats('multiball_running') == True):
+			if (self.zone4Staus == 0):
+				self.incrementMultiballZones()
+			return procgame.game.SwitchStop
+		else:
+			return procgame.game.SwitchContinue
+
+	def sw_ejectHole5_closed_for_400ms(self, sw):
+		if (self.game.utilities.get_player_stats('multiball_running') == True):
+			if (self.zone5Staus == 0):
+				self.incrementMultiballZones()
+		return procgame.game.SwitchContinue
+
+	def sw_rightLoop6_closed(self, sw):
+		if (self.game.utilities.get_player_stats('multiball_running') == True):
+			if (self.zone6Staus == 0):
+				self.incrementMultiballZones()
+			return procgame.game.SwitchStop
+		else:
+			return procgame.game.SwitchContinue
+
+	def sw_rightInsideReturn7_closed(self, sw):
+		if (self.game.utilities.get_player_stats('multiball_running') == True):
+			if (self.zone7Staus == 0):
+				self.incrementMultiballZones()
+			return procgame.game.SwitchStop
+		else:
+			return procgame.game.SwitchContinue
+
+	def sw_leftReturnLane8_closed(self, sw):
+		if (self.game.utilities.get_player_stats('multiball_running') == True):
+			if (self.zone8Staus == 0):
+				self.incrementMultiballZones()
+			return procgame.game.SwitchStop
+		else:
+			return procgame.game.SwitchContinue
+
+	def sw_captiveBall9_closed(self, sw):
+		if (self.game.utilities.get_player_stats('multiball_running') == True):
+			if (self.zone9Staus == 0):
+				self.incrementMultiballZones()
+			
+			if (self.game.utilities.get_player_stats('super_jackpot_lit') == True):
+				self.game.jackpot_mode.awardSuperJackpot()
+				self.resetMultiballZones()
+
+			return procgame.game.SwitchStop
+		else:
+			return procgame.game.SwitchContinue
 
 
 

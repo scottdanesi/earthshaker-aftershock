@@ -326,7 +326,7 @@ class Shelter(game.Mode):
 		elif (self.game.multiball_mode.ballLock3Lit == True):
 			self.game.multiball_mode.startMultiball()
 		else:
-			if (self.modeSelectorActive == False):
+			if (self.modeSelectorActive == False and self.game.multiball_mode.multiballStarting == False):
 				self.setModeSelectorActive(True)
 				self.modeSelector()
 

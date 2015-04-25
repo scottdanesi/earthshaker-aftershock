@@ -105,8 +105,8 @@ class Trough(procgame.game.Mode):
 		#for switch in self.early_save_switchnames:
 			#self.add_switch_handler(name=switch, event_type='active', delay=None, handler=self.early_save_switch_handler)
 
-		# Install outhole switch handler.
-		self.add_switch_handler(name=self.outhole_switchname, event_type='active', delay=0.75, handler=self.outhole_switch_handler)
+		# Install outhole switch handler. Was at a delay of .75
+		self.add_switch_handler(name=self.outhole_switchname, event_type='active', delay=.75, handler=self.outhole_switch_handler)
 
 		# Reset variables
 		self.num_balls_in_play = 0
@@ -149,15 +149,32 @@ class Trough(procgame.game.Mode):
 		#add handler for outhole
 	def outhole_switch_handler(self,sw):
 		self.log.info('outhole switch handler called')
+
 		#if self.game.switches[self.outhole_switchname].is_active(seconds=1.0):
 		#self.game.switched_coils.drive(self.outhole_coilname)
 		self.game.utilities.acCoilPulse('outholeKicker_CaptiveFlashers')
-		if(self.game.utilities.get_player_stats('multiball_running') == True):
-			self.delay(delay=1,handler=self.checkForEndOfMultiball)
+		#self.delay(delay=2,handler=self.check_switches)
+		if (self.game.ball != 0):
+			if(self.game.utilities.get_player_stats('multiball_running') == True):
+				self.delay(delay=1,handler=self.checkForEndOfMultiball)
+			else:
+				self.delay(delay=1,handler=self.checkForEndOfBall)
 
+	def checkForEndOfBall(self):
+		if self.num_balls() == 3: #Last ball drained
+			self.game.utilities.setBallInPlay(False) # Will need to use the trough mode for this
+			#self.game.utilities.acCoilPulse('outholeKicker_CaptiveFlashers')
+			self.delay('finishBall',delay=.5,handler=self.game.base_mode.finish_ball)
+			
 	def checkForEndOfMultiball(self):
-		if (self.num_balls() >= 2):
+		if (self.num_balls() == 2):
+			#print self.num_balls()
 			self.game.multiball_mode.stopMultiball()
+		self.delay(delay=1,handler=self.checkForEndOfBall)
+		#elif(self.num_balls() == 3):
+			#print self.num_balls()
+			#self.game.multiball_mode.stopMultiball()
+			#self.delay('finishBall',delay=.5,handler=self.game.base_mode.finish_ball)
 
 	# Switches will change states a lot as balls roll down the trough.
 	# So don't go through all of the logic every time.  Keep resetting a
@@ -165,13 +182,14 @@ class Trough(procgame.game.Mode):
 	# the delay will call the real handler (check_switches).
 	def position_switch_handler(self, sw):
 		self.cancel_delayed('check_switches')
-		self.delay(name='check_switches', event_type=None, delay=0.50, handler=self.check_switches)
+		self.delay(name='check_switches', event_type=None, delay=1, handler=self.check_switches) # was at a delay of .5
 
 	def check_switches(self):
 		if self.num_balls_in_play > 0:
 			# Base future calculations on how many balls the machine 
 			# thinks are currently installed.
-			num_current_machine_balls = self.game.num_balls_total
+			#num_current_machine_balls = self.game.num_balls_total
+			num_current_machine_balls = 3
 			temp_num_balls = self.num_balls()
 			if self.ball_save_active:
 
