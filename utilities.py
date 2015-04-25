@@ -68,12 +68,15 @@ class UtilitiesMode(game.Mode):
 	#######################
 	def log(self,text,level='info'):
 		if (level == 'error'):
-			logging.error(text)
+			pass
+			#logging.error(text)
 		elif (level == 'warning'):
-			logging.warning(text)
+			pass
+			#logging.warning(text)
 		else:
-			logging.info(text)
-		print level + " - " + text
+			pass
+			#logging.info(text)
+		#print level + " - " + text
 
 
 	#################################
@@ -224,7 +227,7 @@ class UtilitiesMode(game.Mode):
 			self.topScoresText = self.player2ScoreFormatted
 			self.game.alpha_score_display.set_text(self.topScoresText,0,justify='right')
 		else:
-			self.game.alpha_score_display.set_text(self.p.name.upper() + "  BALL "+str(self.game.ball),0,justify='right')
+			self.game.alpha_score_display.set_text(self.p.name.upper() + "  BALL "+str(self.game.ball),0,justify='left')
 
 		#Bottom Line#
 		if(self.p.name.upper() == 'PLAYER 3'):
@@ -234,7 +237,7 @@ class UtilitiesMode(game.Mode):
 			self.bottomScoresText = self.player4ScoreFormatted
 			self.game.alpha_score_display.set_text(self.bottomScoresText,1,justify='right')
 		else:
-			self.game.alpha_score_display.set_text(self.p.name.upper() + "  BALL "+str(self.game.ball),1,justify='right')
+			self.game.alpha_score_display.set_text(self.p.name.upper() + "  BALL "+str(self.game.ball),1,justify='left')
 
 	def displayWithPlayers(self):
 
