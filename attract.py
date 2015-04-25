@@ -39,7 +39,7 @@ class AttractMode(game.Mode):
 			self.modeTickCounter = 0
 			self.attractTest = False
 			self.attractLampshowKey = 0
-			self.attractLampshows = 12
+			self.attractLampshows = 14
 
 	def mode_started(self):
 		#### Reset Quake Instituet ####
@@ -64,6 +64,8 @@ class AttractMode(game.Mode):
 
 		#### Enable Backbox Lighting ####
 		self.game.utilities.setBackboxLED(100,100,255)
+
+		
 
 	#def mode_tick(self):
 		#This will cycle random colors through the backbox during Attract Mode
@@ -98,7 +100,8 @@ class AttractMode(game.Mode):
 		else:
 			self.attractLampshowKey = 1
 		self.game.lampctrlflash.stop_show()
-		self.game.lampctrlflash.play_show('attract' + str(self.attractLampshowKey), repeat=True)
+		if (self.game.utilities.ACCoilInProgress == False):
+			self.game.lampctrlflash.play_show('attract' + str(self.attractLampshowKey), repeat=True)
 		self.delay(name='lampshows',delay=2,handler=self.changeAttractLampshow)
 
 			
@@ -222,30 +225,29 @@ class AttractMode(game.Mode):
 		#########################
 		#### Previous Game Scores
 		#########################
+		self.player1Score = ''
+		self.player2Score = ''
+		self.player3Score = ''
+		self.player4Score = ''
+
+		self.player1ScoreFormatted = ''
+		self.player2ScoreFormatted = ''
+		self.player3ScoreFormatted = ''
+		self.player4ScoreFormatted = ''
+
 		self.player1Score = self.game.game_data['LastGameScores']['LastPlayer1Score']
 		self.player2Score = self.game.game_data['LastGameScores']['LastPlayer2Score']
 		self.player3Score = self.game.game_data['LastGameScores']['LastPlayer3Score']
 		self.player4Score = self.game.game_data['LastGameScores']['LastPlayer4Score']
 
-		try:
-			self.player1Score = locale.format("%d", int(float(self.player1Score)), True)
-		except ValueError:
-			pass
-
-		try:
-			self.player2Score = locale.format("%d", int(float(self.player2Score)), True)
-		except ValueError:
-			pass
-
-		try:
-			self.player3Score = locale.format("%d", int(float(self.player3Score)), True)
-		except ValueError:
-			pass
-
-		try:
-			self.player4Score = locale.format("%d", int(float(self.player4Score)), True)
-		except ValueError:
-			pass
+		if (self.player1Score <> ' '):
+			self.player1ScoreFormatted = str(locale.format("%d", self.player1Score, grouping=True))
+		if (self.player2Score <> ' '):
+			self.player2ScoreFormatted = str(locale.format("%d", self.player2Score, grouping=True))
+		if (self.player3Score <> ' '):
+			self.player3ScoreFormatted = str(locale.format("%d", self.player3Score, grouping=True))
+		if (self.player4Score <> ' '):
+			self.player4ScoreFormatted = str(locale.format("%d", self.player4Score, grouping=True))
 
 		#######################################################################
 		#### Set Top and Bottom Text for Previous Game Scores #################
@@ -254,21 +256,61 @@ class AttractMode(game.Mode):
 		#### It also contains error checking for when both scores on 1 line are 
 		#### larger than 16 characters.
 		#######################################################################
+		### Set Top Text ###################################################
+		#######################################################################
 		self.scoreSpaceCount = 16 - (len(str(self.player1Score)) + len(str(self.player2Score)))
 		if self.scoreSpaceCount < 0: # Just in case scores get very large (over 8 characters each)
 			self.scoreSpaceCount = 0
-		self.topScoresText = str(self.player1Score)
+
+		### Attempt to convert the Score to a formatted string ###
+		#try:
+			#self.player1Score = locale.format("%d", int(float(self.player1Score)), True)
+			#self.player1Score = locale.format("%d", int(self.player1Score), True)
+		#except ValueError:
+			#pass
+
+		self.topScoresText = str(self.player1ScoreFormatted)
 		for i in range (0,self.scoreSpaceCount): # Puts a space between the scores for i places
-			self.topScoresText += ' ' 
-		self.topScoresText += str(self.player2Score) # Add the score to the end
-		# Set Bottom Text
+			self.topScoresText += ' '
+
+		### Attempt to convert the Score to a formatted string ###
+		#try:
+			#self.player2Score = locale.format("%d", int(float(self.player2Score)), True)
+			#self.player2Score = locale.format("%d", int(self.player2Score), True)
+		#except ValueError:
+			#pass
+
+		self.topScoresText += str(self.player2ScoreFormatted) # Add the score to the end
+
+		#######################################################################
+		### Set Bottom Text ###################################################
+		#######################################################################
 		self.scoreSpaceCount = 16 - (len(str(self.player3Score)) + len(str(self.player4Score)))
 		if self.scoreSpaceCount < 0: # Just in case scores get very large (over 8 characters each)
 			self.scoreSpaceCount = 0
-		self.bottomScoresText = str(self.player3Score)
+
+		### Attempt to convert the Score to a formatted string ###
+		#try:
+			#self.player3Score = locale.format("%d", int(float(self.player3Score)), True)
+			#self.player3Score = locale.format("%d", int(self.player3Score), True)
+		#except ValueError:
+			#pass
+
+		self.bottomScoresText = str(self.player3ScoreFormatted)
 		for i in range (0,self.scoreSpaceCount):
 			self.bottomScoresText += ' '
-		self.bottomScoresText += str(self.player4Score)
+
+		### Attempt to convert the Score to a formatted string ###
+		#try:
+			#self.player4Score = locale.format("%d", int(float(self.player4Score)), True)
+			#self.player4Score = locale.format("%d", int(self.player4Score), True)
+		#except ValueError:
+			#pass
+
+		self.bottomScoresText += str(self.player4ScoreFormatted)
+
+		#script.append({'top':str(self.player1Score),'bottom':str(self.player2Score),'timer':7,'transition':1})
+		#script.append({'top':str(self.player3Score),'bottom':str(self.player4Score),'timer':7,'transition':1})
 
 		# Append Prev Game Scores to Script
 		script.append({'top':self.topScoresText,'bottom':self.bottomScoresText,'timer':7,'transition':0})
