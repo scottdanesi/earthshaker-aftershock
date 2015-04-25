@@ -76,51 +76,53 @@ class CollectZones(game.Mode):
 	def update_lamps(self):
 		print "Update Lamps: Collect Zones"
 		self.game.utilities.log('CollectZone Mode - Update Lamps','info')
-		#Disable all zone lamps#
-		for item in self.allZoneLamps:
-			self.game.lamps[item].disable()
 
-		#Enable active Zones#
-		for item in self.activeZones:
-			if (item == 'zone1_status'):
-				self.game.lamps.standupLeft1.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=True)
-			elif (item == 'zone2_status'):
-				self.game.lamps.standupRightHigh2.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=True)
-			elif (item == 'zone3_status'):
-				self.game.lamps.standupRightLow3.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=True)
-			elif (item == 'zone4_status'):
-				self.game.lamps.standupCenter4.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=True)
-			elif (item == 'zone5_status'):
-				self.game.lamps.ejectTop5.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=True)
-			elif (item == 'zone6_status'):
-				self.game.lamps.underFaultLoop6.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=True)
-			elif (item == 'zone7_status'):
-				self.game.lamps.inlaneRight7.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=True)
-			elif (item == 'zone8_status'):
-				self.game.lamps.inlaneLeft8.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=True)
-			elif (item == 'zone9_status'):
-				self.game.lamps.captiveArrow9.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=True)
+		if (self.game.utilities.get_player_stats('multiball_running') == False):
+			#Disable all zone lamps#
+			for item in self.allZoneLamps:
+				self.game.lamps[item].disable()
+
+			#Enable active Zones#
+			for item in self.activeZones:
+				if (item == 'zone1_status'):
+					self.game.lamps.standupLeft1.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=True)
+				elif (item == 'zone2_status'):
+					self.game.lamps.standupRightHigh2.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=True)
+				elif (item == 'zone3_status'):
+					self.game.lamps.standupRightLow3.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=True)
+				elif (item == 'zone4_status'):
+					self.game.lamps.standupCenter4.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=True)
+				elif (item == 'zone5_status'):
+					self.game.lamps.ejectTop5.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=True)
+				elif (item == 'zone6_status'):
+					self.game.lamps.underFaultLoop6.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=True)
+				elif (item == 'zone7_status'):
+					self.game.lamps.inlaneRight7.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=True)
+				elif (item == 'zone8_status'):
+					self.game.lamps.inlaneLeft8.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=True)
+				elif (item == 'zone9_status'):
+					self.game.lamps.captiveArrow9.schedule(schedule=0x0F0F0F0F, cycle_seconds=0, now=True)
 		
-		#Enable completed zones#
-		for item in self.completedZones:
-			if (item == 'zone1_status'):
-				self.game.lamps.standupLeft1.enable()
-			elif (item == 'zone2_status'):
-				self.game.lamps.standupRightHigh2.enable()
-			elif (item == 'zone3_status'):
-				self.game.lamps.standupRightLow3.enable()
-			elif (item == 'zone4_status'):
-				self.game.lamps.standupCenter4.enable()
-			elif (item == 'zone5_status'):
-				self.game.lamps.ejectTop5.enable()
-			elif (item == 'zone6_status'):
-				self.game.lamps.underFaultLoop6.enable()
-			elif (item == 'zone7_status'):
-				self.game.lamps.inlaneRight7.enable()
-			elif (item == 'zone8_status'):
-				self.game.lamps.inlaneLeft8.enable()
-			elif (item == 'zone9_status'):
-				self.game.lamps.captiveArrow9.enable()
+			#Enable completed zones#
+			for item in self.completedZones:
+				if (item == 'zone1_status'):
+					self.game.lamps.standupLeft1.enable()
+				elif (item == 'zone2_status'):
+					self.game.lamps.standupRightHigh2.enable()
+				elif (item == 'zone3_status'):
+					self.game.lamps.standupRightLow3.enable()
+				elif (item == 'zone4_status'):
+					self.game.lamps.standupCenter4.enable()
+				elif (item == 'zone5_status'):
+					self.game.lamps.ejectTop5.enable()
+				elif (item == 'zone6_status'):
+					self.game.lamps.underFaultLoop6.enable()
+				elif (item == 'zone7_status'):
+					self.game.lamps.inlaneRight7.enable()
+				elif (item == 'zone8_status'):
+					self.game.lamps.inlaneLeft8.enable()
+				elif (item == 'zone9_status'):
+					self.game.lamps.captiveArrow9.enable()
 
 	def resetPlayerZones(self):
 		self.game.utilities.log('CollectZone Mode - Reset Player Zones','info')
@@ -278,7 +280,7 @@ class CollectZones(game.Mode):
 			self.game.sound.play('zone_na')
 		return procgame.game.SwitchContinue
 		
-	def sw_ejectHole5_closed_for_100ms(self, sw):
+	def sw_ejectHole5_closed_for_200ms(self, sw):
 		if ('zone5_status' in self.activeZones):
 			self.game.utilities.set_player_stats('zone5_status',1)
 			self.game.lampctrl.play_show('zone_collected', repeat=False)
@@ -287,9 +289,13 @@ class CollectZones(game.Mode):
 			#self.game.utilities.acFlashSchedule(coilname='californiaFault_CenterRampFlashers3',schedule=0x000000CC, cycle_seconds=1, now=True)
 			self.scoreZoneCollected()
 			self.refreshAllZoneLists()
+			self.game.base_mode.ejectZone5()
+			#return procgame.game.SwitchStop
+		elif (self.game.multiball_mode.ballLock1Lit == True):
+			self.game.multiball_mode.lockBall1()
+			self.delay(delay=.5,handler=self.game.base_mode.ejectZone5)
 		else:
-			pass
-			#self.zoneNotAwarded()
+			self.game.base_mode.ejectZone5()
 		return procgame.game.SwitchContinue
 		
 	def sw_rightLoop6_closed(self, sw):
