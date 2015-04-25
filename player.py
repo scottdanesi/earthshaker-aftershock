@@ -56,6 +56,7 @@ class Player(procgame.game.Player):
 			self.player_stats['total_jackpots_collected']=0
 			self.player_stats['last_multiball_jackpots_collected']=0
 			self.player_stats['jackpot_lit']=False
+			self.player_stats['super_jackpot_lit']=False
 
 			### Multiball Stats ######################################
 			self.player_stats['lock1_lit']=False
@@ -95,3 +96,14 @@ class Player(procgame.game.Player):
 			self.player_stats['mode7_status']=-1
 			self.player_stats['mode8_status']=-1
 			self.player_stats['mode9_status']=-1
+
+			### Super Jackpot Zone Status ############################
+			self.player_stats['super_jackpot_zone1_status']=0
+			self.player_stats['super_jackpot_zone2_status']=-1
+			self.player_stats['super_jackpot_zone3_status']=-1
+			self.player_stats['super_jackpot_zone4_status']=-1
+			self.player_stats['super_jackpot_zone5_status']=-1
+			self.player_stats['super_jackpot_zone6_status']=-1
+			self.player_stats['super_jackpot_zone7_status']=-1
+			self.player_stats['super_jackpot_zone8_status']=-1
+			self.player_stats['super_jackpot_zone9_status']=-1
