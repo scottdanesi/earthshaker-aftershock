@@ -37,7 +37,8 @@ class BaseGameMode(game.Mode):
 	def __init__(self, game, priority):
 			#locale.setlocale(locale.LC_ALL, '') #Might not be needed
 			super(BaseGameMode, self).__init__(game, priority)
-			
+			self.finishingBall = False
+			self.missingBalls = False
 			
 	def mode_started(self):
 			#Start Attract Mode
@@ -94,6 +95,8 @@ class BaseGameMode(game.Mode):
 		#### Queue Ball Modes ####
 		self.loadBallModes()
 
+		#self.game.modes.add(self.game.healthcheck_mode)
+
 		#### Enable Flippers ####
 		self.game.coils.flipperEnable.enable()
 
@@ -109,6 +112,8 @@ class BaseGameMode(game.Mode):
 		#self.game.trough.num_balls_to_launch = 1
 		self.game.trough.launch_balls(num=1)
 
+		#self.healthChecker()
+
 
 		#### Update Player Display ####
 		self.game.utilities.updateBaseDisplay()
@@ -120,19 +125,29 @@ class BaseGameMode(game.Mode):
 		self.game.sound.play_music('shooter',loops=-1,music_volume=.5)
 		self.game.shooter_lane_status = 1
 
+		self.game.update_lamps()
+
 		#### Debug Info ####
 		print "Ball Started"
 
 	def finish_ball(self):
-		# Remove Drops mode because of delay issue #
-		self.game.modes.remove(self.game.drops_mode)
+		if (self.finishingBall == False):
+			self.finishingBall = True
 
-		self.game.modes.add(self.game.bonus_mode)
+			# Remove Drops mode because of delay issue #
+			self.game.modes.remove(self.game.drops_mode)
+
+			#self.game.modes.remove(self.game.healthcheck_mode)
+
+			#self.cancel_delayed('healthChecker')
+
+			self.game.modes.add(self.game.bonus_mode)
 		
-		if self.game.tiltStatus == 0:
-			self.game.bonus_mode.calculate(self.game.base_mode.end_ball)
-		else:
-			self.end_ball()
+			if self.game.tiltStatus == 0:
+				self.game.bonus_mode.calculate(self.game.base_mode.end_ball)
+			else:
+				self.end_ball()
+
 		
 	def end_ball(self):
 		#Remove Bonus
@@ -181,6 +196,8 @@ class BaseGameMode(game.Mode):
 			print "Not last player drained"
 			self.game.current_player_index += 1
 			self.start_ball()
+
+		self.finishingBall = False
 
 	def finish_game(self):
 		#self.game.modes.add(self.game.highscore_mode)
@@ -293,9 +310,17 @@ class BaseGameMode(game.Mode):
 				self.start_game()
 			else:
 				#missing balls
+				#self.missingBalls = True
 				self.game.utilities.releaseStuckBalls()
-				#self.game.alpha_score_display.set_text("MISSING PINBALLS",0)
-				#self.game.alpha_score_display.set_text("PLEASE WAIT",1)
+				self.game.modes.remove('attract_mode')
+				script=[]
+				script.append({'top':'MISSING PINBALLS','bottom':' ','timer':2,'transition':0})
+				script.append({'top':'PLEASE CHECK','bottom':'SKILLSHOT RAMP','timer':2,'transition':0})
+				script.append({'top':'LIFT GAME FRONT','bottom':'IF BALL STUCK','timer':2,'transition':0})
+				self.game.alpha_score_display.cancel_script()
+				self.game.alpha_score_display.set_script(script)
+				self.delay(name='stuckBalls',delay=6,handler=self.game.modes.add,param='attract_mode')
+
 		elif self.game.ball == 1 and len(self.game.players) < 4:
 			self.game.add_player()
 			print 'Player Added - Total Players = ' + str(len(self.game.players))
@@ -318,14 +343,25 @@ class BaseGameMode(game.Mode):
 		
 	def sw_outhole_closed_for_1s(self, sw):
 		### Ball handling ###
-		if self.game.trough.num_balls_in_play == 1: #Last ball in play
-			self.game.utilities.setBallInPlay(False) # Will need to use the trough mode for this
-			#self.game.utilities.acCoilPulse('outholeKicker_CaptiveFlashers')
-			self.delay('finishBall',delay=1,handler=self.finish_ball)
+		#if self.game.trough.num_balls_in_play == 1: #Last ball in play
+			#self.game.utilities.setBallInPlay(False) # Will need to use the trough mode for this
+			##self.game.utilities.acCoilPulse('outholeKicker_CaptiveFlashers')
+			#self.delay('finishBall',delay=.5,handler=self.finish_ball)
 		return procgame.game.SwitchStop
 
+	#def healthChecker(self):
+		#if self.game.trough.num_balls_in_play == 0:
+			#self.game.utilities.setBallInPlay(False)
+			#self.finish_ball()
+			#self.cancel_delayed('healthChecker')
+		#self.delay(name='heathChecker',delay=5,handler=self.healthChecker)
+
 	def sw_ejectHole5_closed_for_200ms(self, sw):
-		self.ejectZone5()
+		#if (self.game.multiball_mode.ballLock1Lit == True):
+			#self.game.multiball_mode.lockBall1()
+			#self.delay(delay=.5,handler=self.ejectZone5)
+		#else:
+			#self.ejectZone5()
 		return procgame.game.SwitchStop
 
 	def sw_jetLeft_active(self, sw):
