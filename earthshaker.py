@@ -59,6 +59,7 @@ from jackpot import *
 from shelter import *
 from highscore import *
 from bonusmultiplier import *
+from healthcheck import *
 
 #### Mini Modes ####
 from mode_1 import *
@@ -159,6 +160,7 @@ class EarthshakerAftershock(game.BasicGame):
 
 		#### Mode Definitions ####
 		self.utilities = UtilitiesMode(self,0)
+		self.healthcheck_mode = HealthCheckMode(self,0)
 		
 		self.base_mode = BaseGameMode(self,2)
 		self.attract_mode = AttractMode(self,5)
@@ -315,6 +317,8 @@ class EarthshakerAftershock(game.BasicGame):
 		self.lampctrl.register_show('attract10', game_lampshows + 'attract_radar_cw.lampshow')
 		self.lampctrl.register_show('attract11', game_lampshows + 'attract_sweep_horizontalsparkle.lampshow')
 		self.lampctrl.register_show('attract12', game_lampshows + 'attract_sweep_horizontalsparkle.lampshow')
+		self.lampctrl.register_show('attract13', game_lampshows + 'attract_feature_a.lampshow')
+		self.lampctrl.register_show('attract14', game_lampshows + 'attract_feature_a.lampshow')
 		self.lampctrl.register_show('center_ramp_1', game_lampshows + 'centerramp_complete_a.lampshow')
 		self.lampctrlflash.register_show('bonus_feat_left', game_lampshows + 'bonus_feature_left.lampshow')
 		self.lampctrlflash.register_show('bonus_feat_right', game_lampshows + 'bonus_feature_right.lampshow')
