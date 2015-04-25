@@ -73,6 +73,23 @@ class Jackpot(game.Mode):
 			self.game.coils.jackpotFlasher.disable()
 			self.game.lamps.rightRampJackpot.disable()
 
+		# Update for Super Jackpot #
+		if (self.game.utilities.get_player_stats('super_jackpot_lit') == True):
+			self.game.utilities.acFlashSchedule(coilname='outholeKicker_CaptiveFlashers',schedule=0x03030303, cycle_seconds=0, now=True)
+			self.game.lamps.captive25k.schedule(schedule=0x00000C03, cycle_seconds=0, now=False)
+			self.game.lamps.captive50k.schedule(schedule=0x0000300C, cycle_seconds=0, now=False)
+			self.game.lamps.captive100k.schedule(schedule=0x000C0030, cycle_seconds=0, now=False)
+			self.game.lamps.captive150k.schedule(schedule=0x003000C0, cycle_seconds=0, now=False)
+			self.game.lamps.captive250k.schedule(schedule=0x00C00300, cycle_seconds=0, now=False)
+		else:
+			pass
+			#self.game.coils.outholeKicker_CaptiveFlashers.disable()
+			#self.game.lamps.captive25k.disable()
+			#self.game.lamps.captive50k.disable()
+			#self.game.lamps.captive100k.disable()
+			#self.game.lamps.captive150k.disable()
+			#self.game.lamps.captive250k.disable()
+
 	def incrementJackpot(self):
 		if (self.game.utilities.get_player_stats('jackpot_level') < 7):
 			self.game.utilities.set_player_stats('jackpot_level',self.game.utilities.get_player_stats('jackpot_level') + 1)
@@ -121,4 +138,10 @@ class Jackpot(game.Mode):
 		self.unlightJackpot()
 		self.resetJackpotLevel()
 
+	def awardSuperJackpot(self):
+		self.game.sound.play('jackpot')
+		self.game.utilities.shakerPulseHigh()
+		self.game.utilities.score(4000000)
+		self.game.utilities.set_player_stats('super_jackpot_lit',False)
+		self.game.lampctrlflash.play_show('jackpot', repeat=False, callback=self.game.update_lamps)
 		
