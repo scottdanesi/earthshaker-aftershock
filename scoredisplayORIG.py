@@ -57,15 +57,17 @@ class AlphaScoreDisplay(game.ScoreDisplay):
 	def __init__(self, game, priority, left_players_justify="right"):
 		super(AlphaScoreDisplay, self).__init__(game, priority)
 
-                self.log = logging.getLogger('scoredisplay.alpha_display')
+                self.log = logging.getLogger('whirlwind.alpha_display')
                 
                 #set the position of the rhs of score for each player
-                self.player_score_posn=[8,16,8,16]
+                self.player_score_posn=[8,15,8,15]
+
 
                 #set the starting point for a rhs transition
                 self.transition_posn = [17,17]
+
                 self.transition_reveal_posn = [0,0]
-                
+
                 #flags
                 self.blink_flag = False
                 self.text_set = False
@@ -74,7 +76,7 @@ class AlphaScoreDisplay(game.ScoreDisplay):
                 self.reset()
 
         def reset(self):
-                self.log.debug('reset called')    
+                self.log.debug('reset called')
                 #cancel any delays
                 for i in range(2):
                     self.cancel_delayed('text_blink_repeat'+str(i))
@@ -119,16 +121,15 @@ class AlphaScoreDisplay(game.ScoreDisplay):
 		if score == 0:
 			return '00'
 		else:
-			#return locale.format("%d", score, True)
-                        return str(score)
+			return locale.format("%d", score, True)
 
         def update_layer(self):
                 super(AlphaScoreDisplay, self).update_layer()
 
 		if self.game.ball >0:
-                    text = " BALL %d " % (self.game.ball)
+                    text = "BALL %d" % (self.game.ball)
                     if self.game.current_player_index<3: #move text if player 4
-                        posn = 8
+                        posn = 9
                     else:
                         posn = 0
                    
@@ -176,14 +177,12 @@ class AlphaScoreDisplay(game.ScoreDisplay):
         def set_text(self,text,row,justify='center',opaque=True,blink_rate=0,seconds=0):
             self.text_set = True
 
-            strippedText = text.replace(',', '')
-
-            size = len(strippedText)
+            size = len(text)
             posn = 0
             if justify=='left':
-                posn = len(strippedText)
+                posn = len(text)
             elif justify=='right':
-                posn = 16
+                posn =16
             elif justify=='center':
                 posn = 8+size/2
 
@@ -221,7 +220,6 @@ class AlphaScoreDisplay(game.ScoreDisplay):
 
 
         def set_text_blink(self,data):
-            self.text_set = True
             delay=data[0]
             row=data[1]
 
@@ -292,15 +290,10 @@ class AlphaScoreDisplay(game.ScoreDisplay):
             self.cancel_delayed('display_script_ttext')
             self.cancel_delayed('display_script_btext')
             self.cancel_delayed('display_script_repeat')
-            self.cancel_delayed('text_blink_repeat0')
-            self.cancel_delayed('text_blink_repeat1')
             self.restore()
             
 
         def set_transition_in(self,text,row,justify='left',seconds=0):
-            self.text_set = True
-            self.cancel_delayed('text_blink_repeat'+str(row)) #cancel any active blinking
-            
             size = len(text)
 
             if justify=='left':
@@ -333,9 +326,6 @@ class AlphaScoreDisplay(game.ScoreDisplay):
 
 
         def set_transition_reveal(self,text,row,seconds=0):
-            self.text_set = True
-            self.cancel_delayed('text_blink_repeat'+str(row)) #cancel any active blinking
-            
             size = len(text)
             
             #create curtain
