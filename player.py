@@ -35,6 +35,7 @@ class Player(procgame.game.Player):
 
 			### General Stats ########################################
 			self.player_stats['ball_in_play']=False
+			self.player_stats['greatharm_switch_hits']=0
 
 			### Ball Saver ###########################################
 			self.player_stats['ballsave_active']=False

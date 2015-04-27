@@ -35,7 +35,7 @@ class Bonus(game.Mode):
 			# Settings Variables #
 			self.delay_time = 1.5
 			self.miles_value = 3000
-			self.totalGreatHarm=11177
+			self.totalGreatHarm=0
 
 			# System Variables #
 			self.total_value = 0
@@ -61,6 +61,7 @@ class Bonus(game.Mode):
 	def calculate(self,callback):
 		#self.game.sound.play_music('bonus', loops=1)
 		self.callback = callback
+		self.totalGreatHarm = self.game.utilities.get_player_stats('greatharm_switch_hits') * 60
 		self.total_value = ((self.game.utilities.get_player_stats('miles') * self.miles_value) + self.totalGreatHarm) * self.game.utilities.get_player_stats('bonus_x')
 		self.miles()
 
@@ -75,7 +76,7 @@ class Bonus(game.Mode):
 		self.delay(name='next_frame', event_type=None, delay=self.delay_time, handler=self.greatHarm)
 
 	def greatHarm(self):
-		self.game.utilities.displayText(priority=self.priority,topText='GREAT HARM BONUS'.upper(),bottomText=locale.format("%d", self.totalGreatHarm, True),justify='center',seconds=self.delay_time)
+		self.game.utilities.displayText(priority=self.priority,topText='GREAT HARM BONUS',bottomText=str(self.totalGreatHarm),justify='center',seconds=self.delay_time)
 		self.game.sound.play('bonus_features')
 		self.game.lampctrlflash.play_show('bonus_feat_right', repeat=False)
 		self.game.utilities.setBackboxLED(255,0,0,pulsetime=100)

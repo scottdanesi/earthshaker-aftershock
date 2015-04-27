@@ -249,6 +249,7 @@ class BaseGameMode(game.Mode):
 		self.game.modes.add(self.game.collect_mode)
 		self.game.modes.add(self.game.shelter_mode)
 		self.game.modes.add(self.game.bonusmultiplier_mode)
+		self.game.modes.add(self.game.switch_tracker_mode)
 
 	def unloadBallModes(self):
 		self.game.modes.remove(self.game.skillshot_mode)
@@ -263,6 +264,7 @@ class BaseGameMode(game.Mode):
 		self.game.modes.remove(self.game.collect_mode)
 		self.game.modes.remove(self.game.shelter_mode)
 		self.game.modes.remove(self.game.bonusmultiplier_mode)
+		self.game.modes.remove(self.game.switch_tracker_mode)
 		self.unloadMiniModes()
 
 	def unloadMiniModes(self):

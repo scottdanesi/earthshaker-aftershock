@@ -59,6 +59,7 @@ from jackpot import *
 from shelter import *
 from highscore import *
 from bonusmultiplier import *
+from switchtracker import *
 #from healthcheck import *
 
 #### Mini Modes ####
@@ -178,6 +179,7 @@ class EarthshakerAftershock(game.BasicGame):
 		self.tilt = Tilt(self,200)
 		self.bonus_mode = Bonus(self,1000)
 		self.highscore_mode = HighScore(self,1001)
+		self.switch_tracker_mode = SwitchTrackerMode(self,1999)
 		self.trough = Trough(self,2000)
 
 		#### Mini Mode Definitions ####

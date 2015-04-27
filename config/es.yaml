@@ -88,28 +88,37 @@ PRSwitches:
         tags: trough
     rightInsideReturn7:
         number: S26
+        tags: greatharm
     rightOutsideReturn:
         number: S27
+        tags: greatharm
     rightOutlane:
         number: S28
-        tags: early_save
+        tags: early_save,greatharm
     leftOutlane:
         number: S31
-        tags: early_save
+        tags: early_save,greatharm
     leftReturnLane8:
         number: S32
+        tags: greatharm
     leftStandup1:
         number: S33
+        tags: greatharm
     ejectHole5:
         number: S34
+        tags: greatharm
     rightStandupHigh2:
         number: S35
+        tags: greatharm
     rightStandupLow3:
         number: S36
+        tags: greatharm
     captiveBall9:
         number: S37
+        tags: greatharm
     rightStandup50k:
         number: S38
+        tags: greatharm
     instituteUp:
         number: S41
         type: 'NC'
@@ -117,44 +126,63 @@ PRSwitches:
         number: S42
     dropBankLeft:
         number: S43
+        tags: greatharm
     dropBankMid:
         number: S44
+        tags: greatharm
     dropBankRight:
         number: S45
+        tags: greatharm
     centerStandup4:
         number: S46
+        tags: greatharm
     rightLoop6:
         number: S47
+        tags: greatharm
     leftLoop6:
         number: S48
+        tags: greatharm
     onRamp50k:
         number: S51
+        tags: greatharm
     onRamp25k:
         number: S52
+        tags: greatharm
     onRamp100k:
         number: S53
+        tags: greatharm
     onRampBypass:
         number: S54
+        tags: greatharm
     ballPopperTop:
         number: S55
+        tags: greatharm
     underPlayfieldDrop1:
         number: S56
+        tags: greatharm
     underPlayfieldDrop2: 
         number: S57
+        tags: greatharm
     ballPopperBottom: 
         number: S58
+        tags: greatharm
     spinner:
         number: S61
+        tags: greatharm
     faultOpen:
         number: S62
     rightRampEntry:
         number: S63
+        tags: greatharm
     centerRampEntry:
         number: S64
+        tags: greatharm
     centerRampMiddle:
         number: S65
+        tags: greatharm
     centerRampEnd:
         number: S66
+        tags: greatharm
     unusedS67:
         number: S67
     unusedS68:
@@ -168,14 +196,19 @@ PRSwitches:
         number: S73
     jetLeft: 
         number: S74
+        tags: greatharm
     jetRight:
         number: S75
+        tags: greatharm
     jetTop:
         number: S76
+        tags: greatharm
     slingL:
         number: S77
+        tags: greatharm
     slingR:
         number: S78
+        tags: greatharm
     unusedS83:
         number: S83
     unusedS84:
