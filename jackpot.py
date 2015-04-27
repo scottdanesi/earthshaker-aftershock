@@ -33,6 +33,7 @@ class Jackpot(game.Mode):
 	def __init__(self, game, priority):
 			super(Jackpot, self).__init__(game, priority)
 			self.jackpotMaxed = False
+			#self.superJackpotWasLit = False
 
 			#### Load Mode Feature Defaults ####
 			# Is this needed here since it is int he mode_started??? #
@@ -49,12 +50,13 @@ class Jackpot(game.Mode):
 	def mode_stopped(self):
 		#self.cancel_delayed('dropReset')
 		#self.game.utilities.set_player_stats('jackpot_level',1)
-		pass
+		self.update_lamps()
 
 	def update_lamps(self):
 		print "Update Lamps: Jackpot"
 		self.jackpotLevel = self.game.utilities.get_player_stats('jackpot_level')
 		print 'Jackpot Update Lamps Called'
+		
 
 		# Update Jackpot Value #
 		for i in range(1,8):
@@ -68,22 +70,24 @@ class Jackpot(game.Mode):
 		# Update Jackpot Flasher #
 		if (self.game.utilities.get_player_stats('jackpot_lit') == True):
 			self.game.coils.jackpotFlasher.schedule(schedule=0x000C000C, cycle_seconds=0, now=True)
+			self.game.utilities.acFlashSchedule(coilname='bottomBallPopper_RightRampFlashers1',schedule=0x30303030, cycle_seconds=0, now=True)
 			self.game.lamps.rightRampJackpot.enable()
 		else:
 			self.game.coils.jackpotFlasher.disable()
+			self.game.coils.bottomBallPopper_RightRampFlashers1.disable()
 			self.game.lamps.rightRampJackpot.disable()
 
 		# Update for Super Jackpot #
 		if (self.game.utilities.get_player_stats('super_jackpot_lit') == True):
 			self.game.utilities.acFlashSchedule(coilname='outholeKicker_CaptiveFlashers',schedule=0x03030303, cycle_seconds=0, now=True)
-			self.game.lamps.captive25k.schedule(schedule=0x00000C03, cycle_seconds=0, now=False)
-			self.game.lamps.captive50k.schedule(schedule=0x0000300C, cycle_seconds=0, now=False)
-			self.game.lamps.captive100k.schedule(schedule=0x000C0030, cycle_seconds=0, now=False)
-			self.game.lamps.captive150k.schedule(schedule=0x003000C0, cycle_seconds=0, now=False)
-			self.game.lamps.captive250k.schedule(schedule=0x00C00300, cycle_seconds=0, now=False)
+			#self.game.lamps.captive25k.schedule(schedule=0x00000C03, cycle_seconds=0, now=False)
+			#self.game.lamps.captive50k.schedule(schedule=0x0000300C, cycle_seconds=0, now=False)
+			#self.game.lamps.captive100k.schedule(schedule=0x000C0030, cycle_seconds=0, now=False)
+			#self.game.lamps.captive150k.schedule(schedule=0x003000C0, cycle_seconds=0, now=False)
+			#self.game.lamps.captive250k.schedule(schedule=0x00C00300, cycle_seconds=0, now=False)
+			#self.superJackpotWasLit = True
 		else:
-			pass
-			#self.game.coils.outholeKicker_CaptiveFlashers.disable()
+			self.game.coils.outholeKicker_CaptiveFlashers.disable()
 			#self.game.lamps.captive25k.disable()
 			#self.game.lamps.captive50k.disable()
 			#self.game.lamps.captive100k.disable()
@@ -101,13 +105,13 @@ class Jackpot(game.Mode):
 	def resetJackpotLevel(self):
 		self.game.utilities.set_player_stats('jackpot_level',1)
 		self.jackpotMaxed = False
-		self.update_lamps()
+		self.game.update_lamps()
 
 	def lightJackpot(self):
 		if (self.game.utilities.get_player_stats('jackpot_lit') == False):
 			self.game.utilities.set_player_stats('jackpot_lit',True)
 			self.game.sound.play('jackpot_lit')
-			self.update_lamps()
+			self.game.update_lamps()
 		else:
 			#will put vocals here for shoot right ramp for jackpot
 			pass
@@ -115,7 +119,7 @@ class Jackpot(game.Mode):
 	def unlightJackpot(self):
 		if (self.game.utilities.get_player_stats('jackpot_lit') == True):
 			self.game.utilities.set_player_stats('jackpot_lit',False)
-			self.update_lamps()
+			self.game.update_lamps()
 
 	def awardJackpot(self):
 		self.game.sound.play('jackpot')

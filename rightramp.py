@@ -34,7 +34,7 @@ class RightRampMode(game.Mode):
 	def __init__(self, game, priority):
 			super(RightRampMode, self).__init__(game, priority)
 			## Global Setting Variables ##
-			pass
+			self.RightRampProcessing = False
 
 	def mode_started(self):
 		## Global System Variables ##
@@ -57,11 +57,6 @@ class RightRampMode(game.Mode):
 		self.game.lamps.rightRampJackpot.disable()
 
 	def rightRampShotCompleted(self):
-		self.game.lampctrlflash.play_show('right_ramp_1', repeat=False, callback=self.game.update_lamps)
-
-		if self.game.utilities.get_player_stats('jackpot_lit') == False:
-			self.game.sound.play_voice('complete_shot')
-
 		# Handle it! #
 		if (self.game.utilities.get_player_stats('multiball_running') == True):
 			if (self.game.utilities.get_player_stats('jackpot_lit') == True):
@@ -72,18 +67,24 @@ class RightRampMode(game.Mode):
 				self.game.utilities.score(50000)
 				# Sound FX #
 				#self.game.sound.play('centerRampComplete')
+				self.game.lampctrlflash.play_show('right_ramp_1', repeat=False, callback=self.game.update_lamps)
+				self.game.sound.play_voice('complete_shot')
 				self.sendBallToLeftRamp()
 		else:
 			if (self.game.utilities.get_player_stats('lock1_lit') == True or self.game.utilities.get_player_stats('lock2_lit') == True or self.game.utilities.get_player_stats('lock3_lit') == True):
+				self.game.lampctrlflash.play_show('right_ramp_1', repeat=False, callback=self.game.update_lamps)
+				self.game.sound.play_voice('complete_shot')
 				self.sendBallToShelter()
-				self.game.utilities.score(250)
+				self.game.utilities.score(500)
 			else:
 				# Sound FX #
 				#self.game.sound.play('centerRampComplete')
+				self.game.lampctrlflash.play_show('right_ramp_1', repeat=False, callback=self.game.update_lamps)
+				self.game.sound.play_voice('complete_shot')
 				self.sendBallToLeftRamp()
 				#self.game.coils.quakeInstitute.enable()
 				self.game.collect_mode.spotZone()
-				self.game.utilities.score(250)
+				self.game.utilities.score(500)
 		
 
 		# Add Fault Visit #
@@ -114,24 +115,25 @@ class RightRampMode(game.Mode):
 
 	def sendBallToShelter(self):
 		self.openFault()
-		self.delay(delay=.2,handler=self.ejectBall)
+		self.delay(delay=.4,handler=self.ejectBall)
 		self.delay(delay=2,handler=self.closeFault)
 
 	def sendBallToLeftRamp(self):
 		self.closeFault()
-		self.delay(delay=.2,handler=self.ejectBall)
+		self.delay(delay=.4,handler=self.ejectBall)
 
 	def ejectBall(self):
-		self.game.lampctrlflash.play_show('right_ramp_eject', repeat=False, callback=self.game.update_lamps)
-		self.delay(delay=.2,handler=self.game.coils.topBallPopper.pulse)
+		#self.game.lampctrlflash.play_show('right_ramp_eject', repeat=False, callback=self.game.update_lamps)
+		self.delay(delay=.4,handler=self.game.coils.topBallPopper.pulse)
 
-	def sw_ballPopperTop_closed_for_30ms(self, sw):
-		self.game.lampctrlflash.play_show('right_ramp_1', repeat=False, callback=self.game.update_lamps)
+	#def sw_ballPopperTop_closed_for_30ms(self, sw):
+
+		#self.game.lampctrlflash.play_show('right_ramp_1', repeat=False, callback=self.game.update_lamps)
 		#self.game.utilities.acFlashSchedule(coilname='bottomBallPopper_RightRampFlashers1',schedule=0x0000C00C, cycle_seconds=1, now=True) # This needs to be replaced with a lampshow for better AC Relay control 
 		#self.game.utilities.acFlashSchedule(coilname='knocker_RightRampFlashers2',schedule=0x00C0C0C0, cycle_seconds=1, now=True) # This needs to be replaced with a lampshow for better AC Relay control 
 		#self.game.utilities.acFlashSchedule(coilname='unused_RightRampFlashers3',schedule=0x0C000C00, cycle_seconds=1, now=True) # This needs to be replaced with a lampshow for better AC Relay control 
 		# Sound FX #
-		self.game.sound.play('rightRampComplete')
+		#self.game.sound.play('rightRampComplete')
 
 	def sw_ballPopperTop_closed_for_500ms(self, sw):
 		# if (self.game.utilities.get_player_stats('lock1_lit') == True or self.game.utilities.get_player_stats('lock2_lit') == True or self.game.utilities.get_player_stats('lock3_lit') == True):
