@@ -59,7 +59,7 @@ from jackpot import *
 from shelter import *
 from highscore import *
 from bonusmultiplier import *
-from healthcheck import *
+#from healthcheck import *
 
 #### Mini Modes ####
 from mode_1 import *
@@ -160,7 +160,7 @@ class EarthshakerAftershock(game.BasicGame):
 
 		#### Mode Definitions ####
 		self.utilities = UtilitiesMode(self,0)
-		self.healthcheck_mode = HealthCheckMode(self,0)
+		#self.healthcheck_mode = HealthCheckMode(self,0)
 		
 		self.base_mode = BaseGameMode(self,2)
 		self.attract_mode = AttractMode(self,5)

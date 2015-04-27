@@ -167,7 +167,7 @@ class Trough(procgame.game.Mode):
 			self.delay('finishBall',delay=.5,handler=self.game.base_mode.finish_ball)
 			
 	def checkForEndOfMultiball(self):
-		if (self.num_balls() == 2):
+		if (self.num_balls() >= 2):
 			#print self.num_balls()
 			self.game.multiball_mode.stopMultiball()
 		self.delay(delay=1,handler=self.checkForEndOfBall)
