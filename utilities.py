@@ -44,6 +44,7 @@ class UtilitiesMode(game.Mode):
 			##############################
 			self.currentDisplayPriority = 0	
 			self.randomLampPulseCount = 0
+			self.randomRGBPulseCount = 0
 			self.ACCoilInProgress = False
 			self.ACNameArray = []
 			self.ACNameArray.append('outholeKicker_CaptiveFlashers')
@@ -102,6 +103,13 @@ class UtilitiesMode(game.Mode):
 			self.game.coils.autoLauncher.pulse(100) #Does not need AC Relay logic
 		#self.game.coils.quakeInstitute.enable()
 
+	def executeBallSearch(self):
+		delayTime = 200
+		self.game.utilities.acCoilPulse(coilname='ejectHole_CenterRampFlashers4',pulsetime=50)
+		self.delay(delay=delayTime*1,handler=self.game.utilities.acCoilPulse,param='bottomBallPopper_RightRampFlashers1')
+		self.delay(delay=delayTime*2,handler=self.game.coils.topBallPopper.pulse,param=50)
+		self.delay(delay=delayTime*3,handler=self.game.coils.autoLauncher.pulse,param=100)
+
 	def launch_ball(self):
 		if self.game.switches.ballShooter.is_active()==True:
 			self.game.coils.autoLauncher.pulse(100)
@@ -126,6 +134,7 @@ class UtilitiesMode(game.Mode):
 		self.ACCoilInProgress = True
 		self.acSelectTimeBuffer = .3
 		self.acSelectEnableBuffer = (pulsetime/1000)+(self.acSelectTimeBuffer*2)
+		self.updateLampsBuffer = self.acSelectEnableBuffer + .2
 
 		### Remove any scheduling of the AC coils ###
 		for item in self.ACNameArray:
@@ -139,6 +148,9 @@ class UtilitiesMode(game.Mode):
 		self.game.coils.acSelect.disable()
 		self.delay(name='coilDelay',event_type=None,delay=self.acSelectTimeBuffer,handler=self.game.coils[coilname].pulse,param=pulsetime)
 		self.delay(name='acEnableDelay',delay=self.acSelectEnableBuffer,handler=self.ACRelayEnable)
+
+		### Update lamps since some of the flashers may have been disabled ###
+		self.delay(delay=self.updateLampsBuffer,handler=self.game.update_lamps)
 
 	def acFlashPulse(self,coilname,pulsetime=50):
 		if (self.ACCoilInProgress == False or coilname not in self.ACNameArray):
@@ -287,6 +299,10 @@ class UtilitiesMode(game.Mode):
 		self.game.coils.giLower.disable()
 		self.game.coils.giBackbox.disable()
 
+	############################
+	#### Lighting Functions ####
+	############################
+
 	def randomLampPulse(self, numPulses):
 		randomInt = randint(1,64)
 		i = 1
@@ -299,7 +315,20 @@ class UtilitiesMode(game.Mode):
 			self.delay(delay=.1,handler=self.randomLampPulse,param=numPulses)
 		else:
 			self.randomLampPulseCount = 0
-			
+
+	def randomBackboxPulse(self, numPulses):
+		randomIntRed = randint(0,255)
+		randomIntGreen = randint(0,255)
+		randomIntBlue = randint(0,255)
+				
+		self.setBackboxLED(r=randomIntRed,g=randomIntGreen,b=randomIntBlue,pulsetime=100)
+
+		self.randomRGBPulseCount += 1
+		if (self.randomRGBPulseCount <= numPulses):
+			self.delay(delay=.2,handler=self.randomBackboxPulse,param=numPulses)
+		else:
+			self.randomRGBPulseCount = 0
+
 
 
 	###################################
@@ -381,7 +410,8 @@ class UtilitiesMode(game.Mode):
 			self.delay(delay=.255,handler=self.enableMultiballQuake)
 
 	def enableMultiballQuake(self):
-		self.game.coils.quakeMotor.patter(on_time=15,off_time=100)
+		if (self.game.utilities.get_player_stats('multiball_running') == True):
+			self.game.coils.quakeMotor.patter(on_time=15,off_time=100)
 
 	###############################
 	#### Backbox LED Functions ####

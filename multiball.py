@@ -195,6 +195,7 @@ class Multiball(game.Mode):
 		self.game.sound.stop_music()
 		self.game.lampctrlflash.play_show('multiball_intro_1', repeat=False)
 		self.game.utilities.randomLampPulse(100)
+		self.game.utilities.randomBackboxPulse(50)
 		# Sound FX #
 		self.game.sound.play('earthquake_1')
 		self.game.sound.play_music('multiball_intro',loops=1,music_volume=.5)
@@ -225,6 +226,7 @@ class Multiball(game.Mode):
 	def stopMultiball(self):
 		self.game.utilities.set_player_stats('multiball_running',False)
 		self.game.utilities.set_player_stats('jackpot_lit',False)
+		self.game.utilities.set_player_stats('super_jackpot_lit',False)
 		self.game.sound.stop_music()
 		self.game.sound.play_music('main',loops=-1,music_volume=.5)
 		self.resetMultiballStats()
@@ -261,6 +263,8 @@ class Multiball(game.Mode):
 		self.zone7Staus = self.game.utilities.get_player_stats('super_jackpot_zone7_status')
 		self.zone8Staus = self.game.utilities.get_player_stats('super_jackpot_zone8_status')
 		self.zone9Staus = self.game.utilities.get_player_stats('super_jackpot_zone9_status')
+		if (self.zone9Staus == 0):
+			self.game.utilities.set_player_stats('super_jackpot_lit',True)
 
 	def incrementMultiballZones(self):
 		if (self.zone1Staus == 0):
@@ -371,6 +375,7 @@ class Multiball(game.Mode):
 			if (self.game.utilities.get_player_stats('super_jackpot_lit') == True):
 				self.game.jackpot_mode.awardSuperJackpot()
 				self.resetMultiballZones()
+				self.update_lamps()
 
 			return procgame.game.SwitchStop
 		else:

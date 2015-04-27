@@ -134,8 +134,9 @@ class BaseGameMode(game.Mode):
 		if (self.finishingBall == False):
 			self.finishingBall = True
 
-			# Remove Drops mode because of delay issue #
+			# Remove Drops and Mini Modes because of delay issue #
 			self.game.modes.remove(self.game.drops_mode)
+			self.unloadMiniModes()
 
 			#self.game.modes.remove(self.game.healthcheck_mode)
 
@@ -173,6 +174,9 @@ class BaseGameMode(game.Mode):
 
 		#### Remove Ball Modes ####
 		self.unloadBallModes()
+
+		#### Reset Multiball Identifier in case something went wrong ####
+		self.game.utilities.set_player_stats('multiball_running',False)
 
 		#self.game.sound.fadeout_music(time_ms=1000) #This is causing delay issues with the AC Relay
 		self.game.sound.stop_music()
@@ -259,7 +263,9 @@ class BaseGameMode(game.Mode):
 		self.game.modes.remove(self.game.collect_mode)
 		self.game.modes.remove(self.game.shelter_mode)
 		self.game.modes.remove(self.game.bonusmultiplier_mode)
+		self.unloadMiniModes()
 
+	def unloadMiniModes(self):
 		### Clear Mini Modes ###
 		self.game.modes.remove(self.game.mode_1)
 		self.game.modes.remove(self.game.mode_2)
@@ -311,15 +317,15 @@ class BaseGameMode(game.Mode):
 			else:
 				#missing balls
 				#self.missingBalls = True
-				self.game.utilities.releaseStuckBalls()
-				self.game.modes.remove('attract_mode')
+				self.game.modes.remove(self.game.attract_mode)
+				self.game.utilities.executeBallSearch()
 				script=[]
 				script.append({'top':'MISSING PINBALLS','bottom':' ','timer':2,'transition':0})
 				script.append({'top':'PLEASE CHECK','bottom':'SKILLSHOT RAMP','timer':2,'transition':0})
 				script.append({'top':'LIFT GAME FRONT','bottom':'IF BALL STUCK','timer':2,'transition':0})
 				self.game.alpha_score_display.cancel_script()
 				self.game.alpha_score_display.set_script(script)
-				self.delay(name='stuckBalls',delay=6,handler=self.game.modes.add,param='attract_mode')
+				self.delay(name='stuckBalls',delay=6,handler=self.game.modes.add,param=self.game.attract_mode)
 
 		elif self.game.ball == 1 and len(self.game.players) < 4:
 			self.game.add_player()
