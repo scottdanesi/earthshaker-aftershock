@@ -143,7 +143,7 @@ class Jackpot(game.Mode):
 		self.resetJackpotLevel()
 
 	def awardSuperJackpot(self):
-		self.game.sound.play('jackpot')
+		self.game.sound.play('super_jackpot')
 		self.game.utilities.shakerPulseHigh()
 		self.game.utilities.score(4000000)
 		self.game.utilities.set_player_stats('super_jackpot_lit',False)

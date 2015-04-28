@@ -66,6 +66,7 @@ class BonusMultiplier(game.Mode):
 		self.multiplier = self.game.utilities.get_player_stats('bonus_x')
 		if (self.multiplier <> 6):
 			self.game.utilities.set_player_stats('bonus_x',self.multiplier + 1)
+			self.game.sound.play('bonus_multiplier_vox')
 			self.update_lamps()
 		else:
 			#### Bonus Maxed ####

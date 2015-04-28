@@ -244,6 +244,7 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_sound('bonus_features', game_sound_path + 'bonus_feature_v8.wav')
 		self.sound.register_sound('bonus_total', game_sound_path + 'bonus_total_v5.wav')
 		self.sound.register_sound('bonus_music', game_music_path + 'music_001_bonus.wav',new_sound_volume=.5)
+		self.sound.register_sound('bonus_multiplier_vox', game_sound_path + 'vocal_bonus_multiplier_increase.wav')
 		# Zone Sounds #
 		self.sound.register_sound('zone_na', game_sound_path + 'zone_na.wav')
 		#self.sound.register_sound('zone_awarded', game_sound_path + 'zone_awarded.wav')
@@ -278,6 +279,7 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_sound('main_loop_tape_stop', game_sound_path + 'music_001_main_loop_stop.wav',new_sound_volume=.5)
 		self.sound.register_sound('short_out_1', game_sound_path + 'short_out_1.wav')
 		self.sound.register_sound('short_out_2', game_sound_path + 'short_out_2.wav')
+		self.sound.register_sound('super_jackpot_advance', game_sound_path + 'super_jackpot_advance.wav')
 		# Ball Lock Vocals #
 		self.sound.register_sound('ball_lock_1', game_sound_path + 'vocal_lock_ball_1.wav')
 		self.sound.register_sound('ball_lock_2', game_sound_path + 'vocal_lock_ball_2.wav')
@@ -287,6 +289,7 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_sound('jackpot', game_sound_path + 'vocal_lionman.wav')
 		self.sound.register_sound('jackpot_increase', game_sound_path + 'vocal_jackpot_increase.wav')
 		self.sound.register_sound('jackpot_lit', game_sound_path + 'vocal_jackpot_lit.wav')
+		self.sound.register_sound('super_jackpot', game_sound_path + 'vocal_super_jackpot.wav')
 		# Complete Shot Vocals #
 		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_encourage_greatshot.wav')
 		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_encourage_niceshot.wav')

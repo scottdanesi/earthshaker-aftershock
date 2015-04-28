@@ -110,7 +110,7 @@ class SkillshotMode(game.Mode):
 		self.game.modes.remove(self.game.skillshot_mode)
 		return procgame.game.SwitchContinue
 
-	def sw_onRamp50k_active(self, sw):
+	def sw_onRamp50k_active_for_10ms(self, sw):
 		self.game.utilities.displayText(100,'SKILLSHOT',locale.format("%d", 50000 * self.game.utilities.get_player_stats('skillshot_x'), grouping=True) + ' POINTS',seconds=self.skillshotDisplayTime,justify='center')
 		self.game.utilities.score(50000 * self.game.utilities.get_player_stats('skillshot_x'))
 		self.game.lampctrlflash.play_show('skillshot', repeat=False, callback=self.game.update_lamps)
@@ -119,7 +119,7 @@ class SkillshotMode(game.Mode):
 		self.skillshotAwarded()
 		return procgame.game.SwitchContinue
 
-	def sw_onRamp25k_active(self, sw):
+	def sw_onRamp25k_active_for_10ms(self, sw):
 		self.game.utilities.displayText(100,'SKILLSHOT',locale.format("%d", 25000 * self.game.utilities.get_player_stats('skillshot_x'), grouping=True) + ' POINTS',seconds=self.skillshotDisplayTime,justify='center')
 		self.game.utilities.score(25000 * self.game.utilities.get_player_stats('skillshot_x'))
 		self.game.lampctrlflash.play_show('skillshot', repeat=False, callback=self.game.update_lamps)
@@ -128,7 +128,7 @@ class SkillshotMode(game.Mode):
 		self.skillshotAwarded()
 		return procgame.game.SwitchContinue
 
-	def sw_onRamp100k_active(self, sw):
+	def sw_onRamp100k_active_for_10ms(self, sw):
 		self.game.utilities.displayText(100,'SKILLSHOT',locale.format("%d", 100000 * self.game.utilities.get_player_stats('skillshot_x'), grouping=True) + ' POINTS',seconds=self.skillshotDisplayTime,justify='center')
 		self.game.utilities.score(100000 * self.game.utilities.get_player_stats('skillshot_x'))
 		self.game.lampctrlflash.play_show('skillshot', repeat=False, callback=self.game.update_lamps)
@@ -137,7 +137,7 @@ class SkillshotMode(game.Mode):
 		self.skillshotAwarded()
 		return procgame.game.SwitchContinue
 
-	def sw_onRampBypass_active(self, sw):
+	def sw_onRampBypass_active_for_10ms(self, sw):
 		self.skillshotMissed()
 		return procgame.game.SwitchContinue
 

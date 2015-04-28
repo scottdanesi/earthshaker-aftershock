@@ -270,33 +270,40 @@ class Multiball(game.Mode):
 		if (self.zone1Staus == 0):
 			self.game.utilities.set_player_stats('super_jackpot_zone1_status',1)
 			self.game.utilities.set_player_stats('super_jackpot_zone2_status',0)
+			self.game.sound.play('super_jackpot_advance')
 		elif (self.zone2Staus == 0):
 			self.game.utilities.set_player_stats('super_jackpot_zone2_status',1)
 			self.game.utilities.set_player_stats('super_jackpot_zone3_status',0)
+			self.game.sound.play('super_jackpot_advance')
 		elif (self.zone3Staus == 0):
 			self.game.utilities.set_player_stats('super_jackpot_zone3_status',1)
 			self.game.utilities.set_player_stats('super_jackpot_zone4_status',0)
+			self.game.sound.play('super_jackpot_advance')
 		elif (self.zone4Staus == 0):
 			self.game.utilities.set_player_stats('super_jackpot_zone4_status',1)
 			self.game.utilities.set_player_stats('super_jackpot_zone5_status',0)
+			self.game.sound.play('super_jackpot_advance')
 		elif (self.zone5Staus == 0):
 			self.game.utilities.set_player_stats('super_jackpot_zone5_status',1)
 			self.game.utilities.set_player_stats('super_jackpot_zone6_status',0)
+			self.game.sound.play('super_jackpot_advance')
 		elif (self.zone6Staus == 0):
 			self.game.utilities.set_player_stats('super_jackpot_zone6_status',1)
 			self.game.utilities.set_player_stats('super_jackpot_zone7_status',0)
+			self.game.sound.play('super_jackpot_advance')
 		elif (self.zone7Staus == 0):
 			self.game.utilities.set_player_stats('super_jackpot_zone7_status',1)
 			self.game.utilities.set_player_stats('super_jackpot_zone8_status',0)
+			self.game.sound.play('super_jackpot_advance')
 		elif (self.zone8Staus == 0):
 			self.game.utilities.set_player_stats('super_jackpot_zone8_status',1)
 			self.game.utilities.set_player_stats('super_jackpot_zone9_status',0)
 			### Light Super Jackpot ###
 			self.game.utilities.set_player_stats('super_jackpot_lit',True)
+			self.game.sound.play('super_jackpot_advance')
 		elif (self.zone9Staus == 0):
 			self.game.utilities.set_player_stats('super_jackpot_zone9_status',1)
-			
-
+			self.game.sound.play('super_jackpot_advance')
 		self.game.update_lamps()
 
 	def sw_outhole_closed_for_500ms(self, sw):
