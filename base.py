@@ -204,9 +204,9 @@ class BaseGameMode(game.Mode):
 		self.finishingBall = False
 
 	def finish_game(self):
-		#self.game.modes.add(self.game.highscore_mode)
-		#self.game.highscore_mode.checkScores(self.game.base_mode.end_game)
-		self.end_game()
+		self.game.modes.add(self.game.highscore_mode)
+		self.game.highscore_mode.checkScores(self.game.base_mode.end_game)
+		#self.end_game()
 
 	def end_game(self):
 		self.game.utilities.log('Game Ended','info')
@@ -432,9 +432,9 @@ class BaseGameMode(game.Mode):
 		self.game.utilities.setBallInPlay(True)
 		return procgame.game.SwitchStop
 
-	def sw_ballShooter_open(self, sw):
+	def sw_ballShooter_open_for_30ms(self, sw):
 		# This will play the car take off noise when the ball leaves the shooter lane
-		if (self.game.utilities.get_player_stats('ball_in_play') == False):
+		if (self.game.utilities.get_player_stats('ball_in_play') == False and len(self.game.players) > 0):
 			self.game.sound.play('game_start_takeoff')
 
 	#############################
