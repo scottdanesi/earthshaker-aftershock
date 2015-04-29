@@ -1,0 +1,20 @@
+###################################################################################
+# Lightshow: highscore_loop_a
+# Type: simple
+# Length: 32 frames / 1 seconds
+###################################################################################
+# Markers:                                       |        8      16      24      32
+# Frames:                                        | 12345678123456781234567812345678
+###################################################################################
+# Driver group: Flashers
+###################################################################################
+coil:outholeKicker_CaptiveFlashers              |              ..   ..            
+coil:ballReleaseShooterLane_CenterRampFlashers1 |     ..                    ...   
+coil:dropReset_CenterRampFlashers2              |  ...                         .. 
+coil:californiaFault_CenterRampFlashers3        |    ...                     ..   
+coil:ejectHole_CenterRampFlashers4              |         ...           ..        
+coil:bottomBallPopper_RightRampFlashers1        |         ..            ..        
+coil:knocker_RightRampFlashers2                 |        ...             ..       
+coil:unused_RightRampFlashers3                  |       ..                ..      
+coil:jackpotFlasher                             |          ..           ..        
+coil:onRampJetBumperFlashers                    |    ...                     ..   

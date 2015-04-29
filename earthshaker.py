@@ -91,6 +91,7 @@ game_sound_path = curr_file_path + "/assets/sound/"
 game_lampshows = curr_file_path + "/lamps/"
 
 ballsPerGame = 3 # this will eventually be called from the config file
+coinOp = -1
 
 ################################################
 # GAME CLASS
@@ -214,6 +215,8 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_music('multiball_intro', game_music_path + 'music_001_multiball_start.wav')
 		self.sound.register_music('multiball_loop', game_music_path + 'music_001_multiball_loop.wav')
 		self.sound.register_music('game_over', game_music_path + 'music_001_game_over.wav')
+		self.sound.register_music('highscore_loop', game_music_path + 'music_003_highscore_loop.wav')
+		#self.sound.register_music('game_over', game_music_path + 'music_002_game_over.wav')
 		#self.sound.register_music('main', game_music_path + 'music_001_main_loop.wav')
 		#self.sound.register_music('shooter', game_music_path + 'music_001_shooter_loop.wav')
 		#self.sound.register_music('main', game_music_path + 'music_002_main_loop.wav')
@@ -329,6 +332,7 @@ class EarthshakerAftershock(game.BasicGame):
 		self.lampctrlflash.register_show('bonus_feat_right', game_lampshows + 'bonus_feature_right.lampshow')
 		self.lampctrlflash.register_show('bonus_total', game_lampshows + 'bonus_total_a.lampshow')
 		self.lampctrlflash.register_show('multiball_intro_1', game_lampshows + 'multiball_intro.lampshow')
+		self.lampctrlflash.register_show('highscore_flash_loop', game_lampshows + 'highscore_loop_a.lampshow')
 		self.lampctrl.register_show('right_ramp_1', game_lampshows + 'rightramp_complete_a.lampshow')
 		self.lampctrl.register_show('right_ramp_eject', game_lampshows + 'right_ramp_eject.lampshow')
 		self.lampctrl.register_show('jackpot', game_lampshows + 'jackpot_awarded_a.lampshow')
