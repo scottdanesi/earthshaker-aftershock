@@ -104,11 +104,18 @@ class UtilitiesMode(game.Mode):
 		#self.game.coils.quakeInstitute.enable()
 
 	def executeBallSearch(self):
-		delayTime = 200
-		self.game.utilities.acCoilPulse(coilname='ejectHole_CenterRampFlashers4',pulsetime=50)
-		self.delay(delay=delayTime*1,handler=self.game.utilities.acCoilPulse,param='bottomBallPopper_RightRampFlashers1')
-		self.delay(delay=delayTime*2,handler=self.game.coils.topBallPopper.pulse,param=50)
-		self.delay(delay=delayTime*3,handler=self.game.coils.autoLauncher.pulse,param=100)
+		delayTime = .7
+		self.game.coils.quakeInstitute.enable()
+		self.acCoilPulse(coilname='ejectHole_CenterRampFlashers4',pulsetime=50)
+		#self.delay(delay=delayTime*1,handler=self.game.coils.jetLeft.pulse,param=50)
+		#self.delay(delay=delayTime*2,handler=self.game.coils.jetRight.pulse,param=50)
+		#self.delay(delay=delayTime*3,handler=self.game.coils.jetTop.pulse,param=50)
+		self.delay(delay=delayTime*3,handler=self.acCoilPulse,param='bottomBallPopper_RightRampFlashers1')
+		#self.delay(delay=delayTime*5,handler=self.game.coils.slingL.pulse,param=50)
+		#self.delay(delay=delayTime*6,handler=self.game.coils.slingR.pulse,param=50)
+		self.delay(delay=delayTime*1,handler=self.game.coils.topBallPopper.pulse,param=50)
+		self.delay(delay=delayTime*2,handler=self.game.coils.autoLauncher.pulse,param=100)
+		self.delay(delay=delayTime*4,handler=self.game.update_lamps)
 
 	def launch_ball(self):
 		if self.game.switches.ballShooter.is_active()==True:

@@ -38,6 +38,7 @@ class SwitchTrackerMode(game.Mode):
 			#### Set Global Variables ####
 			##############################
 			self.greatharm_switchnames = []
+			self.ballSearchDelayTime = 15
 			
 			for switch in self.game.switches.items_tagged('greatharm'):
 				self.greatharm_switchnames.append(switch.name)
@@ -46,7 +47,13 @@ class SwitchTrackerMode(game.Mode):
 				self.add_switch_handler(name=switch, event_type='active', delay=None, handler=self.greatharm_switch_handler)
 
 	def greatharm_switch_handler(self,sw):
+		self.cancel_delayed('ballSearchTimer')
 		self.game.utilities.set_player_stats('greatharm_switch_hits',self.game.utilities.get_player_stats('greatharm_switch_hits') + 1)
+		self.delay(name='ballSearchTimer',delay=self.ballSearchDelayTime,handler=self.ballSearch)
+
+	def ballSearch(self):
+		if self.game.utilities.get_player_stats('ball_in_play') == True:
+			self.game.utilities.executeBallSearch()
 
 	def mode_started(self):
 		pass
