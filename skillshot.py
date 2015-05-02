@@ -101,13 +101,15 @@ class SkillshotMode(game.Mode):
 		#points will be added in the base mode
 		self.game.modes.remove(self)
 
+	def startSuperSkillshotTimer(self):
+		self.delay(name='endSuperSkillshot',delay=self.superSkillshotSeconds,handler=self.superSkillshotMissed)
+
 	###########################
 	## Switch Handling Modes ##
 	###########################
 
 	def sw_outhole_closed_for_1s(self, sw):
-		#### Remove Skillshot Mode ####
-		self.game.modes.remove(self.game.skillshot_mode)
+		
 		return procgame.game.SwitchContinue
 
 	def sw_onRamp50k_active_for_10ms(self, sw):
@@ -158,6 +160,7 @@ class SkillshotMode(game.Mode):
 		return procgame.game.SwitchContinue
 
 	def sw_centerRampEnd_active(self, sw):
-		self.game.sound.play_voice('shoot_captive_ball')
-		self.delay(name='endSuperSkillshot',delay=self.superSkillshotSeconds,handler=self.superSkillshotMissed)
+		#This should be handled by the centerramp.py file
+		#self.game.sound.play_voice('shoot_captive_ball')
+		#self.delay(name='endSuperSkillshot',delay=self.superSkillshotSeconds,handler=self.superSkillshotMissed)
 		return procgame.game.SwitchContinue
