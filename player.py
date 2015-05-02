@@ -58,6 +58,8 @@ class Player(procgame.game.Player):
 			self.player_stats['last_multiball_jackpots_collected']=0
 			self.player_stats['jackpot_lit']=False
 			self.player_stats['super_jackpot_lit']=False
+			self.player_stats['million_lit']=False
+			self.player_stats['last_chance_million_qualified']=True
 
 			### Multiball Stats ######################################
 			self.player_stats['lock1_lit']=False

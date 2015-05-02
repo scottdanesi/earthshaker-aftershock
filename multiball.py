@@ -229,10 +229,13 @@ class Multiball(game.Mode):
 		self.game.utilities.set_player_stats('super_jackpot_lit',False)
 		self.game.sound.stop_music()
 		self.game.sound.play_music('main',loops=-1,music_volume=.5)
+		if (self.game.utilities.get_player_stats('last_chance_million_qualified') == True):
+			self.game.million_mode.startLastChanceMillion()
 		self.resetMultiballStats()
 		self.game.bonusmultiplier_mode.incrementBonusMultiplier()
 		self.game.update_lamps()
 		self.game.coils.quakeMotor.disable()
+		
 		self.callback()
 
 	def resetMultiballStats(self):
@@ -240,6 +243,7 @@ class Multiball(game.Mode):
 		self.game.utilities.set_player_stats('lock2_lit',False)
 		self.game.utilities.set_player_stats('lock3_lit',False)
 		self.game.utilities.set_player_stats('balls_locked',0)
+		self.game.utilities.set_player_stats('last_chance_million_qualified',True)
 		self.getUserStats()
 
 	def resetMultiballZones(self):
@@ -300,6 +304,7 @@ class Multiball(game.Mode):
 			self.game.utilities.set_player_stats('super_jackpot_zone9_status',0)
 			### Light Super Jackpot ###
 			self.game.utilities.set_player_stats('super_jackpot_lit',True)
+			self.game.sound.play_voice('super_jackpot_lit')
 			self.game.sound.play('super_jackpot_advance')
 		elif (self.zone9Staus == 0):
 			self.game.utilities.set_player_stats('super_jackpot_zone9_status',1)

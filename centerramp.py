@@ -37,6 +37,7 @@ class CenterRampMode(game.Mode):
 			self.centerRampShotsToLite50k = 3
 			self.centerRampShotStartedDelay = 3 #in seconds
 			self.centerRamp2MilesTimer = 8 #in Seconds
+			self.centerRampSwitchSkip = True
 
 	def mode_started(self):
 		## Global System Variables ##
@@ -121,8 +122,6 @@ class CenterRampMode(game.Mode):
 
 	def centerRampShotCompleted(self):
 		self.game.lampctrlflash.play_show('center_ramp_1', repeat=False, callback=self.game.update_lamps)
-		#self.game.coils.californiaFault_CenterRampFlashers3.schedule(schedule=0x0000000F, cycle_seconds=1, now=True)
-		#self.game.coils.ejectHole_CenterRampFlashers4.schedule(schedule=0x000000F0, cycle_seconds=1, now=True)
 
 		# Sound FX #
 		self.game.sound.play('centerRampComplete')
@@ -162,6 +161,9 @@ class CenterRampMode(game.Mode):
 		self.enabled50k = False
 		self.update_lamps()
 
+	def resetSwitchSkipVariable(self):
+		self.centerRampSwitchSkip = True
+
 	def sw_centerRampEntry_active(self, sw):
 		self.cancel_delayed('centerRampShotStarted') # Needed if the center shot was made by another ball
 		self.centerRampShotStarted = True # This may already be True, but just in case
@@ -175,14 +177,24 @@ class CenterRampMode(game.Mode):
 		return procgame.game.SwitchContinue
 
 	def sw_centerRampMiddle_active(self, sw):
-		if (self.game.utilities.get_player_stats('ball_in_play') == True):
+		self.cancel_delayed('switchSkipReset')
+		self.centerRampSwitchSkip = False
+		self.delay(name='switchSkipReset',delay=.5,handler=self.resetSwitchSkipVariable)
+		if (self.game.utilities.get_player_stats('skillshot_active') == True and self.game.utilities.get_player_stats('ball_in_play') == False):
+			self.game.sound.play_voice('shoot_captive_ball')
+			self.game.skillshot_mode.startSuperSkillshotTimer()
+		elif (self.game.utilities.get_player_stats('ball_in_play') == True):
 			self.centerRampShotCompleted()
 		return procgame.game.SwitchContinue
 
 	def sw_centerRampEnd_active(self, sw):
 		#in case the ball skips one of the ramp switches
-		#if (self.centerRampShotStarted == True):
-			#self.centerRampShotCompleted()
+		if (self.centerRampSwitchSkip == True):
+			if (self.game.utilities.get_player_stats('skillshot_active') == True and self.game.utilities.get_player_stats('ball_in_play') == False):
+				self.game.sound.play_voice('shoot_captive_ball')
+				self.game.skillshot_mode.startSuperSkillshotTimer()
+			elif (self.game.utilities.get_player_stats('ball_in_play') == True):
+				self.centerRampShotCompleted()
 		return procgame.game.SwitchContinue
 
 	def sw_rightStandup50k_active(self, sw):

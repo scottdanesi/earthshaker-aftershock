@@ -60,6 +60,8 @@ from shelter import *
 from highscore import *
 from bonusmultiplier import *
 from switchtracker import *
+from combo import *
+from million import *
 #from healthcheck import *
 
 #### Mini Modes ####
@@ -172,10 +174,12 @@ class EarthshakerAftershock(game.BasicGame):
 		self.collect_mode = CollectZones(self,10)
 		self.spinner_mode = Spinner(self,11)
 		self.jackpot_mode = Jackpot(self,12)
+		self.million_mode = Million(self,14)
 		self.bonusmultiplier_mode = BonusMultiplier(self,98)
 		self.shelter_mode = Shelter(self,99)
 		self.skillshot_mode = SkillshotMode(self,100)
 		self.multiball_mode = Multiball(self,101)
+		self.combo_mode = Combo(self,102)
 		self.ballsaver_mode = BallSaver(self,199)
 		self.tilt = Tilt(self,200)
 		self.bonus_mode = Bonus(self,1000)
@@ -214,9 +218,10 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_music('shooter', game_music_path + 'music_001_shooter_loop.wav')
 		self.sound.register_music('multiball_intro', game_music_path + 'music_001_multiball_start.wav')
 		self.sound.register_music('multiball_loop', game_music_path + 'music_001_multiball_loop.wav')
-		self.sound.register_music('game_over', game_music_path + 'music_001_game_over.wav')
+		#self.sound.register_music('game_over', game_music_path + 'music_001_game_over.wav') #Fractal - Breathe
+		#self.sound.register_music('game_over', game_music_path + 'music_003_highscore_loop.wav') #Fred V & Graphix - Hydra
 		self.sound.register_music('highscore_loop', game_music_path + 'music_003_highscore_loop.wav')
-		#self.sound.register_music('game_over', game_music_path + 'music_002_game_over.wav')
+		self.sound.register_music('game_over', game_music_path + 'music_002_game_over.wav') #Calvertron
 		#self.sound.register_music('main', game_music_path + 'music_001_main_loop.wav')
 		#self.sound.register_music('shooter', game_music_path + 'music_001_shooter_loop.wav')
 		#self.sound.register_music('main', game_music_path + 'music_002_main_loop.wav')
@@ -240,6 +245,7 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_sound('warning_vox', game_sound_path + 'vocal_warning_easy_there.wav')
 		self.sound.register_sound('warning_vox', game_sound_path + 'vocal_warning_hey.wav')
 		self.sound.register_sound('warning_vox', game_sound_path + 'vocal_warning_watch_it.wav')
+		self.sound.register_sound('warning_vox', game_sound_path + 'vocal_warning_chill.wav')
 		# BallSaver Sounds #
 		self.sound.register_sound('ball_saved', game_sound_path + 'vocal_ballsaver_2.wav')
 		self.sound.register_sound('ball_saved', game_sound_path + 'vocal_ballsaver_3.wav')
@@ -287,12 +293,16 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_sound('ball_lock_1', game_sound_path + 'vocal_lock_ball_1.wav')
 		self.sound.register_sound('ball_lock_2', game_sound_path + 'vocal_lock_ball_2.wav')
 		# Jackpot Vocals #
+		self.sound.register_sound('jackpot_instruction', game_sound_path + 'vocal_jackpot_instruction.wav')
 		self.sound.register_sound('jackpot', game_sound_path + 'vocal_jackpot_1.wav')
 		self.sound.register_sound('jackpot', game_sound_path + 'vocal_jackpot_2.wav')
 		self.sound.register_sound('jackpot', game_sound_path + 'vocal_lionman.wav')
 		self.sound.register_sound('jackpot_increase', game_sound_path + 'vocal_jackpot_increase.wav')
 		self.sound.register_sound('jackpot_lit', game_sound_path + 'vocal_jackpot_lit.wav')
 		self.sound.register_sound('super_jackpot', game_sound_path + 'vocal_super_jackpot.wav')
+		self.sound.register_sound('super_jackpot_lit', game_sound_path + 'vocal_super_jackpot_lit.wav')
+		self.sound.register_sound('million_vocal', game_sound_path + 'vocal_million.wav')
+		self.sound.register_sound('million_vocal_crazy', game_sound_path + 'vocal_million_crazy.wav')
 		# Complete Shot Vocals #
 		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_encourage_greatshot.wav')
 		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_encourage_niceshot.wav')
@@ -309,6 +319,23 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_sound('captive_carnival', game_sound_path + 'captive_carnival_beep.wav')
 		# Skillshot Sounds #
 		self.sound.register_sound('shoot_captive_ball', game_sound_path + 'vocal_shoot_captive_ball.wav')
+		# Combo Sounds #
+		self.sound.register_sound('combo_swoosh', game_sound_path + 'combo_swoosh.wav')
+		self.sound.register_sound('combo1', game_sound_path + 'combo1.wav')
+		self.sound.register_sound('combo2', game_sound_path + 'combo2.wav')
+		self.sound.register_sound('combo3', game_sound_path + 'combo3.wav')
+		self.sound.register_sound('combo4', game_sound_path + 'combo4.wav')
+		self.sound.register_sound('combo5', game_sound_path + 'combo5.wav')
+		self.sound.register_sound('combo6', game_sound_path + 'combo6.wav')
+		self.sound.register_sound('combo7', game_sound_path + 'combo7.wav')
+		self.sound.register_sound('combo8', game_sound_path + 'combo8.wav')
+		# Countdown Vocals #
+		self.sound.register_sound('countdown_0_vox', game_sound_path + 'vocal_countdown_0.wav')
+		self.sound.register_sound('countdown_1_vox', game_sound_path + 'vocal_countdown_1.wav')
+		self.sound.register_sound('countdown_2_vox', game_sound_path + 'vocal_countdown_2.wav')
+		self.sound.register_sound('countdown_3_vox', game_sound_path + 'vocal_countdown_3.wav')
+		self.sound.register_sound('countdown_4_vox', game_sound_path + 'vocal_countdown_4.wav')
+		self.sound.register_sound('countdown_5_vox', game_sound_path + 'vocal_countdown_5.wav')
 
 		self.sound.set_volume(10)
 

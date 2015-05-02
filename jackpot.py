@@ -36,9 +36,11 @@ class Jackpot(game.Mode):
 			#self.superJackpotWasLit = False
 
 			#### Load Mode Feature Defaults ####
-			# Is this needed here since it is int he mode_started??? #
+			# Is this needed here since it is in the mode_started??? #
 			self.jackpotHold = self.game.user_settings['Feature']['Jackpot Hold']
 			self.jackpotLevel = self.game.utilities.get_player_stats('jackpot_level')
+
+			#self.lastChanceMillionQualified = True
 
 	def mode_started(self):
 		#### Load Mode Feature Defaults ####
@@ -98,7 +100,7 @@ class Jackpot(game.Mode):
 		if (self.game.utilities.get_player_stats('jackpot_level') < 7):
 			self.game.utilities.set_player_stats('jackpot_level',self.game.utilities.get_player_stats('jackpot_level') + 1)
 			self.game.utilities.displayText(self.priority,topText='JACKPOT',bottomText='INCREASED',justify='center',seconds=2)
-			self.game.sound.play('jackpot_increase')
+			self.game.sound.play_voice('jackpot_increase')
 		if (self.game.utilities.get_player_stats('jackpot_level') == 7):
 			self.jackpotMaxed = True
 
@@ -110,7 +112,7 @@ class Jackpot(game.Mode):
 	def lightJackpot(self):
 		if (self.game.utilities.get_player_stats('jackpot_lit') == False):
 			self.game.utilities.set_player_stats('jackpot_lit',True)
-			self.game.sound.play('jackpot_lit')
+			self.game.sound.play_voice('jackpot_lit')
 			self.game.update_lamps()
 		else:
 			#will put vocals here for shoot right ramp for jackpot
@@ -119,10 +121,11 @@ class Jackpot(game.Mode):
 	def unlightJackpot(self):
 		if (self.game.utilities.get_player_stats('jackpot_lit') == True):
 			self.game.utilities.set_player_stats('jackpot_lit',False)
+			self.delay(delay=2,handler=self.game.sound.play_voice,param='jackpot_instruction')
 			self.game.update_lamps()
 
 	def awardJackpot(self):
-		self.game.sound.play('jackpot')
+		self.game.sound.play_voice('jackpot')
 		self.game.utilities.shakerPulseHigh()
 		self.game.lampctrlflash.play_show('jackpot', repeat=False, callback=self.game.update_lamps)
 		if (self.jackpotLevel == 1):
@@ -141,11 +144,13 @@ class Jackpot(game.Mode):
 			self.game.utilities.score(2500000)
 		self.unlightJackpot()
 		self.resetJackpotLevel()
+		self.game.utilities.set_player_stats('last_chance_million_qualified',False)
 
 	def awardSuperJackpot(self):
-		self.game.sound.play('super_jackpot')
+		self.game.sound.play_voice('super_jackpot')
 		self.game.utilities.shakerPulseHigh()
 		self.game.utilities.score(4000000)
 		self.game.utilities.set_player_stats('super_jackpot_lit',False)
 		self.game.lampctrlflash.play_show('jackpot', repeat=False, callback=self.game.update_lamps)
+		self.game.utilities.set_player_stats('last_chance_million_qualified',False)
 		

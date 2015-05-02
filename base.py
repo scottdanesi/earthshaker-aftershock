@@ -35,7 +35,6 @@ import locale
 
 class BaseGameMode(game.Mode):
 	def __init__(self, game, priority):
-			#locale.setlocale(locale.LC_ALL, '') #Might not be needed
 			super(BaseGameMode, self).__init__(game, priority)
 			self.finishingBall = False
 			self.missingBalls = False
@@ -67,7 +66,6 @@ class BaseGameMode(game.Mode):
 		#This function is to be used when starting a NEW game, player 1 and ball 1
 		#Clean Up
 		self.game.modes.remove(self.game.attract_mode)
-		#self.game.modes.add(self.game.tilt)
 		
 		self.game.add_player() #will be first player at this point
 		self.game.ball = 1
@@ -76,7 +74,6 @@ class BaseGameMode(game.Mode):
 		self.game.utilities.updateBaseDisplay()
 		self.game.sound.play('game_start_rev')
 		self.delay(delay=1.2,handler=self.game.sound.play,param='game_start')
-		#self.game.sound.play('game_start')
 
 		self.game.rightramp_mode.resetFault()
 		
@@ -95,8 +92,6 @@ class BaseGameMode(game.Mode):
 		#### Queue Ball Modes ####
 		self.loadBallModes()
 
-		#self.game.modes.add(self.game.healthcheck_mode)
-
 		#### Enable Flippers ####
 		self.game.coils.flipperEnable.enable()
 
@@ -106,14 +101,7 @@ class BaseGameMode(game.Mode):
 		self.game.utilities.enableGI()
 
 		#### Kick Out Ball ####
-		# This is from the original code.  Replacing with the trough mode functions
-		#self.game.utilities.acCoilPulse(coilname='ballReleaseShooterLane_CenterRampFlashers1',pulsetime=50)
-		#self.game.trough.num_balls_in_play = 1
-		#self.game.trough.num_balls_to_launch = 1
 		self.game.trough.launch_balls(num=1)
-
-		#self.healthChecker()
-
 
 		#### Update Player Display ####
 		self.game.utilities.updateBaseDisplay()
@@ -136,11 +124,11 @@ class BaseGameMode(game.Mode):
 
 			# Remove Drops and Mini Modes because of delay issue #
 			self.game.modes.remove(self.game.drops_mode)
+
+			#### Remove Skillshot Mode ####
+			self.game.modes.remove(self.game.skillshot_mode)
+
 			self.unloadMiniModes()
-
-			#self.game.modes.remove(self.game.healthcheck_mode)
-
-			#self.cancel_delayed('healthChecker')
 
 			self.game.modes.add(self.game.bonus_mode)
 		
@@ -149,7 +137,6 @@ class BaseGameMode(game.Mode):
 			else:
 				self.end_ball()
 
-		
 	def end_ball(self):
 		#Remove Bonus
 		self.game.modes.remove(self.game.bonus_mode)
@@ -178,12 +165,10 @@ class BaseGameMode(game.Mode):
 		#### Reset Multiball Identifier in case something went wrong ####
 		self.game.utilities.set_player_stats('multiball_running',False)
 
-		#self.game.sound.fadeout_music(time_ms=1000) #This is causing delay issues with the AC Relay
 		self.game.sound.stop_music()
 
 		if self.game.current_player_index == len(self.game.players) - 1:
 			#Last Player or Single Player Drained
-			#print "Last player or single player drained"
 			if self.game.ball == self.game.balls_per_game:
 				#Last Ball Drained
 				print "Last ball drained, ending game"
@@ -191,7 +176,6 @@ class BaseGameMode(game.Mode):
 				self.finish_game()
 			else:
 				#Increment Current Ball
-				#print "Increment current ball and set player back to 1"
 				self.game.current_player_index = 0
 				self.game.ball += 1
 				self.start_ball()
@@ -206,7 +190,6 @@ class BaseGameMode(game.Mode):
 	def finish_game(self):
 		self.game.modes.add(self.game.highscore_mode)
 		self.game.highscore_mode.checkScores(self.game.base_mode.end_game)
-		#self.end_game()
 
 	def end_game(self):
 		self.game.utilities.log('Game Ended','info')
@@ -231,9 +214,8 @@ class BaseGameMode(game.Mode):
 		#### Save Game Audit Data ####
 		self.game.save_game_data()
 
-		#self.game.modes.add(self.game.attract_mode)
 		self.game.sound.play_music('game_over',loops=1,music_volume=1)
-
+		
 		self.game.reset()
 
 	def loadBallModes(self):
@@ -244,7 +226,9 @@ class BaseGameMode(game.Mode):
 		self.game.modes.add(self.game.ballsaver_mode)
 		self.game.modes.add(self.game.drops_mode)
 		self.game.modes.add(self.game.jackpot_mode)
+		self.game.modes.add(self.game.million_mode)
 		self.game.modes.add(self.game.spinner_mode)
+		self.game.modes.add(self.game.combo_mode)
 		self.game.modes.add(self.game.multiball_mode)
 		self.game.modes.add(self.game.collect_mode)
 		self.game.modes.add(self.game.shelter_mode)
@@ -259,7 +243,9 @@ class BaseGameMode(game.Mode):
 		self.game.modes.remove(self.game.ballsaver_mode)
 		self.game.modes.remove(self.game.drops_mode)
 		self.game.modes.remove(self.game.jackpot_mode)
+		self.game.modes.remove(self.game.million_mode)
 		self.game.modes.remove(self.game.spinner_mode)
+		self.game.modes.remove(self.game.combo_mode)
 		self.game.modes.remove(self.game.multiball_mode)
 		self.game.modes.remove(self.game.collect_mode)
 		self.game.modes.remove(self.game.shelter_mode)
@@ -268,7 +254,7 @@ class BaseGameMode(game.Mode):
 		self.unloadMiniModes()
 
 	def unloadMiniModes(self):
-		### Clear Mini Modes ###
+		### Unload All Mini Modes ###
 		self.game.modes.remove(self.game.mode_1)
 		self.game.modes.remove(self.game.mode_2)
 		self.game.modes.remove(self.game.mode_3)
@@ -288,9 +274,6 @@ class BaseGameMode(game.Mode):
 	###############################################################
 	# BASE SWITCH HANDLING FUNCTIONS
 	###############################################################		
-	#def sw_instituteDown_closed(self, sw):
-		#self.game.coils.quakeInstitute.disable()
-		#return procgame.game.SwitchStop
 
 	def sw_startButton_active_for_1000ms(self, sw):
 		#########################
@@ -301,7 +284,6 @@ class BaseGameMode(game.Mode):
 		#### Remove Ball Modes ####
 		self.unloadBallModes()
 
-		#self.game.sound.fadeout_music(time_ms=1000) #This is causing delay issues with the AC Relay
 		self.game.sound.stop_music()
 
 		self.end_game()
@@ -309,7 +291,7 @@ class BaseGameMode(game.Mode):
 	def sw_startButton_active_for_20ms(self, sw):
 		print 'Player: ' + str(self.game.players.index)
 		print 'Ball' + str(self.game.ball)
-		#Trough is full!
+
 		if self.game.ball == 0:
 			if self.game.utilities.troughIsFull()==True:
 				#########################
@@ -317,19 +299,15 @@ class BaseGameMode(game.Mode):
 				#########################
 				self.start_game()
 			else:
-				#missing balls
-				#self.missingBalls = True
-				self.game.modes.remove(self.game.attract_mode)
+				#########################
+				#Missing Balls
+				#########################
+				self.game.utilities.displayText(100,'MISSING BALLS','PLEASE WAIT',seconds=4,justify='center')
 				self.game.utilities.executeBallSearch()
-				script=[]
-				script.append({'top':'MISSING PINBALLS','bottom':' ','timer':2,'transition':0})
-				script.append({'top':'PLEASE CHECK','bottom':'SKILLSHOT RAMP','timer':2,'transition':0})
-				script.append({'top':'LIFT GAME FRONT','bottom':'IF BALL STUCK','timer':2,'transition':0})
-				self.game.alpha_score_display.cancel_script()
-				self.game.alpha_score_display.set_script(script)
-				self.delay(name='stuckBalls',delay=6,handler=self.game.modes.add,param=self.game.attract_mode)
-
 		elif self.game.ball == 1 and len(self.game.players) < 4:
+			#########################
+			#Add Player
+			#########################
 			self.game.add_player()
 			print 'Player Added - Total Players = ' + str(len(self.game.players))
 			if (len(self.game.players) == 2):
@@ -342,6 +320,9 @@ class BaseGameMode(game.Mode):
 				self.game.sound.play_voice('player_4_vox')
 				self.game.utilities.displayText(200,topText='PLAYER 4',bottomText='ADDED',seconds=1,justify='center')
 		else:
+			#########################
+			#Do Nothing
+			#########################
 			pass		
 		return procgame.game.SwitchStop
 
@@ -350,58 +331,37 @@ class BaseGameMode(game.Mode):
 		pass
 		
 	def sw_outhole_closed_for_1s(self, sw):
-		### Ball handling ###
-		#if self.game.trough.num_balls_in_play == 1: #Last ball in play
-			#self.game.utilities.setBallInPlay(False) # Will need to use the trough mode for this
-			##self.game.utilities.acCoilPulse('outholeKicker_CaptiveFlashers')
-			#self.delay('finishBall',delay=.5,handler=self.finish_ball)
 		return procgame.game.SwitchStop
 
-	#def healthChecker(self):
-		#if self.game.trough.num_balls_in_play == 0:
-			#self.game.utilities.setBallInPlay(False)
-			#self.finish_ball()
-			#self.cancel_delayed('healthChecker')
-		#self.delay(name='heathChecker',delay=5,handler=self.healthChecker)
-
 	def sw_ejectHole5_closed_for_200ms(self, sw):
-		#if (self.game.multiball_mode.ballLock1Lit == True):
-			#self.game.multiball_mode.lockBall1()
-			#self.delay(delay=.5,handler=self.ejectZone5)
-		#else:
-			#self.ejectZone5()
 		return procgame.game.SwitchStop
 
 	def sw_jetLeft_active(self, sw):
 		self.game.sound.play('jet')
-		self.game.utilities.score(500)
+		self.game.utilities.score(1000)
 		return procgame.game.SwitchStop
 
 	def sw_jetRight_active(self, sw):
 		self.game.sound.play('jet')
-		self.game.utilities.score(500)
+		self.game.utilities.score(1000)
 		return procgame.game.SwitchStop
 
 	def sw_jetTop_active(self, sw):
 		self.game.sound.play('jet')
-		self.game.utilities.score(500)
+		self.game.utilities.score(1000)
 		return procgame.game.SwitchStop
 
 	def sw_slingL_active(self, sw):
 		self.game.sound.play('sling')
-		self.game.utilities.score(100)
+		self.game.utilities.score(200)
 		return procgame.game.SwitchStop
 
 	def sw_slingR_active(self, sw):
 		self.game.sound.play('sling')
-		self.game.utilities.score(100)
+		self.game.utilities.score(200)
 		return procgame.game.SwitchStop
 
 	def sw_spinner_active(self, sw):
-		#self.game.utilities.acFlashPulse(coilname='dropReset_CenterRampFlashers2',pulsetime=40)
-		#self.game.coils.dropReset_CenterRampFlashers2.pulse(40)
-		#self.game.sound.play('spinner')
-		#self.game.utilities.score(100)
 		return procgame.game.SwitchStop
 
 	##################################################
@@ -478,6 +438,15 @@ class BaseGameMode(game.Mode):
 	#############################
 	def sw_rightOutlane_closed(self, sw):
 		self.game.sound.play('outlane')
+		return procgame.game.SwitchStop
 
 	def sw_leftOutlane_closed(self, sw):
 		self.game.sound.play('outlane')
+		return procgame.game.SwitchStop
+
+	#############################
+	## Institute Switch
+	#############################
+	def sw_instituteUp_open_for_100ms(self, sw):
+		self.game.coils.quakeInstitute.disable()
+		return procgame.game.SwitchStop
