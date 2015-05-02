@@ -34,7 +34,8 @@ class RightRampMode(game.Mode):
 	def __init__(self, game, priority):
 			super(RightRampMode, self).__init__(game, priority)
 			## Global Setting Variables ##
-			self.RightRampProcessing = False
+			self.rightRampProcessing = False
+			#self.lastChanceMillionLit = False
 
 	def mode_started(self):
 		## Global System Variables ##
@@ -58,37 +59,54 @@ class RightRampMode(game.Mode):
 
 	def rightRampShotCompleted(self):
 		# Handle it! #
-		if (self.game.utilities.get_player_stats('multiball_running') == True):
-			if (self.game.utilities.get_player_stats('jackpot_lit') == True):
-				# Score Jackpot
-				self.game.jackpot_mode.awardJackpot()
-				self.delay(delay=1.2,handler=self.sendBallToShelter)
-			else:			
-				self.game.utilities.score(50000)
-				# Sound FX #
-				#self.game.sound.play('centerRampComplete')
-				self.game.lampctrlflash.play_show('right_ramp_1', repeat=False, callback=self.game.update_lamps)
-				self.game.sound.play_voice('complete_shot')
-				self.sendBallToLeftRamp()
-		else:
-			if (self.game.utilities.get_player_stats('lock1_lit') == True or self.game.utilities.get_player_stats('lock2_lit') == True or self.game.utilities.get_player_stats('lock3_lit') == True):
-				self.game.lampctrlflash.play_show('right_ramp_1', repeat=False, callback=self.game.update_lamps)
-				self.game.sound.play_voice('complete_shot')
-				self.sendBallToShelter()
-				self.game.utilities.score(500)
+		if (self.rightRampProcessing == False):
+			if (self.game.utilities.get_player_stats('multiball_running') == True):
+				if (self.game.utilities.get_player_stats('jackpot_lit') == True):
+					self.rightRampProcessing = True
+					# Score Jackpot
+					self.game.jackpot_mode.awardJackpot()
+					self.delay(delay=1.2,handler=self.sendBallToShelter)
+				else:
+					self.rightRampProcessing = True			
+					self.game.utilities.score(50000)
+					# Sound FX #
+					#self.game.sound.play('centerRampComplete')
+					self.game.lampctrlflash.play_show('right_ramp_1', repeat=False, callback=self.game.update_lamps)
+					self.game.sound.play_voice('complete_shot')
+					self.sendBallToLeftRamp()
+			elif (self.game.utilities.get_player_stats('million_lit') == True):
+				self.rightRampProcessing = True
+				self.game.million_mode.scoreLastChanceMillion()
+				if (self.game.utilities.get_player_stats('lock1_lit') == True or self.game.utilities.get_player_stats('lock2_lit') == True or self.game.utilities.get_player_stats('lock3_lit') == True):
+					self.sendBallToShelter()
+				else:
+					self.sendBallToLeftRamp()
 			else:
-				# Sound FX #
-				#self.game.sound.play('centerRampComplete')
-				self.game.lampctrlflash.play_show('right_ramp_1', repeat=False, callback=self.game.update_lamps)
-				self.game.sound.play_voice('complete_shot')
-				self.sendBallToLeftRamp()
-				#self.game.coils.quakeInstitute.enable()
-				self.game.collect_mode.spotZone()
-				self.game.utilities.score(500)
+				if (self.game.utilities.get_player_stats('lock1_lit') == True or self.game.utilities.get_player_stats('lock2_lit') == True or self.game.utilities.get_player_stats('lock3_lit') == True):
+					self.rightRampProcessing = True
+					self.game.lampctrlflash.play_show('right_ramp_1', repeat=False, callback=self.game.update_lamps)
+					self.game.sound.play_voice('complete_shot')
+					self.sendBallToShelter()
+					self.game.utilities.score(500)
+				else:
+					self.rightRampProcessing = True
+					# Sound FX #
+					#self.game.sound.play('centerRampComplete')
+					self.game.lampctrlflash.play_show('right_ramp_1', repeat=False, callback=self.game.update_lamps)
+					self.game.sound.play_voice('complete_shot')
+					self.sendBallToLeftRamp()
+					#self.game.coils.quakeInstitute.enable()
+					self.game.collect_mode.spotZone()
+					self.game.utilities.score(500)
+		else:
+			self.ejectBall()
 		
 
 		# Add Fault Visit #
 		self.game.utilities.set_player_stats('fault_visits',self.game.utilities.get_player_stats('fault_visits') + 1)
+
+	def resetRightRampProcessingVariable(self):
+		self.rightRampProcessing = False
 
 	def sw_rightRampEntry_active(self, sw):
 		# Sound FX #
@@ -117,10 +135,12 @@ class RightRampMode(game.Mode):
 		self.openFault()
 		self.delay(delay=.4,handler=self.ejectBall)
 		self.delay(delay=2,handler=self.closeFault)
+		self.delay(delay=2,handler=self.resetRightRampProcessingVariable)
 
 	def sendBallToLeftRamp(self):
 		self.closeFault()
 		self.delay(delay=.4,handler=self.ejectBall)
+		self.delay(delay=.4,handler=self.resetRightRampProcessingVariable)
 
 	def ejectBall(self):
 		#self.game.lampctrlflash.play_show('right_ramp_eject', repeat=False, callback=self.game.update_lamps)
