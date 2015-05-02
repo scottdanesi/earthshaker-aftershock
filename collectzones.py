@@ -203,7 +203,7 @@ class CollectZones(game.Mode):
 
 	def scoreZoneCollected(self):
 		self.game.utilities.log('CollectZone Mode - Score Collected Zone','info')
-		self.game.utilities.score(2500)
+		self.game.utilities.score(10000)
 		self.game.utilities.set_player_stats('zones_visited',self.game.utilities.get_player_stats('zones_visited') + 1)
 		self.game.sound.play('zone_awarded')
 		self.game.utilities.shakerPulseLow()
@@ -217,7 +217,7 @@ class CollectZones(game.Mode):
 			self.refreshAllZoneLists()
 
 	def zoneNotAwarded(self):
-		self.game.utilities.score(250)
+		self.game.utilities.score(500)
 		
 
 
