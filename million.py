@@ -49,12 +49,13 @@ class Million(game.Mode):
 			self.game.lamps.rightRamp3Miles.disable()
 		
 	def startCountdownTimers(self):
-		self.delay(name='count0',delay=self.millionTotalTime-2,handler=self.game.sound.play,param='countdown_0_vox')
+		self.delay(name='count0',delay=self.millionTotalTime-3,handler=self.game.sound.play,param='countdown_0_vox')
 		self.delay(name='count1',delay=self.millionTotalTime-4,handler=self.game.sound.play,param='countdown_1_vox')
-		self.delay(name='count2',delay=self.millionTotalTime-6,handler=self.game.sound.play,param='countdown_2_vox')
-		self.delay(name='count3',delay=self.millionTotalTime-8,handler=self.game.sound.play,param='countdown_3_vox')
-		self.delay(name='count4',delay=self.millionTotalTime-10,handler=self.game.sound.play,param='countdown_4_vox')
-		self.delay(name='count5',delay=self.millionTotalTime-12,handler=self.game.sound.play,param='countdown_5_vox')
+		self.delay(name='count2',delay=self.millionTotalTime-5,handler=self.game.sound.play,param='countdown_2_vox')
+		self.delay(name='count3',delay=self.millionTotalTime-6,handler=self.game.sound.play,param='countdown_3_vox')
+		self.delay(name='count4',delay=self.millionTotalTime-7,handler=self.game.sound.play,param='countdown_4_vox')
+		self.delay(name='count5',delay=self.millionTotalTime-8,handler=self.game.sound.play,param='countdown_5_vox')
+		self.delay(name='missed',delay=self.millionTotalTime-11,handler=self.game.sound.play,param='shoot_rr')
 		#self.delay(name='count5',delay=self.millionTotalTime-12,handler=self.game.sound.play,param='countdown_5_vox') Pleacholder for Shoot Right Ramp or Last Chance Million is lit.
 
 	def stopCountdownTimers(self):
@@ -64,15 +65,18 @@ class Million(game.Mode):
 		self.cancel_delayed('count3')
 		self.cancel_delayed('count4')
 		self.cancel_delayed('count5')
+		self.cancel_delayed('missed')
 
 	def startLastChanceMillion(self):
 		self.game.utilities.set_player_stats('million_lit',True)
+		self.game.sound.play_voice('lcm_lit')
 		self.delay(delay=15,handler=self.stopLastChanceMillion)
 		self.startCountdownTimers()
 		self.game.update_lamps()
 
 	def stopLastChanceMillion(self):
 		self.game.utilities.set_player_stats('million_lit',False)
+		#self.game.sound.play_voice('lcm_missed')
 		#self.game.utilities.set_player_stats('last_chance_million_qualified',True)
 		self.stopCountdownTimers()
 		self.game.update_lamps()

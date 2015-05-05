@@ -296,22 +296,31 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_sound('jackpot_instruction', game_sound_path + 'vocal_jackpot_instruction.wav')
 		self.sound.register_sound('jackpot', game_sound_path + 'vocal_jackpot_1.wav')
 		self.sound.register_sound('jackpot', game_sound_path + 'vocal_jackpot_2.wav')
-		self.sound.register_sound('jackpot', game_sound_path + 'vocal_lionman.wav')
+		#self.sound.register_sound('jackpot', game_sound_path + 'vocal_lionman.wav')
 		self.sound.register_sound('jackpot_increase', game_sound_path + 'vocal_jackpot_increase.wav')
 		self.sound.register_sound('jackpot_lit', game_sound_path + 'vocal_jackpot_lit.wav')
 		self.sound.register_sound('super_jackpot', game_sound_path + 'vocal_super_jackpot.wav')
-		self.sound.register_sound('super_jackpot_lit', game_sound_path + 'vocal_super_jackpot_lit.wav')
+		self.sound.register_sound('super_jackpot_lit', game_sound_path + 'vocal_super_jackpot_lit_2.wav')
 		self.sound.register_sound('million_vocal', game_sound_path + 'vocal_million.wav')
 		self.sound.register_sound('million_vocal_crazy', game_sound_path + 'vocal_million_crazy.wav')
 		# Complete Shot Vocals #
 		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_encourage_greatshot.wav')
 		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_encourage_niceshot.wav')
-		#self.sound.register_sound('complete_shot', game_sound_path + 'vocal_lionman.wav')
+		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_lionman.wav')
 		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_bitchin.wav')
 		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_nice.wav')
 		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_awesome.wav')
 		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_awesome_shot.wav')
 		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_keep_it_up.wav')
+		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_encourage_killer.wav')
+		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_encourage_rad.wav')
+		self.sound.register_sound('complete_shot', game_sound_path + 'vocal_encourage_rockin.wav')
+		# Last Chance Million Vocals #
+		self.sound.register_sound('lcm_lit', game_sound_path + 'vocal_last_chance_million_lit.wav')
+		self.sound.register_sound('lcm_lit', game_sound_path + 'vocal_last_chance_million_lit_shoot_ramp.wav')
+		self.sound.register_sound('lcm_missed', game_sound_path + 'vocal_better_luck_next_time.wav')
+		# Right Ramp Vocals #
+		self.sound.register_sound('shoot_rr', game_sound_path + 'vocal_shoot_right_ramp.wav')
 		# Shelter Sounds #
 		self.sound.register_sound('mode_select', game_sound_path + 'mode_select_beep2.wav')
 		self.sound.register_sound('mode_selected', game_sound_path + 'mode_select_beep_selected.wav')
@@ -336,6 +345,8 @@ class EarthshakerAftershock(game.BasicGame):
 		self.sound.register_sound('countdown_3_vox', game_sound_path + 'vocal_countdown_3.wav')
 		self.sound.register_sound('countdown_4_vox', game_sound_path + 'vocal_countdown_4.wav')
 		self.sound.register_sound('countdown_5_vox', game_sound_path + 'vocal_countdown_5.wav')
+		# High Score Vocals #
+		self.sound.register_sound('great_score_vox', game_sound_path + 'vocal_great_score.wav')
 
 		self.sound.set_volume(10)
 

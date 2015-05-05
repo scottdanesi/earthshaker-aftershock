@@ -232,6 +232,8 @@ class HighScore(game.Mode):
 		
 		self.game.sound.play_music('highscore_loop',loops=-1,music_volume=1)
 
+		self.game.sound.play_voice('great_score_vox')
+
 		#### Disable All Lamps ####
 		for lamp in self.game.lamps:
 			lamp.disable()

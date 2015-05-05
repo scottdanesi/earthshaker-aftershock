@@ -139,7 +139,7 @@ class SkillshotMode(game.Mode):
 		self.skillshotAwarded()
 		return procgame.game.SwitchContinue
 
-	def sw_onRampBypass_active_for_10ms(self, sw):
+	def sw_onRampBypass_active_for_20ms(self, sw):
 		self.skillshotMissed()
 		return procgame.game.SwitchContinue
 
