@@ -375,7 +375,7 @@ class AttractMode(game.Mode):
 		script.append({'top':'HIGH SCORE 2','bottom':self.highScore2Inits + ' ' + self.highScore2Score,'timer':5,'transition':1})
 		script.append({'top':'HIGH SCORE 3','bottom':self.highScore3Inits + ' ' + self.highScore3Score,'timer':5,'transition':1})
 		script.append({'top':'HIGH SCORE 4','bottom':self.highScore4Inits + ' ' + self.highScore4Score,'timer':5,'transition':1})
-		script.append({'top':'MILEAGE CHAMP','bottom':self.milesChampInits + ' ' + self.milesChampMiles + ' MILES','timer':5,'transition':1})
+		#script.append({'top':'MILEAGE CHAMP','bottom':self.milesChampInits + ' ' + self.milesChampMiles + ' MILES','timer':5,'transition':1})
 
 		#####################################################
 		#### Previous Game Scores #2 ########################

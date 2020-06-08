@@ -89,9 +89,6 @@ class BaseGameMode(game.Mode):
 		#### Set Diagnostic LED ####
 		self.game.utilities.setDiagLED(self.game.current_player_index + 1)
 
-		#### Queue Ball Modes ####
-		self.loadBallModes()
-
 		#### Enable Flippers ####
 		self.game.coils.flipperEnable.enable()
 
@@ -102,6 +99,9 @@ class BaseGameMode(game.Mode):
 
 		#### Kick Out Ball ####
 		self.game.trough.launch_balls(num=1)
+
+		#### Queue Ball Modes ####
+		self.loadBallModes()
 
 		#### Update Player Display ####
 		self.game.utilities.updateBaseDisplay()

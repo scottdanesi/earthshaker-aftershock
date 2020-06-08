@@ -53,7 +53,12 @@ class SwitchTrackerMode(game.Mode):
 
 	def ballSearch(self):
 		if self.game.utilities.get_player_stats('ball_in_play') == True:
-			self.game.utilities.executeBallSearch()
+			if (self.game.trough.num_balls() == 3):
+				#### Something is wrong...  Kick Out Ball ####
+				self.game.trough.launch_balls(num=1)
+			else:
+				self.game.utilities.executeBallSearch()
+		self.delay(name='ballSearchTimer',delay=self.ballSearchDelayTime,handler=self.ballSearch)
 
 	def mode_started(self):
 		pass

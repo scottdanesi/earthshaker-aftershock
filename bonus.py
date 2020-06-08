@@ -47,6 +47,7 @@ class Bonus(game.Mode):
 		self.game.coils.flipperEnable.disable()
 		self.game.sound.stop_music()
 		self.game.utilities.disableGI()
+		self.game.million_mode.stopLastChanceMillion()
 
 		#### Disable All Lamps ####
 		for lamp in self.game.lamps:
@@ -61,7 +62,7 @@ class Bonus(game.Mode):
 	def calculate(self,callback):
 		#self.game.sound.play_music('bonus', loops=1)
 		self.callback = callback
-		self.totalGreatHarm = self.game.utilities.get_player_stats('greatharm_switch_hits') * 600
+		self.totalGreatHarm = self.game.utilities.get_player_stats('greatharm_switch_hits') * 150
 		self.total_value = ((self.game.utilities.get_player_stats('miles') * self.miles_value) + self.totalGreatHarm) * self.game.utilities.get_player_stats('bonus_x')
 		self.miles()
 

@@ -45,6 +45,7 @@ class HighScore(game.Mode):
 			self.newPlayerPosition = 0
 			self.newPlayerNumber = 0
 			self.newPlayerScore = 0
+			self.newPlayerType = ''
 
 			self.checkScoreCallback = ''
 
@@ -113,6 +114,7 @@ class HighScore(game.Mode):
 			self.newPlayerPosition -= 1
 
 		if (self.newPlayerPosition < 5):
+			self.newPlayerType = 'highscore'
 			self.enterInitialsStart(self.newPlayerNumber,self.newPlayerPosition)
 		else:
 			self.checkScoreCallback()
@@ -134,6 +136,7 @@ class HighScore(game.Mode):
 			self.newPlayerPosition -= 1
 
 		if (self.newPlayerPosition < 5):
+			self.newPlayerType = 'highscore'
 			self.enterInitialsStart(self.newPlayerNumber,self.newPlayerPosition)
 		else:
 			self.checkScoreCallback()
@@ -155,6 +158,7 @@ class HighScore(game.Mode):
 			self.newPlayerPosition -= 1
 
 		if (self.newPlayerPosition < 5):
+			self.newPlayerType = 'highscore'
 			self.enterInitialsStart(self.newPlayerNumber,self.newPlayerPosition)
 		else:
 			self.checkScoreCallback()
@@ -176,9 +180,13 @@ class HighScore(game.Mode):
 			self.newPlayerPosition -= 1
 
 		if (self.newPlayerPosition < 5):
+			self.newPlayerType = 'highscore'
 			self.enterInitialsStart(self.newPlayerNumber,self.newPlayerPosition)
 		else:
 			self.checkScoreCallback()
+
+	def updateMilesChamp(self,miles,inits):
+		pass
 
 	def updateScores(self,score,inits):
 		if (self.newPlayerPosition == 5):

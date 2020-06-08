@@ -58,48 +58,42 @@ class Combo(game.Mode):
 			pass
 		elif (self.currentComboInt == 1):
 			self.game.sound.play('combo1')
-			self.earnedPoints = 10000
+			self.earnedPoints = 20000
 			self.game.utilities.score(self.earnedPoints)
 			self.delay(delay=.5,handler=self.game.sound.play_voice,param='complete_shot')
 			self.game.utilities.displayText(priority=self.priority,topText='LOOP COMBO ' + str(self.currentComboInt),bottomText=locale.format("%d", self.earnedPoints, True) + ' POINTS',justify='center',seconds=self.comboTime)
 		elif (self.currentComboInt == 2):
 			self.game.sound.play('combo2')
-			self.earnedPoints = 20000
+			self.earnedPoints = 40000
 			self.game.utilities.score(self.earnedPoints)
 			self.delay(delay=.5,handler=self.game.sound.play_voice,param='complete_shot')
 			self.game.utilities.displayText(priority=self.priority,topText='LOOP COMBO ' + str(self.currentComboInt),bottomText=locale.format("%d", self.earnedPoints, True) + ' POINTS',justify='center',seconds=self.comboTime)
 		elif (self.currentComboInt == 3):
 			self.game.sound.play('combo3')
-			self.earnedPoints = 40000
+			self.earnedPoints = 80000
 			self.game.utilities.score(self.earnedPoints)
 			self.delay(delay=.5,handler=self.game.sound.play_voice,param='complete_shot')
 			self.game.utilities.displayText(priority=self.priority,topText='LOOP COMBO ' + str(self.currentComboInt),bottomText=locale.format("%d", self.earnedPoints, True) + ' POINTS',justify='center',seconds=self.comboTime)
 		elif (self.currentComboInt == 4):
 			self.game.sound.play('combo4')
-			self.earnedPoints = 80000
+			self.earnedPoints = 160000
 			self.game.utilities.score(self.earnedPoints)
 			self.delay(delay=.5,handler=self.game.sound.play_voice,param='complete_shot')
 			self.game.utilities.displayText(priority=self.priority,topText='LOOP COMBO ' + str(self.currentComboInt),bottomText=locale.format("%d", self.earnedPoints, True) + ' POINTS',justify='center',seconds=self.comboTime)
 		elif (self.currentComboInt == 5):
 			self.game.sound.play('combo5')
-			self.earnedPoints = 160000
+			self.earnedPoints = 320000
 			self.game.utilities.score(self.earnedPoints)
 			self.delay(delay=.5,handler=self.game.sound.play_voice,param='complete_shot')
 			self.game.utilities.displayText(priority=self.priority,topText='LOOP COMBO ' + str(self.currentComboInt),bottomText=locale.format("%d", self.earnedPoints, True) + ' POINTS',justify='center',seconds=self.comboTime)
 		elif (self.currentComboInt == 6):
 			self.game.sound.play('combo6')
-			self.earnedPoints = 320000
+			self.earnedPoints = 640000
 			self.game.utilities.score(self.earnedPoints)
 			self.delay(delay=.5,handler=self.game.sound.play_voice,param='complete_shot')
 			self.game.utilities.displayText(priority=self.priority,topText='LOOP COMBO ' + str(self.currentComboInt),bottomText=locale.format("%d", self.earnedPoints, True) + ' POINTS',justify='center',seconds=self.comboTime)
 		elif (self.currentComboInt == 7):
 			self.game.sound.play('combo7')
-			self.earnedPoints = 640000
-			self.game.utilities.score(self.earnedPoints)
-			self.delay(delay=.5,handler=self.game.sound.play_voice,param='complete_shot')
-			self.game.utilities.displayText(priority=self.priority,topText='LOOP COMBO ' + str(self.currentComboInt),bottomText=locale.format("%d", self.earnedPoints, True) + ' POINTS',justify='center',seconds=self.comboTime)
-		elif (self.currentComboInt == 8):
-			self.game.sound.play('combo8')
 			self.earnedPoints = 1280000
 			self.game.utilities.score(self.earnedPoints)
 			self.delay(delay=.5,handler=self.game.sound.play_voice,param='complete_shot')

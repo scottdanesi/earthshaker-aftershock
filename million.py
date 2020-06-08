@@ -84,5 +84,5 @@ class Million(game.Mode):
 	def scoreLastChanceMillion(self):
 		self.game.lampctrlflash.play_show('jackpot', repeat=False, callback=self.game.update_lamps)
 		self.game.utilities.score(1000000)
-		self.game.sound.play_voice('million_vocal_crazy')
+		self.game.sound.play('million_vocal_crazy')
 		self.stopLastChanceMillion()

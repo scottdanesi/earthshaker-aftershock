@@ -47,6 +47,7 @@ class SkillshotMode(game.Mode):
 		return super(SkillshotMode, self).mode_started()
 
 	def mode_stopped(self):
+		self.cancel_delayed('endSuperSkillshot')
 		self.game.utilities.set_player_stats('skillshot_active',False)
 		self.update_lamps()
 		self.game.collect_mode.update_lamps()
@@ -108,10 +109,6 @@ class SkillshotMode(game.Mode):
 	## Switch Handling Modes ##
 	###########################
 
-	def sw_outhole_closed_for_1s(self, sw):
-		
-		return procgame.game.SwitchContinue
-
 	def sw_onRamp50k_active_for_10ms(self, sw):
 		self.game.utilities.displayText(100,'SKILLSHOT',locale.format("%d", 50000 * self.game.utilities.get_player_stats('skillshot_x'), grouping=True) + ' POINTS',seconds=self.skillshotDisplayTime,justify='center')
 		self.game.utilities.score(50000 * self.game.utilities.get_player_stats('skillshot_x'))
@@ -140,18 +137,22 @@ class SkillshotMode(game.Mode):
 		return procgame.game.SwitchContinue
 
 	def sw_onRampBypass_active_for_20ms(self, sw):
+		print 'SKILLSHOT MISSED: sw_onRampBypass_active_for_20ms'
 		self.skillshotMissed()
 		return procgame.game.SwitchContinue
 
 	def sw_rightStandup50k_active(self, sw):
+		print 'SUPER SKILLSHOT MISSED: sw_rightStandup50k_active'
 		self.superSkillshotMissed()
 		return procgame.game.SwitchContinue
 
 	def sw_rightStandupHigh2_active(self, sw):
+		print 'SUPER SKILLSHOT MISSED: sw_rightStandupHigh2_active'
 		self.superSkillshotMissed()
 		return procgame.game.SwitchContinue
 
 	def sw_rightStandupLow3_active(self, sw):
+		print 'SUPER SKILLSHOT MISSED: sw_rightStandupLow3_active'
 		self.superSkillshotMissed()
 		return procgame.game.SwitchContinue
 

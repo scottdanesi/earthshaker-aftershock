@@ -207,7 +207,7 @@ class Animation(object):
 		
 			# Finally store the data in the cache:	
 			if animation_cache:
-				print "Storing in the cache: ", key_path
+				#print "Storing in the cache: ", key_path
 				animation_cache.set_at_path(key_path, dmd_data)
 					
 			logger.debug('Loaded "%s" from disk in %0.3fs', key_path, time.time()-t0)

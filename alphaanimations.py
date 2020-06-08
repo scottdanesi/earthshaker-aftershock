@@ -105,9 +105,6 @@ class UtilitiesMode(game.Mode):
 
 	def executeBallSearch(self):
 		delayTime = .7
-		print "BALL SEARCH"
-		print "TROUGH  - " + str(self.game.trough.num_balls())
-		print "IN PLAY - " + str(self.game.trough.num_balls_in_play)
 		self.game.coils.quakeInstitute.enable()
 		self.acCoilPulse(coilname='ejectHole_CenterRampFlashers4',pulsetime=50)
 		#self.delay(delay=delayTime*1,handler=self.game.coils.jetLeft.pulse,param=50)

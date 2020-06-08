@@ -203,7 +203,7 @@ class BasicRecordableGame(BasicGame):
 			eventStr = eventStr + "|" + str(event['time'])
 		self._switch_record_file.write(eventStr+"\n")
 		self.logger.info("%s:\tswitch recorded-\t%s",str(currentTime),friendly_switch_name)
-		print event
+		#print event
 
 	def run_loop(self, min_seconds_per_cycle=None):
 		""" We override the original run loop to encapsulate it inside of a 
@@ -214,8 +214,9 @@ class BasicRecordableGame(BasicGame):
 		try:
 			super(BasicRecordableGame,self).run_loop(min_seconds_per_cycle)
 		except Exception as e:
-			print e
-			print traceback.format_exc()
+			#print e
+			#print traceback.format_exc()
+			pass
 			
 		""" Close the switch record file """
 		if self.is_recording():

@@ -49,14 +49,18 @@ class Tilt(game.Mode):
 		self.game.modes.remove(self.game.skillshot_mode)
 		self.game.modes.remove(self.game.centerramp_mode)
 		self.game.modes.remove(self.game.rightramp_mode)
+		#self.game.modes.remove(self.game.tilt)
 		self.game.modes.remove(self.game.ballsaver_mode)
 		self.game.modes.remove(self.game.drops_mode)
 		self.game.modes.remove(self.game.jackpot_mode)
+		self.game.modes.remove(self.game.million_mode)
 		self.game.modes.remove(self.game.spinner_mode)
+		self.game.modes.remove(self.game.combo_mode)
 		self.game.modes.remove(self.game.multiball_mode)
 		self.game.modes.remove(self.game.collect_mode)
 		self.game.modes.remove(self.game.shelter_mode)
 		self.game.modes.remove(self.game.bonusmultiplier_mode)
+		self.game.modes.remove(self.game.switch_tracker_mode)
 
 		### Clear Mini Modes ###
 		self.game.modes.remove(self.game.mode_1)
