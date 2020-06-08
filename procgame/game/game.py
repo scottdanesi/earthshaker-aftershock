@@ -11,6 +11,9 @@ from gameitems import *
 from procgame import util
 from mode import *
 from pdb import PDBConfig
+import datetime
+import shutil
+from shutil import copyfile
 
 def config_named(name):
 	if not os.path.isfile(name): # If we cannot find this file easily, try searching the config_path:
@@ -336,66 +339,260 @@ class GameController(object):
 		sect_dict = self.config['PRGame']
 		self.num_balls_total = sect_dict['numBalls']
 
-
 	def load_settings(self, template_filename, user_filename):
 		"""Loads the YAML game settings configuration file.  The game settings
-		describe operator configuration options, such as balls per game and
-		replay levels.
-		The *template_filename* provides default values for the game;
-		*user_filename* contains the values set by the user.
+        describe operator configuration options, such as balls per game and
+        replay levels.
+        The *template_filename* provides default values for the game;
+        *user_filename* contains the values set by the user.
 
-		See also: :meth:`save_settings`
-		"""
+        See also: :meth:`save_settings`
+        """
+
+		settings_changed = False
 		self.user_settings = {}
-		self.settings = yaml.load(open(template_filename, 'r'))
-		if os.path.exists(user_filename):
-			self.user_settings = yaml.load(open(user_filename, 'r'))
 
-		for section in self.settings:
-			for item in self.settings[section]:
-				if not section in self.user_settings:
-					self.user_settings[section] = {}
-					if 'default' in self.settings[section][item]:
-						self.user_settings[section][item] = self.settings[section][item]['default']
+		with open(template_filename, 'r') as template_file:
+			self.settings = yaml.load(template_file)
+		template_file.close()
+		template_file = None
+
+		## Attempt to restore missing settings file if original is missing ##
+		if os.path.exists(user_filename) == False:
+			# Try and restore backup first
+			if os.path.exists(user_filename + '.bak'):
+				os.rename(user_filename + '.bak', user_filename)
+			else:
+				pass
+
+		## Check for 0 file size and load file ##
+		if os.path.exists(user_filename):
+			if os.path.getsize(user_filename) == 0:
+				if os.path.exists(user_filename + '.bak'):
+					os.remove(user_filename)
+					os.rename(user_filename + '.bak', user_filename)
+				else:
+					pass
+			else:
+				with open(user_filename, 'r') as user_filename_file:
+					self.user_settings = yaml.load(user_filename_file)
+				user_filename_file.close()
+				user_filename_file = None
+
+		# user_filename_file = open(user_filename, 'r')
+		# self.user_settings = yaml.load(user_filename_file)
+		# file.close(user_filename_file)
+		# user_filename_file.close()
+
+		# self.user_settings = yaml.load(open(user_filename, 'r'))
+
+		# this pass ensures the user settings include everything in the
+		# game settings by assigning defaults for anything missing
+		try:
+			for section in self.settings:
+				for item in self.settings[section]:
+					if not section in self.user_settings:
+						self.user_settings[section] = {}
+						settings_changed = True
+					if not item in self.user_settings[section]:
+						settings_changed = True
+						if 'default' in self.settings[section][item]:
+							self.user_settings[section][item] = self.settings[section][item]['default']
+						else:
+							self.user_settings[section][item] = self.settings[section][item]['options'][0]
 					else:
-						self.user_settings[section][item] = self.settings[section][item]['options'][0]
-				elif not item in self.user_settings[section]:
-					if 'default' in self.settings[section][item]:
-						self.user_settings[section][item] = self.settings[section][item]['default']
-					else:
-						self.user_settings[section][item] = self.settings[section][item]['options'][0]
+						if 'increments' not in self.settings[section][item]:
+							if (self.user_settings[section][item] not in self.settings[section][item]['options']):
+								settings_changed = True
+								if 'default' in self.settings[section][item]:
+									self.user_settings[section][item] = self.settings[section][item]['default']
+								else:
+									self.user_settings[section][item] = self.settings[section][item]['options'][0]
+			# this pass logs settings that occur in the user settings
+			# but not in game settings and removes them
+			invalid_sections = []
+			for section in self.user_settings:
+				if (section not in self.settings):
+					settings_changed = True
+					invalid_sections.append(section)
+				else:
+					invalid_items = []
+					for item in self.user_settings[section]:
+						if item not in self.settings[section]:
+							settings_changed = True
+							invalid_items.append(item)
+					for item in invalid_items:
+						self.user_settings[section].pop(item)
+			for section in invalid_sections:
+				self.user_settings.pop(section)
+
+			self.loadSettingsRetry = 0
+		except Exception, e:
+			if os.path.exists(user_filename):
+				os.remove(user_filename)
+			if os.path.exists(user_filename + '.bak'):
+				os.rename(user_filename + '.bak', user_filename)
+			if self.loadSettingsRetry <= 2:
+				self.loadSettingsRetry += 1
+				self.load_settings(template_filename, user_filename)
+
+		return settings_changed
 
 	def save_settings(self, filename):
+		self.logger.info("Settings saved to " + str(filename))
 		"""Writes the game settings to *filename*.  See :meth:`load_settings`."""
 		if os.path.exists(filename):
-			os.remove(filename)
-		stream = file(filename, 'w')
-		yaml.dump(self.user_settings, stream)
+			if os.path.exists(filename + '.bak'):
+				os.remove(filename + '.bak')
+			try:
+				os.rename(filename, filename + '.bak')
+			except:
+				pass
+
+		try:
+			if os.path.exists(filename):
+				os.remove(filename)
+
+			with open(filename, 'w') as stream:
+				yaml.dump(self.user_settings, stream)
+				stream.flush()
+				os.fdatasync(stream)
+			# stream.close()
+			# stream = None
+			# os.fsync()
+
+			# os.rename(filename+'.temp', filename)
+
+			# Create backup File if data is good
+			if os.path.getsize(filename) > 0:
+				if os.path.exists(filename + '.bak'):
+					os.remove(filename + '.bak')
+				copyfile(filename, filename + '.bak')
+
+		# stream = open(filename, 'w', 0)
+		# yaml.dump(self.user_settings, stream)
+		# file.close(stream)
+		# stream.close()
+
+		# if os.path.getsize(filename) == 0:
+		#    self.logger.error( " ****** CORRUPT GAME USER SETTINGS FILE REPLACING WITH CLEAN DATA  --- restoring last copy ****************")
+		#    #remove bad file
+		#    os.remove(filename)
+		#    os.rename(filename+'.bak', filename)
+		# else:
+		#    self.logger.info("Settings saved to " + str(filename))
+		except Exception, e:
+			self.logger.error("CANNOT SAVE SETTINGS FILE:" + str(filename) + " - " + str(e))
 
 	def load_game_data(self, template_filename, user_filename):
 		"""Loads the YAML game data configuration file.  This file contains
-		transient information such as audits, high scores and other statistics.
-		The *template_filename* provides default values for the game;
-		*user_filename* contains the values set by the user.
+        transient information such as audits, high scores and other statistics.
+        The *template_filename* provides default values for the game;
+        *user_filename* contains the values set by the user.
 
-		See also: :meth:`save_game_data`
-		"""
+        See also: :meth:`save_game_data`
+        """
 		self.game_data = {}
-		template = yaml.load(open(template_filename, 'r'))
-		if os.path.exists(user_filename):
-			self.game_data = yaml.load(open(user_filename, 'r'))
+		template = {}
 
-		if template:
-			for key, value in template.iteritems():
-				if key not in self.game_data:
-					self.game_data[key] = copy.deepcopy(value)
+		with open(template_filename, 'r') as template_file:
+			template = yaml.load(template_file)
+		template_file.close()
+		template_file = None
+
+		# template_file = open(template_filename,'r')
+		# template = yaml.load(template_file)
+		# file.close(template_file)
+
+		## Attempt to restore missing settings file ##
+		if os.path.exists(user_filename) == False:
+			# Try and restore backup first
+			self.logger.warning("Audits File Missing - Trying to restore from backup")
+			if os.path.exists(user_filename + '.bak'):
+				self.logger.warning("Audits File Missing - Backup exists, restoring...")
+				os.rename(user_filename + '.bak', user_filename)
+
+		## Check for 0 file size and load file ##
+		if os.path.exists(user_filename):
+			if os.path.getsize(user_filename) == 0:
+				self.logger.error(
+					"****************   CORRUPT DATA FILE REPLACING WITH CLEAN DATA  --- ****************")
+				if os.path.exists(user_filename + '.bak'):
+					os.remove(user_filename)
+					os.rename(user_filename + '.bak', user_filename)
+					self.logger.info("Data file restored from Backup")
+				else:
+					self.logger.error(
+						"****************   CORRUPT DATA FILE NO BACKUP TO RESTORE FROM  --- ****************")
+			else:
+				with open(user_filename, 'r') as user_filename_file:
+					self.game_data = yaml.load(user_filename_file)
+				user_filename_file.close()
+				user_filename_file = None
+
+		# user_filename_file = open(user_filename, 'r')
+		# self.game_data = yaml.load(user_filename_file)
+		# file.close(user_filename_file)
+		# user_filename_file.close()
+		try:
+			if template:
+				for key, value in template.iteritems():
+					if key not in self.game_data:
+						self.game_data[key] = copy.deepcopy(value)
+		except Exception, e:
+			self.logger.info("Loading Data Error: " + str(e))
+			self.logger.error("Load data failed.  Restoring backup.")
+			if os.path.exists(user_filename):
+				os.remove(user_filename)
+			if os.path.exists(user_filename + '.bak'):
+				os.rename(user_filename + '.bak', user_filename)
+			if self.loadDataRetry <= 2:
+				self.logger.info("Loading Data File: Retry #" + str(self.loadDataRetry))
+				self.loadDataRetry += 1
+				self.load_settings(template_filename, user_filename)
 
 	def save_game_data(self, filename):
 		"""Writes the game data to *filename*.  See :meth:`load_game_data`."""
 		if os.path.exists(filename):
-			os.remove(filename)
-		stream = file(filename, 'w')
-		yaml.dump(self.game_data, stream)
+			if os.path.exists(filename + '.bak'):
+				os.remove(filename + '.bak')
+			try:
+				os.rename(filename, filename + '.bak')
+			except:
+				pass
+
+		try:
+			if os.path.exists(filename):
+				os.remove(filename)
+
+			with open(filename, 'w') as stream:
+				yaml.dump(self.game_data, stream)
+				stream.flush()
+				os.fdatasync(stream)
+			# stream.close()
+			# stream = None
+			# os.fsync()
+
+			# os.rename(filename+'.temp', filename)
+
+			# Create backup File if data is good
+			if os.path.getsize(filename) > 0:
+				if os.path.exists(filename + '.bak'):
+					os.remove(filename + '.bak')
+				copyfile(filename, filename + '.bak')
+
+		# stream = open(filename, 'w', 0)
+		# yaml.dump(self.game_data, stream)
+		# file.close(stream)
+		# stream.close()
+		# now check for successful write, if not restore backup file
+		# if os.path.getsize(filename) == 0:
+		#    self.logger.info(  " ****************   CORRUPT DATA FILE REPLACING WITH CLEAN DATA  --- restoring last copy ****************")
+		#    #remove bad file
+		#    os.remove(filename)
+		#    os.rename(filename+'.bak', filename)
+		except Exception, e:
+			self.logger.error("CANNOT SAVE GAME DATA FILE:" + str(filename) + " - " + str(e))
 
 	def enable_flippers(self, enable):
 		#return True
